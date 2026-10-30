@@ -1,0 +1,1336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRIS Quality Solutions | Manual Oficial de Marca & Sistema de Identidad Visual</title>
+    <meta name="description" content="Manual oficial de marca, dirección de arte y especificación visual para CRIS Quality Solutions LLC.">
+
+    <!-- Tipografías Oficiales Recomendadas: Montserrat (Display & Titulares) & Inter (Body & UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* =========================================
+           1. DESIGN TOKENS (FONDOS CLAROS Y LIMPIOS)
+           Paleta Oficial del Flyer & Sistema de Identidad
+           ========================================= */
+        :root {
+            --stage-bg: #e2e8f0;
+            --slide-bg: #f8fafc;
+            --surface-white: #ffffff;
+            --surface-subtle: #f1f5f9;
+            --surface-card: #ffffff;
+
+            /* Colores Oficiales */
+            --navy-core: #0b2032;           /* Azul Marino Medianoche (Primario dominante) */
+            --navy-dark: #071624;
+            --navy-light: #16344e;
+
+            --teal-clean: #1e857b;          /* Verde Sea Teal (Isotipo, Botones & Acentos Higiénicos) */
+            --teal-bright: #249c90;
+            --teal-dark: #156c63;
+            --teal-surface: #e6f5f3;
+
+            --coral-alert: #c0392b;         /* Rojo Coral / Precio Exclusivo Este Mes */
+            --coral-surface: #fde8e8;
+
+            --slate-50: #f8fafc;
+            --slate-100: #f4f6f8;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-600: #475569;
+            --slate-700: #1e293b;
+            --slate-900: #0b2032;
+
+            /* Tipografía */
+            --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            /* Radios y Sombras */
+            --radius-subtle: 6px;
+            --radius-card: 10px;
+            --radius-badge: 14px;
+            --radius-full: 9999px;
+
+            --shadow-soft: 0 2px 10px -2px rgba(11, 32, 50, 0.05);
+            --shadow-card: 0 4px 16px -2px rgba(11, 32, 50, 0.08), 0 2px 6px -1px rgba(11, 32, 50, 0.04);
+            --shadow-float: 0 16px 36px -4px rgba(11, 32, 50, 0.14);
+            --shadow-teal: 0 4px 16px rgba(30, 133, 123, 0.25);
+
+            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration: 0.5s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* =========================================
+           2. FIXED 16:9 STAGE ESCALABLE
+           ========================================= */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            font-family: var(--font-body);
+            color: var(--slate-700);
+            user-select: none;
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(30, 133, 123, 0.05) 0%, transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(11, 32, 50, 0.04) 0%, transparent 45%),
+                linear-gradient(to right, rgba(11, 32, 50, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(11, 32, 50, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 80px 80px, 80px 80px;
+        }
+
+        /* Diapositivas */
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            padding: 60px 85px;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+            transition: opacity var(--duration) var(--ease-out);
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            visibility: visible;
+            z-index: 2;
+        }
+
+        /* Encabezados de Diapositiva */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 28px;
+            border-bottom: 2px solid var(--slate-200);
+            padding-bottom: 16px;
+            position: relative;
+        }
+
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 130px;
+            height: 2px;
+            background: var(--teal-clean);
+        }
+
+        .slide-tag {
+            font-family: var(--font-display);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--teal-clean);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 38px;
+            font-weight: 900;
+            color: var(--navy-core);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .slide-title-teal {
+            color: var(--teal-clean);
+        }
+
+        .slide-subtitle {
+            font-size: 15px;
+            color: var(--slate-600);
+            margin-top: 4px;
+            font-weight: 400;
+        }
+
+        .slide-index-badge {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--navy-core);
+            background: var(--surface-white);
+            border: 1px solid var(--slate-200);
+            padding: 6px 14px;
+            border-radius: var(--radius-subtle);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .slide-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            min-height: 0;
+        }
+
+        /* Tarjetas Modulares */
+        .card-modular {
+            background: var(--surface-white);
+            border: 1px solid var(--slate-200);
+            border-radius: var(--radius-card);
+            box-shadow: var(--shadow-card);
+            padding: 24px;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .card-modular:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-float);
+        }
+
+        /* Badges de Marca */
+        .badge-teal {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--teal-surface);
+            color: var(--teal-clean);
+            border: 1px solid rgba(30, 133, 123, 0.3);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-coral {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--coral-surface);
+            color: var(--coral-alert);
+            border: 1px solid rgba(192, 57, 43, 0.3);
+            padding: 4px 10px;
+            border-radius: var(--radius-subtle);
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .badge-navy {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(11, 32, 50, 0.08);
+            color: var(--navy-core);
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* Mockup Browser Frame */
+        .mockup-browser-window {
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: 12px;
+            box-shadow: var(--shadow-float);
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 90px);
+            overflow: hidden;
+        }
+
+        .mockup-top-bar {
+            background: #f1f5f9;
+            border-bottom: 1px solid var(--slate-200);
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .m-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .m-dot-r { background: #ef4444; }
+        .m-dot-y { background: #f59e0b; }
+        .m-dot-g { background: #10b981; }
+
+        .mockup-url-bar {
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            border-radius: 6px;
+            padding: 4px 14px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: var(--slate-600);
+            flex-grow: 1;
+            max-width: 650px;
+        }
+
+        .mockup-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            user-select: text;
+            background: #ffffff;
+        }
+
+        /* Controles de Navegación */
+        .nav-controls {
+            position: fixed;
+            bottom: 25px;
+            right: 40px;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            border: 1px solid var(--slate-200);
+            box-shadow: 0 10px 25px rgba(11, 32, 50, 0.12);
+        }
+
+        .nav-btn {
+            background: #f1f5f9;
+            border: 1px solid var(--slate-200);
+            color: var(--navy-core);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--teal-clean);
+            color: #fff;
+            border-color: var(--teal-clean);
+            transform: scale(1.08);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .slide-counter {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--slate-700);
+            font-weight: 700;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        .edit-hotzone {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 140px;
+            height: 80px;
+            z-index: 1000;
+        }
+
+        .edit-toggle {
+            position: fixed;
+            bottom: 25px;
+            left: 40px;
+            background: #ffffff;
+            border: 1px solid var(--slate-200);
+            color: var(--slate-700);
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 1001;
+            box-shadow: 0 10px 25px rgba(11, 32, 50, 0.12);
+        }
+
+        .edit-toggle.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .edit-toggle.active {
+            background: var(--teal-clean);
+            color: #fff;
+            border-color: var(--teal-clean);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Impresión a PDF 16:9 Landscape */
+        @media print {
+            @page {
+                size: 1920px 1080px;
+                margin: 0;
+            }
+            html, body {
+                width: 1920px !important;
+                height: 1080px !important;
+                background: #ffffff !important;
+                overflow: visible !important;
+            }
+            .deck-viewport {
+                position: static !important;
+                display: block !important;
+            }
+            .deck-stage {
+                position: static !important;
+                transform: none !important;
+                width: 1920px !important;
+                height: auto !important;
+                background: #ffffff !important;
+            }
+            .slide {
+                position: relative !important;
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                width: 1920px !important;
+                height: 1080px !important;
+                background: #f8fafc !important;
+            }
+            .nav-controls, .edit-hotzone, .edit-toggle {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ============================================================
+                 SLIDE 1: PORTADA OFICIAL (FONDO CLARO, HIGIÉNICO & LOGO BADGE)
+                 ============================================================ -->
+            <section class="slide active" id="slide-1" data-index="1">
+                <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; position: relative;">
+                    
+                    <!-- Header Portada -->
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <span class="badge-teal"><i data-lucide="sparkles" style="width:14px;"></i> OFERTA ESPECIAL RESIDENCIAL &amp; COMERCIAL</span>
+                            <span class="badge-navy"><i data-lucide="shield-check" style="width:14px;"></i> PÓLIZA DE SEGURO $2,000,000 USD</span>
+                        </div>
+                        <div style="font-family: var(--font-mono); font-size: 13px; color: var(--slate-600); background: #ffffff; padding: 6px 14px; border-radius: var(--radius-subtle); border: 1px solid var(--slate-200);">
+                            MANUAL OFICIAL DE MARCA • V 3.0.0
+                        </div>
+                    </div>
+
+                    <!-- Contenido Central -->
+                    <div style="display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 60px; align-items: center;">
+                        <div>
+                            <!-- Badge Oficial del Flyer Integrado -->
+                            <div style="margin-bottom: 25px;">
+                                <img src="assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height: 105px; filter: drop-shadow(0 12px 28px rgba(11, 32, 50, 0.12));">
+                            </div>
+
+                            <h1 style="font-family: var(--font-display); font-size: 56px; font-weight: 900; line-height: 1.1; margin-bottom: 16px; letter-spacing: -0.02em; color: var(--navy-core);">
+                                Sistema de Identidad Visual &amp; <br>
+                                <span style="background: linear-gradient(135deg, #1e857b 0%, #249c90 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Guía de Marca Oficial</span>
+                            </h1>
+
+                            <p style="font-size: 24px; color: var(--teal-clean); font-weight: 600; margin-bottom: 25px; font-style: italic;">
+                                "Un hogar más limpio. Más tiempo para ti."
+                            </p>
+
+                            <p style="font-size: 16px; color: var(--slate-600); line-height: 1.6; max-width: 820px; margin-bottom: 30px;">
+                                Plataforma de marca, dirección de arte fotográfica enfocada en la limpieza y pureza sanitaria, y especificaciones de diseño para la presencia digital de CRIS Quality Solutions en Miami.
+                            </p>
+
+                            <!-- 3 Pilares del Flyer -->
+                            <div style="display: flex; gap: 15px;">
+                                <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--navy-core); background: #ffffff; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--slate-200); box-shadow: var(--shadow-soft);">
+                                    <i data-lucide="shield-check" style="color: var(--teal-clean); width: 20px;"></i> SERVICIO CONFIABLE
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--navy-core); background: #ffffff; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--slate-200); box-shadow: var(--shadow-soft);">
+                                    <i data-lucide="search" style="color: var(--teal-clean); width: 20px;"></i> ATENCIÓN AL DETALLE
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px; font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--navy-core); background: #ffffff; padding: 10px 18px; border-radius: 8px; border: 1px solid var(--slate-200); box-shadow: var(--shadow-soft);">
+                                    <i data-lucide="sparkles" style="color: var(--teal-clean); width: 20px;"></i> RESULTADOS VISIBLES
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tarjeta Isotipo Destacado -->
+                        <div class="card-modular" style="text-align: center; padding: 40px; box-shadow: var(--shadow-float); border-top: 4px solid var(--teal-clean);">
+                            <img src="assets/logo/cris-isotype.svg" alt="Isotipo CRIS" style="width: 160px; height: 160px; margin: 0 auto 20px; display: block; filter: drop-shadow(0 10px 20px rgba(30, 133, 123, 0.2));">
+                            <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 800; color: var(--navy-core); margin-bottom: 8px;">Isotipo Oficial</h3>
+                            <p style="font-size: 14px; color: var(--slate-600); line-height: 1.5;">
+                                Silueta arquitectónica de casa residencial + columnas de edificio comercial + destello superior de 4 puntas de pureza higiénica.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Footer Portada -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--slate-200); padding-top: 18px; font-size: 13px; color: var(--slate-400);">
+                        <div>CRIS Quality Solutions • Sede Miami: 801 Brickell Ave, Miami, FL 33131 • Tel: +1 (405) 604-7424</div>
+                        <div>Facebook: <strong>Cris Quality Solutions</strong> • Instagram: <strong>@crisquality.miami</strong></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 2: PALETA CROMÁTICA EXACTA DEL FLYER
+                 ============================================================ -->
+            <section class="slide" id="slide-2" data-index="2">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="palette" style="width:16px;"></i> 01. Paleta de Colores Oficial</div>
+                        <h2 class="slide-title">Valores Cromáticos Extraídos del Sistema Visual</h2>
+                        <p class="slide-subtitle">Calibración con contraste accesible WCAG AAA para transmitir higiene impecable, seriedad corporativa y frescura costera.</p>
+                    </div>
+                    <div class="slide-index-badge">02 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; height: 100%;">
+                        <!-- Swatch 1: Azul Marino Medianoche -->
+                        <div class="card-modular" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                            <div style="height: 160px; background: var(--navy-core); display: flex; align-items: flex-end; padding: 18px; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 16px;">
+                                #0B2032
+                            </div>
+                            <div style="padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1;">
+                                <div style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">Azul Marino Medianoche</div>
+                                <div class="badge-navy" style="width: fit-content;">PRIMARIO DOMINANTE</div>
+                                <div style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    Encabezados principales, barra de navegación, footer institucional y palabra "CRIS". Comunica máxima confianza y autoridad.
+                                </div>
+                                <div style="margin-top: auto; border-top: 1px solid var(--slate-200); padding-top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--slate-600); display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                                    <div><strong>HEX:</strong> #0B2032</div>
+                                    <div><strong>RGB:</strong> 11, 32, 50</div>
+                                    <div><strong>Alt:</strong> #071624</div>
+                                    <div><strong>WCAG:</strong> AAA (>14:1)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Swatch 2: Verde Sea Teal -->
+                        <div class="card-modular" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                            <div style="height: 160px; background: var(--teal-clean); display: flex; align-items: flex-end; padding: 18px; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 16px;">
+                                #1E857B
+                            </div>
+                            <div style="padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1;">
+                                <div style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">Verde Sea Teal</div>
+                                <div class="badge-teal" style="width: fit-content;">ACENTO &amp; LIMPIEZA</div>
+                                <div style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    Isotipo de la casa, badge "OFERTA DEL MES", botones de acción primaria e íconos de desinfección y pureza.
+                                </div>
+                                <div style="margin-top: auto; border-top: 1px solid var(--slate-200); padding-top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--slate-600); display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                                    <div><strong>HEX:</strong> #1E857B</div>
+                                    <div><strong>RGB:</strong> 30, 133, 123</div>
+                                    <div><strong>Light:</strong> #249C90</div>
+                                    <div><strong>Dark:</strong> #156C63</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Swatch 3: Rojo Coral Promocional -->
+                        <div class="card-modular" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                            <div style="height: 160px; background: var(--coral-alert); display: flex; align-items: flex-end; padding: 18px; color: #fff; font-family: var(--font-mono); font-weight: 700; font-size: 16px;">
+                                #C0392B
+                            </div>
+                            <div style="padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1;">
+                                <div style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">Rojo Coral Promocional</div>
+                                <div class="badge-coral" style="width: fit-content;">PRECIO EXCLUSIVO</div>
+                                <div style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    Píldora de urgencia y descuento temporal del flyer para los planes de 2 y 3 dormitorios. Impulsa la tasa de reserva inmediata.
+                                </div>
+                                <div style="margin-top: auto; border-top: 1px solid var(--slate-200); padding-top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--slate-600); display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                                    <div><strong>HEX:</strong> #C0392B</div>
+                                    <div><strong>RGB:</strong> 192, 57, 43</div>
+                                    <div><strong>Light:</strong> #E74C3C</div>
+                                    <div><strong>Fondo:</strong> #FDE8E8</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Swatch 4: Gama de Neutros Higiénicos -->
+                        <div class="card-modular" style="padding: 0; overflow: hidden; display: flex; flex-direction: column;">
+                            <div style="height: 160px; background: #f8fafc; border-bottom: 1px solid var(--slate-200); display: flex; align-items: flex-end; padding: 18px; color: var(--navy-core); font-family: var(--font-mono); font-weight: 700; font-size: 16px;">
+                                #FFFFFF / #F8FAFC
+                            </div>
+                            <div style="padding: 20px; display: flex; flex-direction: column; gap: 8px; flex: 1;">
+                                <div style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">Blanco &amp; Slate Higiénico</div>
+                                <div style="display: inline-block; font-size: 11px; font-weight: 800; color: var(--slate-600); background: #e2e8f0; padding: 3px 8px; border-radius: 4px; width: fit-content;">BASE DE PUREZA</div>
+                                <div style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    • Blanco Puro (#FFFFFF): Tarjetas de tarifas y Master Badge.<br>
+                                    • Slate Claro (#F8FAFC): Fondo diáfano y limpio.<br>
+                                    • Gris Carbón (#1E293B): Tipografía de lectura.
+                                </div>
+                                <div style="margin-top: auto; border-top: 1px solid var(--slate-200); padding-top: 10px; font-family: var(--font-mono); font-size: 11px; color: var(--slate-600); display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                                    <div><strong>Base:</strong> #FFFFFF</div>
+                                    <div><strong>Fondo:</strong> #F8FAFC</div>
+                                    <div><strong>Texto:</strong> #1E293B</div>
+                                    <div><strong>Borde:</strong> #E2E8F0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 3: ANATOMÍA DEL LOGOTIPO Y VERSIONES VECTORIALES
+                 ============================================================ -->
+            <section class="slide" id="slide-3" data-index="3">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="layers" style="width:16px;"></i> 02. Identidad Vectorial</div>
+                        <h2 class="slide-title">Anatomía y Versiones del Logotipo: <span class="slide-title-teal">Principal &amp; Secundarios</span></h2>
+                        <p class="slide-subtitle">Arquitectura vectorial completa del logo oficial de CRIS Quality Solutions para aplicaciones impresas y digitales.</p>
+                    </div>
+                    <div class="slide-index-badge">03 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; height: 100%;">
+                        <!-- Logotipo Principal (Master Badge) -->
+                        <div class="card-modular">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div>
+                                    <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">1. Logotipo Principal (Master Badge)</h4>
+                                    <span style="font-size: 12px; color: var(--slate-400); font-family: var(--font-mono);">assets/logo/cris-logo-badge.svg</span>
+                                </div>
+                                <span class="badge-teal">CABECERA WEB &amp; FLYERS</span>
+                            </div>
+                            <div style="background: var(--surface-subtle); border-radius: var(--radius-subtle); padding: 30px; display: flex; align-items: center; justify-content: center; height: 150px; border: 1px dashed var(--slate-300);">
+                                <img src="assets/logo/cris-logo-badge.svg" alt="CRIS Master Badge" style="max-height: 95px; max-width: 100%;">
+                            </div>
+                            <p style="font-size: 13px; color: var(--slate-600); margin-top: 15px; line-height: 1.5;">
+                                Contenedor rectangular blanco con esquinas redondeadas (14px) y sombra suave que garantiza máxima legibilidad institucional sobre cualquier fondo o fotografía de inmueble.
+                            </p>
+                        </div>
+
+                        <!-- Logotipo Secundario Horizontal -->
+                        <div class="card-modular">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                <div>
+                                    <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">2. Logotipo Secundario Horizontal</h4>
+                                    <span style="font-size: 12px; color: var(--slate-400); font-family: var(--font-mono);">assets/logo/cris-logo-horizontal.svg</span>
+                                </div>
+                                <span class="badge-navy">TRANSPARENTE</span>
+                            </div>
+                            <div style="background: #ffffff; border: 1px dashed var(--slate-300); border-radius: var(--radius-subtle); padding: 30px; display: flex; align-items: center; justify-content: center; height: 150px;">
+                                <img src="assets/logo/cris-logo-horizontal.svg" alt="CRIS Horizontal" style="max-height: 75px; max-width: 100%;">
+                            </div>
+                            <p style="font-size: 13px; color: var(--slate-600); margin-top: 15px; line-height: 1.5;">
+                                Versión sin contenedor para barras de navegación integradas, membretes de contratos, facturación fiscal y firmas de correo digital.
+                            </p>
+                        </div>
+
+                        <!-- Logotipo Secundario Vertical -->
+                        <div class="card-modular">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div>
+                                    <h4 style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core);">3. Logotipo Vertical (Apilado)</h4>
+                                    <span style="font-size: 11px; color: var(--slate-400); font-family: var(--font-mono);">assets/logo/cris-logo-vertical.svg</span>
+                                </div>
+                                <span class="badge-teal">UNIFORMES &amp; TÓTEMS</span>
+                            </div>
+                            <div style="background: #ffffff; border-radius: var(--radius-subtle); padding: 15px; display: flex; align-items: center; justify-content: center; height: 110px; border: 1px dashed var(--slate-300);">
+                                <img src="assets/logo/cris-logo-vertical.svg" alt="CRIS Vertical" style="max-height: 80px; max-width: 100%;">
+                            </div>
+                        </div>
+
+                        <!-- Isotipo y Monocromático -->
+                        <div class="card-modular">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div>
+                                    <h4 style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core);">4. Isotipo &amp; Monocromático</h4>
+                                    <span style="font-size: 11px; color: var(--slate-400); font-family: var(--font-mono);">assets/logo/cris-isotype.svg</span>
+                                </div>
+                                <span class="badge-navy">APP ICON &amp; SELLOS</span>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; height: 110px;">
+                                <div style="background: #ffffff; border-radius: var(--radius-subtle); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--slate-300);">
+                                    <img src="assets/logo/cris-isotype.svg" alt="Isotipo" style="height: 65px;">
+                                </div>
+                                <div style="background: var(--navy-core); border-radius: var(--radius-subtle); display: flex; align-items: center; justify-content: center;">
+                                    <img src="assets/logo/cris-logo-monochrome-white.svg" alt="Blanco" style="max-height: 40px; max-width: 85%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 4: TIPOGRAFÍA OFICIAL & RECOMENDACIÓN
+                 ============================================================ -->
+            <section class="slide" id="slide-4" data-index="4">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="type" style="width:16px;"></i> 03. Tipografía Oficial Recomendada</div>
+                        <h2 class="slide-title">Montserrat (Display / Promos) &amp; Inter (Body / UI)</h2>
+                        <p class="slide-subtitle">Sincronía geométrica con el wordmark institucional y óptimo rendimiento en interfaces de reserva.</p>
+                    </div>
+                    <div class="slide-index-badge">04 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 35px; height: 100%;">
+                        <!-- Display Montserrat -->
+                        <div class="card-modular">
+                            <span style="font-size: 12px; font-weight: 800; color: var(--teal-clean); text-transform: uppercase;">1. TITULARES, DISPLAY &amp; PROMOCIONES</span>
+                            <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 900; color: var(--navy-core); margin: 6px 0 15px;">Montserrat (Bold 700 / Black 900)</h3>
+                            
+                            <div style="background: var(--slate-100); border-radius: var(--radius-subtle); padding: 22px; display: flex; flex-direction: column; gap: 14px; border-left: 4px solid var(--navy-core);">
+                                <div>
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Titular Promo / Bold 900 / All Caps</div>
+                                    <div style="font-family: var(--font-display); font-size: 22px; font-weight: 900; color: var(--navy-core); letter-spacing: -0.01em;">
+                                        OFERTA ESPECIAL DE LIMPIEZA RESIDENCIAL PREMIUM
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Subtítulo Oficial / Medium 500</div>
+                                    <div style="font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--teal-clean); font-style: italic;">
+                                        "Un hogar más limpio. Más tiempo para ti."
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Tarifas en Flyer / Black 900</div>
+                                    <div style="font-family: var(--font-display); font-size: 32px; font-weight: 900; color: var(--navy-core);">
+                                        $135 <span style="font-size: 15px; font-weight: 700; color: var(--slate-600);">/ 1 DORMITORIO</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Body Inter & Mono -->
+                        <div class="card-modular">
+                            <span style="font-size: 12px; font-weight: 800; color: var(--teal-clean); text-transform: uppercase;">2. LECTURA DIGITAL &amp; FORMULARIOS</span>
+                            <h3 style="font-family: var(--font-body); font-size: 24px; font-weight: 700; color: var(--navy-core); margin: 6px 0 15px;">Inter (Body &amp; UI)</h3>
+                            
+                            <div style="background: var(--slate-100); border-radius: var(--radius-subtle); padding: 22px; display: flex; flex-direction: column; gap: 14px; border-left: 4px solid var(--teal-clean);">
+                                <div>
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Párrafos Descriptivos (Regular 400 / 14px)</div>
+                                    <p style="font-size: 14px; color: var(--slate-700); line-height: 1.6;">
+                                        Personal verificado, productos ecológicos seguros para mascotas y niños, y checklist de desinfección con fotos antes y después del servicio.
+                                    </p>
+                                </div>
+                                <div>
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Botones y Badges (Semi-Bold 600)</div>
+                                    <div style="display: flex; gap: 10px; margin-top: 6px;">
+                                        <span class="badge-teal">RESERVA TU LIMPIEZA</span>
+                                        <span class="badge-coral">PRECIO EXCLUSIVO</span>
+                                    </div>
+                                </div>
+                                <div style="border-top: 1px dashed var(--slate-300); padding-top: 10px;">
+                                    <div style="font-family: var(--font-mono); font-size: 11px; color: var(--slate-400);">Métricas &amp; SLAs / JetBrains Mono</div>
+                                    <div style="font-family: var(--font-mono); font-size: 13px; color: var(--navy-core); font-weight: 700;">
+                                        #WO-2026-8942 • $189.00 USD • 99.4% SLA
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 5: TARIFAS REALES Y MATRIZ DE SERVICIO (DEL FLYER)
+                 ============================================================ -->
+            <section class="slide" id="slide-5" data-index="5">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="tag" style="width:16px;"></i> 04. Oferta Residencial Oficial</div>
+                        <h2 class="slide-title">Tarifas y Paquetes de Limpieza Residencial Premium</h2>
+                        <p class="slide-subtitle">Estructura exacta de precios y denominaciones extraídas del flyer comercial para apartamentos en Miami.</p>
+                    </div>
+                    <div class="slide-index-badge">05 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-bottom: 25px;">
+                        <!-- Tarjeta 1 Dormitorio -->
+                        <div class="card-modular" style="text-align: center; border-top: 4px solid var(--navy-core);">
+                            <div style="font-family: var(--font-display); font-size: 14px; font-weight: 800; color: var(--slate-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+                                1 DORMITORIO
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 54px; font-weight: 900; color: var(--navy-core); line-height: 1; margin-bottom: 6px;">
+                                $135
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core); text-transform: uppercase; margin-bottom: 10px;">
+                                REGULAR
+                            </div>
+                            <div style="display: inline-block; background: var(--navy-core); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: var(--radius-subtle); text-transform: uppercase; margin-bottom: 16px;">
+                                OFERTA MENSUAL
+                            </div>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                Ideal para condominios de 1 habitación en Brickell, Downtown y Miami Beach. Incluye desinfección profunda de cocina, baño y sala.
+                            </p>
+                        </div>
+
+                        <!-- Tarjeta 2 Dormitorios -->
+                        <div class="card-modular" style="text-align: center; border-top: 4px solid var(--teal-clean); box-shadow: var(--shadow-float); transform: scale(1.02);">
+                            <div style="font-family: var(--font-display); font-size: 14px; font-weight: 800; color: var(--teal-clean); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+                                2 DORMITORIO (MÁS POPULAR)
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 54px; font-weight: 900; color: var(--teal-clean); line-height: 1; margin-bottom: 6px;">
+                                $189
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--teal-clean); text-transform: uppercase; margin-bottom: 10px;">
+                                EXPERTA
+                            </div>
+                            <div style="display: inline-block; background: var(--coral-alert); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: var(--radius-subtle); text-transform: uppercase; margin-bottom: 16px; box-shadow: 0 4px 10px rgba(192,57,43,0.3);">
+                                PRECIO EXCLUSIVO ESTE MES
+                            </div>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                Plan más popular para apartamentos y penthouses de 2 habitaciones. Incluye hasta 2 baños completos y aspirado HEPA integral.
+                            </p>
+                        </div>
+
+                        <!-- Tarjeta 3 Dormitorios -->
+                        <div class="card-modular" style="text-align: center; border-top: 4px solid var(--coral-alert);">
+                            <div style="font-family: var(--font-display); font-size: 14px; font-weight: 800; color: var(--slate-600); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">
+                                3 DORMITORIO
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 54px; font-weight: 900; color: var(--navy-core); line-height: 1; margin-bottom: 6px;">
+                                $239
+                            </div>
+                            <div style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core); text-transform: uppercase; margin-bottom: 10px;">
+                                DEFINITIVA
+                            </div>
+                            <div style="display: inline-block; background: var(--coral-alert); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: var(--radius-subtle); text-transform: uppercase; margin-bottom: 16px;">
+                                PRECIO EXCLUSIVO ESTE MES
+                            </div>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                Servicio exhaustivo para residencias familiares amplias. Cobertura completa de habitaciones, ventanales interiores y áreas de lavado.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Botón de Oferta y Canales del Flyer -->
+                    <div style="background: var(--navy-core); border-radius: var(--radius-card); padding: 18px 30px; color: #fff; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            <span style="background: var(--teal-clean); color: #fff; font-size: 13px; font-weight: 800; padding: 6px 14px; border-radius: 6px;">RESERVA TU LIMPIEZA EN OFERTA</span>
+                            <span style="font-family: var(--font-mono); font-size: 14px; color: #38bdf8; font-weight: 700;">CALL: +1 (405) 604-7424</span>
+                        </div>
+                        <div style="font-size: 13px; color: #cbd5e1;">
+                            Instagram: <strong>@crisquality.miami</strong> • Facebook: <strong>Cris Quality Solutions</strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 6: DIRECCIÓN DE ARTE ENFOCADA EN LA LIMPIEZA
+                 ============================================================ -->
+            <section class="slide" id="slide-6" data-index="6">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="sparkles" style="width:16px;"></i> 05. Dirección de Arte &amp; Pureza Sanitaria</div>
+                        <h2 class="slide-title">Dirección de Arte Enfocada en la <span class="slide-title-teal">Limpieza &amp; Higiene Impecable</span></h2>
+                        <p class="slide-subtitle">Principios visuales inspirados en el flyer oficial: luz diurna natural, pureza botánica y ausencia absoluta de agentes tóxicos.</p>
+                    </div>
+                    <div class="slide-index-badge">06 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <div style="display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 35px; height: 100%;">
+                        <!-- Columna Izquierda: Flyer Oficial de Referencia -->
+                        <div class="card-modular" style="display: flex; gap: 20px; align-items: center;">
+                            <div style="flex-shrink: 0; width: 220px; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-float); border: 2px solid var(--slate-200); background: #ffffff;">
+                                <img src="../.gemini/antigravity-ide/brain/8fe7d181-db61-4b6c-b7ac-c18bcfeb3ff4/.user_uploaded/media_1793156417996.jpg" alt="Flyer Oficial CRIS" style="width: 100%; height: auto; display: block;">
+                            </div>
+
+                            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+                                <span class="badge-teal" style="width: fit-content;">PIEZA OFICIAL EXTRAÍDA</span>
+                                <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core);">
+                                    Pilares del Flyer Oficial
+                                </h4>
+                                
+                                <div style="background: var(--slate-100); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--teal-clean);">
+                                    <strong style="color: var(--navy-core);">1. Luz Solar Directa:</strong> Grandes ventanales diáfanos con vistas a Biscayne Bay.
+                                </div>
+                                <div style="background: var(--slate-100); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--navy-core);">
+                                    <strong style="color: var(--navy-core);">2. Mármol Pulido:</strong> Mesas y superficies inmaculadas sin reflejos grasos ni polvo.
+                                </div>
+                                <div style="background: var(--slate-100); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--coral-alert);">
+                                    <strong style="color: var(--navy-core);">3. Botánica Viva:</strong> Orquídeas blancas que evocan higiene sin olores a cloro.
+                                </div>
+                                <div style="background: var(--slate-100); padding: 8px 12px; border-radius: 6px; border-left: 3px solid var(--teal-clean);">
+                                    <strong style="color: var(--navy-core);">4. Tríada de Confianza:</strong> Servicio Confiable, Atención al Detalle y Resultados Visibles.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Columna Derecha: Mandamientos de Dirección de Arte para Limpieza -->
+                        <div style="display: flex; flex-direction: column; gap: 14px;">
+                            <div class="card-modular" style="border-left: 4px solid var(--teal-clean); padding: 18px 24px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <i data-lucide="sun" style="color: var(--teal-clean); width: 20px;"></i>
+                                    <h4 style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core);">
+                                        1. Iluminación Natural Diurna (Clean Sunlight)
+                                    </h4>
+                                </div>
+                                <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    Toda fotografía publicitaria debe capturarse con luz diurna natural 100%, proyectando una sensación de ventilación continua, purificación del aire y espacios frescos frente a la costa de Miami.
+                                </p>
+                            </div>
+
+                            <div class="card-modular" style="border-left: 4px solid var(--navy-core); padding: 18px 24px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <i data-lucide="shield-check" style="color: var(--teal-clean); width: 20px;"></i>
+                                    <h4 style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core);">
+                                        2. Protocolo Zero-VOC &amp; Certificación Hospitalaria
+                                    </h4>
+                                </div>
+                                <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    El lenguaje visual debe comunicar que la limpieza es profunda pero segura para niños y mascotas, utilizando productos certificados por la EPA de grado hospitalario que no dejan residuos tóxicos.
+                                </p>
+                            </div>
+
+                            <div class="card-modular" style="border-left: 4px solid var(--coral-alert); padding: 18px 24px;">
+                                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 6px;">
+                                    <i data-lucide="check-circle" style="color: var(--coral-alert); width: 20px;"></i>
+                                    <h4 style="font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--navy-core);">
+                                        3. Orden Riguroso &amp; Calidad Hotelera 5 Estrellas
+                                    </h4>
+                                </div>
+                                <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5;">
+                                    Los encuadres muestran camas perfectamente tensadas, cojines alineados con pliegue de cortesía, griferías descalcificadas con brillo espejo y alfombras con trazado de aspirado profesional.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 7: MUESTRA DEL PORTAL DEL SITIO WEB OFICIAL
+                 ============================================================ -->
+            <section class="slide" id="slide-7" data-index="7">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="globe" style="width:16px;"></i> 06. Experiencia de Usuario</div>
+                        <h2 class="slide-title">Muestra del Portal del Sitio Web: <span class="slide-title-teal">Home &amp; Reserva</span></h2>
+                        <p class="slide-subtitle">Aplicación interactiva de la dirección de arte en un portal web de alta conversión para propietarios en Miami.</p>
+                    </div>
+                    <div class="slide-index-badge">07 / 08</div>
+                </div>
+
+                <div class="mockup-browser-window">
+                    <div class="mockup-top-bar">
+                        <div class="mockup-dots"><span class="m-dot m-dot-r"></span><span class="m-dot m-dot-y"></span><span class="m-dot m-dot-g"></span></div>
+                        <div class="mockup-url-bar">https://www.crisqualitysolution.com</div>
+                        <div style="font-size: 12px; color: var(--teal-clean); font-weight: 700; display: flex; align-items: center; gap: 6px;">
+                            <i data-lucide="shield-check" style="width:14px;"></i> Póliza $2M Activa
+                        </div>
+                    </div>
+
+                    <div class="mockup-body" style="padding: 0; display: flex; flex-direction: column;">
+                        <!-- Utility Bar -->
+                        <div style="background: var(--navy-dark); color: #94a3b8; font-size: 11px; padding: 6px 30px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>📍 Sede Miami: 801 Brickell Ave, Miami, FL 33131 • Cobertura Miami-Dade &amp; Broward</div>
+                            <div style="display: flex; gap: 20px; align-items: center;">
+                                <span>📞 Directo: <strong style="color: #fff;">+1 (405) 604-7424</strong></span>
+                                <span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; color: #fff;">ES | EN</span>
+                            </div>
+                        </div>
+
+                        <!-- Navbar del Portal Web -->
+                        <div style="padding: 10px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-200); background: #ffffff;">
+                            <img src="assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height: 42px;">
+                            
+                            <div style="display: flex; gap: 24px; font-family: var(--font-display); font-size: 13px; font-weight: 700; color: var(--navy-core);">
+                                <span style="color: var(--teal-clean); border-bottom: 2px solid var(--teal-clean); padding-bottom: 4px; cursor: pointer;">Oferta del Mes</span>
+                                <span style="cursor: pointer;">1 Dormitorio ($135)</span>
+                                <span style="cursor: pointer;">2 Dormitorios ($189)</span>
+                                <span style="cursor: pointer;">3 Dormitorios ($239)</span>
+                                <a href="prototypes/calculator.html" target="_blank" style="text-decoration: none; color: inherit;">Calculadora</a>
+                            </div>
+
+                            <a href="prototypes/checkout.html" target="_blank" style="background: var(--teal-clean); color: #fff; padding: 8px 18px; border-radius: 6px; font-family: var(--font-display); font-size: 12px; font-weight: 800; text-decoration: none; box-shadow: var(--shadow-teal); display: flex; align-items: center; gap: 6px;">
+                                RESERVAR OFERTA <i data-lucide="arrow-right" style="width:14px;"></i>
+                            </a>
+                        </div>
+
+                        <!-- HERO SECTION CON FOTOGRAFÍA DE LUJO DE LA BAHÍA DE MIAMI -->
+                        <div style="position: relative; flex-grow: 1; min-height: 430px; background: url('../.gemini/antigravity-ide/brain/8fe7d181-db61-4b6c-b7ac-c18bcfeb3ff4/miami_luxury_condo_1793161085575.jpg') center/cover no-repeat; display: flex; flex-direction: column; justify-content: space-between; padding: 22px 35px;">
+                            
+                            <!-- Overlay suave para legibilidad perfecta -->
+                            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(11,32,50,0.85) 0%, rgba(11,32,50,0.55) 45%, rgba(11,32,50,0.85) 100%); pointer-events: none;"></div>
+
+                            <!-- Encabezado de Oferta Promocional -->
+                            <div style="position: relative; z-index: 2; text-align: center; max-width: 900px; margin: 0 auto;">
+                                <span style="background: var(--teal-clean); color: #fff; font-family: var(--font-display); font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.05em; display: inline-block; margin-bottom: 6px;">
+                                    OFERTA DEL MES
+                                </span>
+                                <h1 style="font-family: var(--font-display); font-size: 28px; font-weight: 900; color: #ffffff; text-transform: uppercase; letter-spacing: -0.01em; margin-bottom: 4px; text-shadow: 0 4px 12px rgba(0,0,0,0.4);">
+                                    OFERTA ESPECIAL DE LIMPIEZA RESIDENCIAL PREMIUM
+                                </h1>
+                                <p style="font-family: var(--font-body); font-size: 16px; color: #e2e8f0; font-style: italic; font-weight: 500; text-shadow: 0 2px 8px rgba(0,0,0,0.5);">
+                                    "Un hogar más limpio. Más tiempo para ti."
+                                </p>
+                            </div>
+
+                            <!-- 3 Tarjetas de Tarifas Flotantes (Idénticas al Flyer) -->
+                            <div style="position: relative; z-index: 2; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 960px; margin: 0 auto; width: 100%;">
+                                <!-- Tarjeta 1 Dormitorio -->
+                                <div style="background: #ffffff; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 14px 30px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8);">
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--slate-400); letter-spacing: 0.05em;">1 DORMITORIO</div>
+                                    <div style="font-family: var(--font-display); font-size: 40px; font-weight: 900; color: var(--navy-core); margin: 4px 0;">$135</div>
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--navy-core); margin-bottom: 8px;">REGULAR</div>
+                                    <span style="background: var(--navy-core); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 4px; display: inline-block;">
+                                        OFERTA MENSUAL
+                                    </span>
+                                </div>
+
+                                <!-- Tarjeta 2 Dormitorios (Destacada) -->
+                                <div style="background: #ffffff; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 16px 36px rgba(30,133,123,0.35); border: 2.5px solid var(--teal-clean); transform: scale(1.04); position: relative;">
+                                    <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--teal-clean); color: #fff; font-size: 10px; font-weight: 800; padding: 2px 10px; border-radius: 9999px;">
+                                        MÁS POPULAR
+                                    </div>
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--teal-clean); letter-spacing: 0.05em;">2 DORMITORIO</div>
+                                    <div style="font-family: var(--font-display); font-size: 42px; font-weight: 900; color: var(--teal-clean); margin: 4px 0;">$189</div>
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--teal-clean); margin-bottom: 8px;">EXPERTA</div>
+                                    <span style="background: var(--coral-alert); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 4px; display: inline-block; box-shadow: 0 4px 10px rgba(192,57,43,0.3);">
+                                        PRECIO EXCLUSIVO ESTE MES
+                                    </span>
+                                </div>
+
+                                <!-- Tarjeta 3 Dormitorios -->
+                                <div style="background: #ffffff; border-radius: 10px; padding: 18px; text-align: center; box-shadow: 0 14px 30px rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.8);">
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--slate-400); letter-spacing: 0.05em;">3 DORMITORIO</div>
+                                    <div style="font-family: var(--font-display); font-size: 40px; font-weight: 900; color: var(--navy-core); margin: 4px 0;">$239</div>
+                                    <div style="font-family: var(--font-display); font-size: 13px; font-weight: 800; color: var(--navy-core); margin-bottom: 8px;">DEFINITIVA</div>
+                                    <span style="background: var(--coral-alert); color: #fff; font-size: 10px; font-weight: 800; padding: 3px 10px; border-radius: 4px; display: inline-block; box-shadow: 0 4px 10px rgba(192,57,43,0.3);">
+                                        PRECIO EXCLUSIVO ESTE MES
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Barra de Garantías & Botón Inferior -->
+                            <div style="position: relative; z-index: 2; background: rgba(11,32,50,0.92); backdrop-filter: blur(8px); border-radius: 8px; padding: 12px 25px; display: flex; justify-content: space-between; align-items: center; max-width: 960px; margin: 12px auto 0; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
+                                <div style="display: flex; gap: 25px; font-family: var(--font-display); font-size: 13px; font-weight: 800; color: #ffffff;">
+                                    <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="shield-check" style="color:var(--teal-clean);width:16px;"></i> SERVICIO CONFIABLE</span>
+                                    <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="search" style="color:var(--teal-clean);width:16px;"></i> ATENCIÓN AL DETALLE</span>
+                                    <span style="display: flex; align-items: center; gap: 6px;"><i data-lucide="sparkles" style="color:var(--teal-clean);width:16px;"></i> RESULTADOS VISIBLES</span>
+                                </div>
+
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <a href="tel:+14056047424" style="color: #cbd5e1; text-decoration: none; font-size: 12px; font-weight: 700;">
+                                        CALL: +1 (405) 604-7424
+                                    </a>
+                                    <a href="prototypes/checkout.html" target="_blank" style="background: var(--teal-clean); color: #fff; padding: 7px 16px; border-radius: 9999px; font-family: var(--font-display); font-size: 12px; font-weight: 800; text-decoration: none; box-shadow: var(--shadow-teal);">
+                                        RESERVA TU LIMPIEZA EN OFERTA →
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 SLIDE 8: ECOSISTEMA DE PROTOTIPOS INTERACTIVOS (SIN CHECKLIST FINAL)
+                 ============================================================ -->
+            <section class="slide" id="slide-8" data-index="8">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag"><i data-lucide="monitor" style="width:16px;"></i> 07. Ecosistema Digital</div>
+                        <h2 class="slide-title">Prototipos Interactivos de Alta Fidelidad para Validación</h2>
+                        <p class="slide-subtitle">Plataforma lista para validación con Gerencia General de CRIS Quality Solutions LLC antes de iniciar frontend.</p>
+                    </div>
+                    <div class="slide-index-badge">08 / 08</div>
+                </div>
+
+                <div class="slide-content">
+                    <p style="font-size: 15px; color: var(--slate-600); margin-bottom: 22px;">
+                        Los prototipos incorporan el logotipo oficial en versión badge, los paquetes residenciales del flyer ($135, $189, $239) y los flujos completos de agendamiento:
+                    </p>
+
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-bottom: 22px;">
+                        <!-- Prototipo 1: Landing -->
+                        <div class="card-modular">
+                            <span class="badge-teal" style="margin-bottom: 10px;">HOME &amp; OFERTA</span>
+                            <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core); margin-bottom: 6px;">1. Landing Page Oficial</h4>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 15px;">
+                                Incorpora las tarifas de $135, $189 y $239, los 3 pilares de confianza y el badge del logo oficial.
+                            </p>
+                            <a href="prototypes/landing.html" target="_blank" style="color: var(--teal-clean); font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                                Abrir Landing Page →
+                            </a>
+                        </div>
+
+                        <!-- Prototipo 2: Calculadora -->
+                        <div class="card-modular">
+                            <span class="badge-teal" style="margin-bottom: 10px;">TIEMPO REAL</span>
+                            <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core); margin-bottom: 6px;">2. Calculadora de Precios</h4>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 15px;">
+                                Selector de habitaciones (1, 2, 3 Dormitorios) y superficie en sq ft con descuentos por frecuencia en vivo.
+                            </p>
+                            <a href="prototypes/calculator.html" target="_blank" style="color: var(--teal-clean); font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                                Abrir Calculadora →
+                            </a>
+                        </div>
+
+                        <!-- Prototipo 3: Checkout -->
+                        <div class="card-modular">
+                            <span class="badge-navy" style="margin-bottom: 10px;">ZONAS MIAMI</span>
+                            <h4 style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: var(--navy-core); margin-bottom: 6px;">3. Checkout &amp; Reserva</h4>
+                            <p style="font-size: 13px; color: var(--slate-600); line-height: 1.5; margin-bottom: 15px;">
+                                Agendamiento por fecha, franja horaria e instrucciones de acceso para conserjería en Brickell y Miami Beach.
+                            </p>
+                            <a href="prototypes/checkout.html" target="_blank" style="color: var(--teal-clean); font-weight: 700; font-size: 13px; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                                Abrir Checkout →
+                            </a>
+                        </div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
+                        <!-- Prototipo 4: Client Portal -->
+                        <div class="card-modular" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span class="badge-teal" style="margin-bottom: 6px;">CLIENT PORTAL</span>
+                                <h4 style="font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--navy-core);">4. Auditoría Fotográfica Antes/Después</h4>
+                                <p style="font-size: 13px; color: var(--slate-600);">Visor comparativo de desinfección sanitaria y facturas.</p>
+                            </div>
+                            <a href="prototypes/client-portal.html" target="_blank" style="background: var(--navy-core); color: #fff; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 700; text-decoration: none;">
+                                Ver Portal
+                            </a>
+                        </div>
+
+                        <!-- Prototipo 5: CRM Operations Hub -->
+                        <div class="card-modular" style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <span class="badge-navy" style="margin-bottom: 6px;">CRM ADMINISTRATIVO</span>
+                                <h4 style="font-family: var(--font-display); font-size: 17px; font-weight: 800; color: var(--navy-core);">5. Centro de Despacho Operativo</h4>
+                                <p style="font-size: 13px; color: var(--slate-600);">Tablero Kanban de órdenes de trabajo y telemetría de furgonetas en Miami.</p>
+                            </div>
+                            <a href="prototypes/crm-admin.html" target="_blank" style="background: var(--teal-clean); color: #fff; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 700; text-decoration: none; box-shadow: var(--shadow-teal);">
+                                Ver CRM Ops
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Navegación Flotante -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevSlideBtn" title="Diapositiva Anterior (←)">
+            <i data-lucide="chevron-left" style="width:20px;"></i>
+        </button>
+        <span class="slide-counter">
+            <span id="currSlideNum">1</span> / <span id="totalSlidesNum">8</span>
+        </span>
+        <button class="nav-btn" id="nextSlideBtn" title="Siguiente Diapositiva (→ o Espacio)">
+            <i data-lucide="chevron-right" style="width:20px;"></i>
+        </button>
+    </div>
+
+    <!-- Zona Activa de Edición (Tecla E) -->
+    <div class="edit-hotzone"></div>
+    <div class="edit-toggle" id="editToggle">
+        <i data-lucide="edit-3" style="width:14px;"></i>
+        <span>Editar en Vivo (E)</span>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        class SlidePresentation {
+            constructor() {
+                this.stage = document.getElementById('deckStage');
+                this.slides = Array.from(document.querySelectorAll('.slide'));
+                this.currentSlide = 0;
+                
+                this.prevBtn = document.getElementById('prevSlideBtn');
+                this.nextBtn = document.getElementById('nextSlideBtn');
+                this.currNumEl = document.getElementById('currSlideNum');
+                this.totalNumEl = document.getElementById('totalSlidesNum');
+
+                if (this.totalNumEl) this.totalNumEl.textContent = this.slides.length;
+
+                this.initStageScaling();
+                this.setupKeyboardEvents();
+                this.setupButtonEvents();
+                this.setupInlineEditing();
+                this.showSlide(0);
+
+                window.addEventListener('resize', () => this.scaleStage());
+            }
+
+            initStageScaling() {
+                this.scaleStage();
+            }
+
+            scaleStage() {
+                const targetWidth = 1920;
+                const targetHeight = 1080;
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+
+                const scaleX = windowWidth / targetWidth;
+                const scaleY = windowHeight / targetHeight;
+                const scale = Math.min(scaleX, scaleY);
+
+                const offsetX = (windowWidth - targetWidth * scale) / 2;
+                const offsetY = (windowHeight - targetHeight * scale) / 2;
+
+                if (this.stage) {
+                    this.stage.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+                }
+            }
+
+            setupKeyboardEvents() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.getAttribute('contenteditable') === 'true') return;
+
+                    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide - 1);
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        this.showSlide(0);
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        this.showSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            setupButtonEvents() {
+                if (this.prevBtn) this.prevBtn.addEventListener('click', () => this.showSlide(this.currentSlide - 1));
+                if (this.nextBtn) this.nextBtn.addEventListener('click', () => this.showSlide(this.currentSlide + 1));
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                
+                this.slides.forEach((slide, i) => {
+                    const isActive = i === this.currentSlide;
+                    slide.classList.toggle('active', isActive);
+                });
+
+                if (this.currNumEl) this.currNumEl.textContent = this.currentSlide + 1;
+                if (this.prevBtn) this.prevBtn.disabled = this.currentSlide === 0;
+                if (this.nextBtn) this.nextBtn.disabled = this.currentSlide === this.slides.length - 1;
+            }
+
+            setupInlineEditing() {
+                const hotzone = document.querySelector('.edit-hotzone');
+                const editToggle = document.getElementById('editToggle');
+                let isEditMode = false;
+                let hideTimeout = null;
+
+                const toggleEdit = () => {
+                    isEditMode = !isEditMode;
+                    editToggle.classList.toggle('active', isEditMode);
+                    
+                    const editableElements = document.querySelectorAll('h1, h2, h3, h4, p, span, li, strong');
+                    editableElements.forEach((el) => {
+                        el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
+                    });
+                };
+
+                if (editToggle) editToggle.addEventListener('click', toggleEdit);
+
+                if (hotzone && editToggle) {
+                    hotzone.addEventListener('mouseenter', () => {
+                        clearTimeout(hideTimeout);
+                        editToggle.classList.add('show');
+                    });
+
+                    hotzone.addEventListener('mouseleave', () => {
+                        hideTimeout = setTimeout(() => {
+                            if (!isEditMode) editToggle.classList.remove('show');
+                        }, 400);
+                    });
+
+                    editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+                    editToggle.addEventListener('mouseleave', () => {
+                        hideTimeout = setTimeout(() => {
+                            if (!isEditMode) editToggle.classList.remove('show');
+                        }, 400);
+                    });
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        toggleEdit();
+                    }
+                });
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.presentation = new SlidePresentation();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>03 - Identidad Corporativa & Design Tokens | CRIS Quality Solutions</title>
+    
+    <!-- Fuentes Google Fonts: Montserrat & Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           FIXED 16:9 STAGE BASE CSS (MANDATORY)
+           Tipografía ampliada & Diseño de Alto Impacto
+           ========================================= */
+        :root {
+            --stage-bg: #050E18;
+            --slide-bg: #F8FAFC;
+            
+            /* Colores Oficiales CRIS Quality Solutions */
+            --navy-dark: #071624;
+            --navy-core: #0B2032;
+            --navy-light: #16344E;
+            --teal-clean: #1E857B;
+            --teal-bright: #249C90;
+            --teal-surface: #E6F5F3;
+            --coral-alert: #C0392B;
+            --coral-surface: #FDE8E8;
+            --gold-accent: #E6CA65;
+            
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-900: #0F172A;
+            --white: #FFFFFF;
+
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-subtle: 0 4px 14px rgba(11, 32, 50, 0.08);
+            --shadow-card: 0 12px 28px -6px rgba(11, 32, 50, 0.10);
+            --shadow-floating: 0 24px 44px -8px rgba(11, 32, 50, 0.20);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.7);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--slide-bg);
+            padding: 55px 75px;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        /* Header común */
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--slate-200);
+            position: relative;
+        }
+
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 160px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal-clean), var(--teal-bright));
+            border-radius: 99px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .badge-module {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--teal-surface);
+            color: var(--teal-clean);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(30, 133, 123, 0.25);
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--navy-core);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .slide-subtitle {
+            font-size: 19px;
+            color: var(--slate-600);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Controls */
+        .deck-controls {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(11, 32, 50, 0.94);
+            backdrop-filter: blur(14px);
+            padding: 12px 26px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+        }
+
+        .deck-btn {
+            background: rgba(255, 255, 255, 0.14);
+            border: none;
+            color: #FFFFFF;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: var(--transition-smooth);
+        }
+
+        .deck-btn:hover {
+            background: var(--teal-clean);
+            transform: scale(1.1);
+        }
+
+        .deck-counter {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+            color: #FFFFFF;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .deck-tag {
+            color: var(--teal-bright);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding-left: 14px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 28px;
+            border: 1px solid var(--slate-200);
+            box-shadow: var(--shadow-card);
+        }
+
+        .pill-tag {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+        }
+        .pill-teal { background: var(--teal-surface); color: var(--teal-clean); }
+        .pill-coral { background: var(--coral-surface); color: var(--coral-alert); }
+        .pill-navy { background: var(--navy-light); color: var(--white); }
+
+        /* Tokens Table */
+        .token-spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 15px;
+        }
+
+        .token-spec-table th {
+            background: var(--navy-core);
+            color: #fff;
+            padding: 14px 18px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .token-spec-table td {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--slate-200);
+            background: #fff;
+        }
+
+        .token-spec-table tr:nth-child(even) td {
+            background: var(--slate-50);
+        }
+
+        .token-code {
+            font-family: var(--font-mono);
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--teal-clean);
+            background: var(--teal-surface);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .swatch-circle {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ========================================================
+                 SLIDE 1: PORTADA
+                 ======================================================== -->
+            <section class="slide" style="background: radial-gradient(circle at 85% 15%, rgba(30, 133, 123, 0.3) 0%, transparent 45%), linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-core) 100%); color: #fff; justify-content: center; padding: 80px 100px;">
+                <div style="width: 400px; margin-bottom: 36px;">
+                    <!-- Badge SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="auto">
+                        <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" />
+                        <g transform="translate(24, 14) scale(0.66)">
+                            <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+                            <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+                            <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+                            <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                            <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                            <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                            <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                        </g>
+                        <g transform="translate(142, 6)">
+                            <text x="0" y="70" font-family="'Montserrat', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+                            <text x="2" y="96" font-family="'Montserrat', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <h1 style="font-family: var(--font-display); font-size: 68px; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; max-width: 1250px; margin-bottom: 22px;">
+                    IDENTIDAD CORPORATIVA & <span style="color: #249C90;">DESIGN TOKENS SYSTEM</span>
+                </h1>
+                <p style="font-size: 26px; color: var(--slate-300); max-width: 1050px; line-height: 1.5; margin-bottom: 44px;">
+                    Especificación técnica integral de tokens, componentes atómicos, arquitectura de información y gobernanza de diseño para CRIS Quality Solutions Miami.
+                </p>
+
+                <div style="display: flex; gap: 48px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.18);">
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Design Ops:</span> <strong style="display: block; font-size: 19px;">Tokens CSS / JSON</strong></div>
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Ratio WCAG:</span> <strong style="display: block; font-size: 19px;">Nivel AAA / AA Superado</strong></div>
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Estado:</span> <strong style="display: block; font-size: 19px; color: #73DEC9;">Ready for Engineering</strong></div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 2: FUNDAMENTOS DE LA IDENTIDAD CORPORATIVA
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Tokens 01</div>
+                        <div>
+                            <h2 class="slide-title">Fundamentos & Semiótica de la Identidad Visual</h2>
+                            <p class="slide-subtitle">Construcción conceptual del badge de CRIS Quality Solutions</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Semiótica Visual</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 36px; height: 100%;">
+                        <div class="card" style="display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-navy">Desglose de Significado</span>
+                                <h3 style="font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--navy-core); margin: 14px 0;">
+                                    El Puente entre la Casa Familiar y la Torre Corporativa
+                                </h3>
+                                <p style="font-size: 16.5px; color: var(--slate-600); line-height: 1.6;">
+                                    El isotipo combina dos figuras arquitectónicas esenciales de Miami: el techo a dos aguas que simboliza el calor y privacidad del hogar residencial, entrelazado con las líneas verticales de los rascacielos de Brickell y Downtown.
+                                </p>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px;">
+                                <div style="background: var(--slate-100); padding: 18px; border-radius: 10px;">
+                                    <strong style="color: var(--teal-clean); font-size: 16px;">✦ El Destello Superior</strong>
+                                    <p style="font-size: 14px; color: var(--slate-600); margin-top: 4px;">Representa el estándar de pulcritud, desinfección y el brillo hospital-grade garantizado.</p>
+                                </div>
+                                <div style="background: var(--slate-100); padding: 18px; border-radius: 10px;">
+                                    <strong style="color: var(--navy-core); font-size: 16px;">■ El Contenedor Badge</strong>
+                                    <p style="font-size: 14px; color: var(--slate-600); margin-top: 4px;">Aporta versatilidad de aplicación en cualquier superficie fotográfica con esquinas de 14px.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card card-dark" style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
+                            <span class="pill-tag pill-teal" style="margin-bottom: 24px;">Geometría & Proporción</span>
+                            <div style="max-width: 320px; width: 100%;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="auto">
+                                    <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" />
+                                    <g transform="translate(24, 14) scale(0.66)">
+                                        <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+                                        <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+                                        <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+                                        <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                                        <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                                        <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                                        <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                                    </g>
+                                    <g transform="translate(142, 6)">
+                                        <text x="0" y="70" font-family="'Montserrat', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+                                        <text x="2" y="96" font-family="'Montserrat', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+                                    </g>
+                                </svg>
+                            </div>
+                            <span style="font-family: var(--font-mono); font-size: 15px; font-weight: 700; color: var(--teal-bright); margin-top: 22px;">
+                                Proporción Áurea de Insignia: 2.71 : 1
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 3: PALETA CROMÁTICA & TOKENS DE COLOR
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Tokens 02</div>
+                        <div>
+                            <h2 class="slide-title">Design Tokens: Paleta Cromática Formalizada</h2>
+                            <p class="slide-subtitle">Tokens de color CSS, valores HEX, RGB y contraste de accesibilidad WCAG</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Color Tokens</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="card" style="padding: 20px;">
+                        <table class="token-spec-table">
+                            <thead>
+                                <tr>
+                                    <th>Color & Muestra</th>
+                                    <th>Token CSS</th>
+                                    <th>Valor HEX</th>
+                                    <th>Valor RGB</th>
+                                    <th>Uso en Sistema</th>
+                                    <th>Contraste WCAG</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #0B2032;"></span><strong>Navy Core</strong></td>
+                                    <td><span class="token-code">--color-navy-core</span></td>
+                                    <td>#0B2032</td>
+                                    <td>11, 32, 50</td>
+                                    <td>Wordmark CRIS, títulos principales y fondos oscuros</td>
+                                    <td><span class="pill-tag pill-teal">13.8:1 (AAA)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #1E857B;"></span><strong>Sea Teal Clean</strong></td>
+                                    <td><span class="token-code">--color-teal-clean</span></td>
+                                    <td>#1E857B</td>
+                                    <td>30, 133, 123</td>
+                                    <td>Isotipo, botones de acción (CTA) y acentos higiénicos</td>
+                                    <td><span class="pill-tag pill-teal">4.7:1 (AA)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #249C90;"></span><strong>Bright Mint</strong></td>
+                                    <td><span class="token-code">--color-teal-bright</span></td>
+                                    <td>#249C90</td>
+                                    <td>36, 156, 144</td>
+                                    <td>Hover interactivo, links y badges iluminados</td>
+                                    <td><span class="pill-tag pill-teal">3.5:1 (UI)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #C0392B;"></span><strong>Coral Alert</strong></td>
+                                    <td><span class="token-code">--color-coral-alert</span></td>
+                                    <td>#C0392B</td>
+                                    <td>192, 57, 43</td>
+                                    <td>Badges de "Precio Exclusivo Este Mes" y alertas urgentes</td>
+                                    <td><span class="pill-tag pill-teal">5.1:1 (AA)</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #E6F5F3;"></span><strong>Teal Surface</strong></td>
+                                    <td><span class="token-code">--color-teal-surface</span></td>
+                                    <td>#E6F5F3</td>
+                                    <td>230, 245, 243</td>
+                                    <td>Fondos de tarjetas activas y badges suaves</td>
+                                    <td><span class="pill-tag pill-teal">Superficie</span></td>
+                                </tr>
+                                <tr>
+                                    <td><span class="swatch-circle" style="background: #F8FAFC;"></span><strong>Slate White</strong></td>
+                                    <td><span class="token-code">--color-surface-bg</span></td>
+                                    <td>#F8FAFC</td>
+                                    <td>248, 250, 252</td>
+                                    <td>Fondo general de la aplicación web y slides</td>
+                                    <td><span class="pill-tag pill-teal">Base</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 4: TIPOGRAFÍA & ESCALA MODULAR
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Tokens 03</div>
+                        <div>
+                            <h2 class="slide-title">Design Tokens: Tipografía & Escala Modular</h2>
+                            <p class="slide-subtitle">Pila de fuentes, pesos, interlineado y jerarquía en píxeles y rem</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-navy">Typography Tokens</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; height: 100%;">
+                        <div class="card">
+                            <span class="pill-tag pill-navy">Familias Tipográficas Oficiales</span>
+                            
+                            <div style="margin-top: 18px; border-bottom: 1px solid var(--slate-200); padding-bottom: 18px;">
+                                <strong style="font-size: 18px; color: var(--navy-core);">1. Montserrat (Display & Titulares)</strong>
+                                <p style="font-size: 15px; color: var(--slate-600); margin: 6px 0;">
+                                    Sans-serif geométrica de gran presencia. Empleada en el wordmark oficial y cabeceras de alta conversión.
+                                </p>
+                                <span class="token-code">font-weight: 700 (Bold), 800 (ExtraBold), 900 (Black)</span>
+                            </div>
+
+                            <div style="margin-top: 18px;">
+                                <strong style="font-size: 18px; color: var(--navy-core);">2. Inter (Cuerpo, UI & Formularios)</strong>
+                                <p style="font-size: 15px; color: var(--slate-600); margin: 6px 0;">
+                                    Tipografía neutra y legible en pantallas táctiles de alta densidad de píxeles.
+                                </p>
+                                <span class="token-code">font-weight: 400 (Regular), 500 (Medium), 600 (SemiBold)</span>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <span class="pill-tag pill-teal">Escala Modular de Tamaños</span>
+                            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--slate-200); padding-bottom: 8px;">
+                                    <span style="font-family: var(--font-display); font-size: 34px; font-weight: 900; color: var(--navy-core);">Hero Display</span>
+                                    <span class="token-code">48px / 3.0rem (Line: 1.15)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--slate-200); padding-bottom: 8px;">
+                                    <span style="font-family: var(--font-display); font-size: 26px; font-weight: 800; color: var(--navy-core);">Section H2</span>
+                                    <span class="token-code">34px / 2.12rem (Line: 1.25)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--slate-200); padding-bottom: 8px;">
+                                    <span style="font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--navy-core);">Card Title H3</span>
+                                    <span class="token-code">22px / 1.37rem (Line: 1.35)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid var(--slate-200); padding-bottom: 8px;">
+                                    <span style="font-family: var(--font-body); font-size: 16px; color: var(--slate-700);">Body Regular</span>
+                                    <span class="token-code">16px / 1.0rem (Line: 1.55)</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                    <span style="font-family: var(--font-display); font-size: 12px; font-weight: 800; color: var(--teal-clean); letter-spacing: 0.1em; text-transform: uppercase;">Overline Badge</span>
+                                    <span class="token-code">12px / 0.75rem (Line: 1.0)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 5: ESPACIADO, RADIOS & ELEVACIONES
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Tokens 04</div>
+                        <div>
+                            <h2 class="slide-title">Design Tokens: Espaciado, Radios & Elevación</h2>
+                            <p class="slide-subtitle">Grilla de 8 puntos, radios de esquina idénticos al flyer y sombras atmosféricas</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Layout & Depth</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; height: 100%;">
+                        <div class="card">
+                            <span class="pill-tag pill-navy">Grilla de 8 Puntos (Spacing)</span>
+                            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-1</span><span class="token-code">4px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-2</span><span class="token-code">8px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-3</span><span class="token-code">12px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-4</span><span class="token-code">16px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-6</span><span class="token-code">24px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-8</span><span class="token-code">32px</span></div>
+                                <div style="display: flex; justify-content: space-between; font-size: 14.5px;"><span>--space-12</span><span class="token-code">48px</span></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <span class="pill-tag pill-teal">Radios de Curvatura (Radius)</span>
+                            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <strong style="font-size: 15px; color: var(--navy-core);">--radius-card: 14px</strong>
+                                    <p style="font-size: 13.5px; color: var(--slate-600); margin-top: 2px;">El radio exacto del contenedor del flyer oficial.</p>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 15px; color: var(--navy-core);">--radius-sm: 8px</strong>
+                                    <p style="font-size: 13.5px; color: var(--slate-600); margin-top: 2px;">Inputs de formulario, botones compactos.</p>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 15px; color: var(--navy-core);">--radius-modal: 20px</strong>
+                                    <p style="font-size: 13.5px; color: var(--slate-600); margin-top: 2px;">Contenedores mayores y modales flotantes.</p>
+                                </div>
+                                <div>
+                                    <strong style="font-size: 15px; color: var(--navy-core);">--radius-full: 9999px</strong>
+                                    <p style="font-size: 13.5px; color: var(--slate-600); margin-top: 2px;">Pills de estatus y botones circulares.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <span class="pill-tag pill-coral">Sombras & Profundidad (Shadows)</span>
+                            <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 16px;">
+                                <div style="background: #fff; padding: 14px; border-radius: 10px; box-shadow: var(--shadow-subtle);">
+                                    <strong style="font-size: 14px; color: var(--navy-core);">--shadow-subtle</strong>
+                                    <small style="display: block; color: var(--slate-500); font-size: 12px;">0 4px 14px rgba(11,32,50,0.08)</small>
+                                </div>
+                                <div style="background: #fff; padding: 14px; border-radius: 10px; box-shadow: var(--shadow-card);">
+                                    <strong style="font-size: 14px; color: var(--navy-core);">--shadow-card</strong>
+                                    <small style="display: block; color: var(--slate-500); font-size: 12px;">0 12px 28px -6px rgba(11,32,50,0.10)</small>
+                                </div>
+                                <div style="background: #fff; padding: 14px; border-radius: 10px; box-shadow: var(--shadow-floating);">
+                                    <strong style="font-size: 14px; color: var(--navy-core);">--shadow-floating</strong>
+                                    <small style="display: block; color: var(--slate-500); font-size: 12px;">0 24px 44px -8px rgba(11,32,50,0.20)</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 6: BIBLIOTECA DE COMPONENTES ATÓMICOS
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">UI Kit 01</div>
+                        <div>
+                            <h2 class="slide-title">Biblioteca de Componentes Atómicos (UI Kit)</h2>
+                            <p class="slide-subtitle">Botones, estados interactivos, inputs de formulario y badges semánticos</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Component Library</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 36px; height: 100%;">
+                        <div class="card">
+                            <span class="pill-tag pill-navy">Botones del Sistema (Buttons)</span>
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <button style="background: var(--teal-clean); color: #fff; border: none; padding: 14px 28px; border-radius: var(--radius-full); font-weight: 800; font-size: 15px; cursor: pointer;">
+                                        RESERVA TU LIMPIEZA
+                                    </button>
+                                    <span class="token-code">Btn Primary Teal</span>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <button style="background: var(--navy-core); color: #fff; border: none; padding: 14px 28px; border-radius: 10px; font-weight: 800; font-size: 15px; cursor: pointer;">
+                                        ACCESO CLIENTES
+                                    </button>
+                                    <span class="token-code">Btn Secondary Navy</span>
+                                </div>
+                                <div style="display: flex; align-items: center; justify-content: space-between;">
+                                    <button style="background: transparent; border: 2px solid var(--teal-clean); color: var(--teal-clean); padding: 12px 26px; border-radius: var(--radius-full); font-weight: 800; font-size: 15px; cursor: pointer;">
+                                        VER CHECKLIST QA
+                                    </button>
+                                    <span class="token-code">Btn Outline Teal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <span class="pill-tag pill-teal">Inputs & Controles Táctiles</span>
+                            <div style="display: flex; flex-direction: column; gap: 14px; margin-top: 16px;">
+                                <div>
+                                    <label style="font-size: 14px; font-weight: 800; color: var(--navy-core); display: block; margin-bottom: 6px;">Input Base (Inter 15px):</label>
+                                    <input type="text" value="1421 Brickell Ave, Miami" style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--slate-300); font-size: 15px;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 14px; font-weight: 800; color: var(--navy-core); display: block; margin-bottom: 6px;">Select Desplegable:</label>
+                                    <select style="width: 100%; padding: 12px 16px; border-radius: 8px; border: 1px solid var(--slate-300); font-size: 15px;">
+                                        <option>2 Dormitorios ($189 Experta)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 7: MOCKUPS INTEGRADOS HOME, CALC & CHECKOUT
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Mockups 04</div>
+                        <div>
+                            <h2 class="slide-title">Mockups Integrados: Home, Calculadora & Checkout</h2>
+                            <p class="slide-subtitle">Demostración en vivo de los tres componentes clave del embudo</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-coral">Experiencia Completa</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; height: 100%;">
+                        <div class="card" style="border-top: 6px solid var(--teal-clean); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-teal">1. Home / Landing</span>
+                                <h4 style="font-size: 19px; font-weight: 800; color: var(--navy-core); margin: 12px 0;">Oferta del Mes ($135, $189, $239)</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Visualización de los planes oficiales del flyer con selección directa del número de dormitorios.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 10px; text-align: center;">
+                                <strong style="font-size: 28px; color: var(--navy-core); display: block;">$189</strong>
+                                <small style="color: var(--teal-clean); font-weight: 800; font-size: 13px;">2 Dormitorios Experta</small>
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-top: 6px solid var(--navy-core); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-navy">2. Calculadora Dinámica</span>
+                                <h4 style="font-size: 19px; font-weight: 800; color: var(--navy-core); margin: 12px 0;">Algoritmo Reactivo</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Permite sumar baños, aplicar descuentos quincenales (-15%) y agregar nevera o ventanales.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 10px; text-align: center;">
+                                <strong style="font-size: 28px; color: var(--teal-clean); display: block;">$160.65</strong>
+                                <small style="color: var(--slate-600); font-size: 13px;">Total con descuento quincenal</small>
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-top: 6px solid var(--coral-alert); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-coral">3. Checkout Seguro</span>
+                                <h4 style="font-size: 19px; font-weight: 800; color: var(--navy-core); margin: 12px 0;">Geocerca & Pasarela</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Validación de dirección en Miami-Dade, selección de franja horaria y cobro seguro vía Stripe.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 10px; text-align: center;">
+                                <strong style="font-size: 16px; color: #10B981; display: block;">🔒 Stripe Encrypted</strong>
+                                <small style="color: var(--slate-600); font-size: 13px;">Confirmación SMS inmediata</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 8: FLUJO Y PANTALLAS CRM ADMINISTRATIVO
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">CRM Ops</div>
+                        <div>
+                            <h2 class="slide-title">Diagrama: Flujo & Pantallas del CRM Administrativo</h2>
+                            <p class="slide-subtitle">Ciclo completo de la orden de trabajo desde el despacho hasta la liquidación contable</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-navy">Backoffice Workflow</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-around; padding: 26px;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px;">
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px; border-left: 5px solid var(--navy-core);">
+                                <strong style="color: var(--navy-core); font-size: 16px; display: block;">1. Despacho Geográfico</strong>
+                                <p style="font-size: 14px; color: var(--slate-600); margin-top: 6px; line-height: 1.45;">
+                                    Asignación inteligente según código postal (Brickell, Doral, Coral Gables) a la van Ford Transit más cercana.
+                                </p>
+                            </div>
+
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px; border-left: 5px solid var(--teal-clean);">
+                                <strong style="color: var(--teal-clean); font-size: 16px; display: block;">2. Check-in de Campo</strong>
+                                <p style="font-size: 14px; color: var(--slate-600); margin-top: 6px; line-height: 1.45;">
+                                    Supervisor valida geolocalización móvil al arribar y captura foto de inicio "Antes".
+                                </p>
+                            </div>
+
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px; border-left: 5px solid #10B981;">
+                                <strong style="color: #10B981; font-size: 16px; display: block;">3. Auditoría QA</strong>
+                                <p style="font-size: 14px; color: var(--slate-600); margin-top: 6px; line-height: 1.45;">
+                                    Checklist digital de 45 puntos (desinfección, zócalos, baños) con cálculo de score.
+                                </p>
+                            </div>
+
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px; border-left: 5px solid var(--coral-alert);">
+                                <strong style="color: var(--coral-alert); font-size: 16px; display: block;">4. Cierre & Factura</strong>
+                                <p style="font-size: 14px; color: var(--slate-600); margin-top: 6px; line-height: 1.45;">
+                                    Emisión automática de invoice fiscal de Florida y sincronización contable.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--navy-core); color: #fff; padding: 20px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="font-size: 17px;">Pantalla Clave del CRM: Tablero Kanban de Órdenes</strong>
+                                <p style="font-size: 14px; color: var(--slate-300); margin-top: 4px;">Visualización en columnas: [Nuevas] → [Asignadas] → [En Ruta] → [En Servicio] → [Completadas QA].</p>
+                            </div>
+                            <span class="pill-tag pill-teal">Trazabilidad 100%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 9: FLUJO Y PANTALLAS ÁREA DE CLIENTES
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Portal 02</div>
+                        <div>
+                            <h2 class="slide-title">Diagrama: Flujo & Pantallas del Área de Clientes</h2>
+                            <p class="slide-subtitle">Experiencia de autogestión sin fricciones para clientes residenciales y corporativos</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Customer Journey</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-around; padding: 26px;">
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+                                <span class="pill-tag pill-navy">Pantalla 1</span>
+                                <h4 style="font-size: 18px; font-weight: 800; color: var(--navy-core); margin: 8px 0;">Dashboard de Inmueble</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Muestra el estado en vivo de la jornada, cuadrilla asignada y botón de llamada directa al supervisor.
+                                </p>
+                            </div>
+
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+                                <span class="pill-tag pill-teal">Pantalla 2</span>
+                                <h4 style="font-size: 18px; font-weight: 800; color: var(--navy-core); margin: 8px 0;">Visor de Fotos QA</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Permite al cliente comparar las imágenes de "Antes y Después" de cada habitación con zoom en alta resolución.
+                                </p>
+                            </div>
+
+                            <div style="background: var(--slate-100); padding: 20px; border-radius: 10px;">
+                                <span class="pill-tag pill-coral">Pantalla 3</span>
+                                <h4 style="font-size: 18px; font-weight: 800; color: var(--navy-core); margin: 8px 0;">Gestión de Facturación</h4>
+                                <p style="font-size: 14.5px; color: var(--slate-600); line-height: 1.5;">
+                                    Descarga de recibos oficiales en PDF, cambio de tarjeta de crédito y solicitud de servicios adicionales.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--teal-surface); padding: 18px; border-radius: 10px; border: 1px solid rgba(30,133,123,0.3);">
+                            <strong style="color: var(--teal-clean); font-size: 15px;">Retención & Fidelización:</strong>
+                            <p style="font-size: 14px; color: var(--slate-700); margin-top: 4px;">
+                                Los clientes con planes quincenales y semanales reciben recordatorios automáticos 24 horas antes por WhatsApp y SMS, reduciendo las cancelaciones en un 88%.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Barra de Control Flotante -->
+    <div class="deck-controls">
+        <button class="deck-btn" id="prevBtn" title="Diapositiva Anterior (←)">‹</button>
+        <span class="deck-counter" id="deckCounter">1 / 9</span>
+        <button class="deck-btn" id="nextBtn" title="Diapositiva Siguiente (→)">›</button>
+        <span class="deck-tag">CRIS Design Tokens</span>
+    </div>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.stage = document.getElementById('deckStage');
+                this.counter = document.getElementById('deckCounter');
+
+                this.setupStageScale();
+                this.setupKeyboardNav();
+                this.setupButtons();
+                this.setupTouchNav();
+                this.showSlide(0);
+            }
+
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        this.showSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        this.showSlide(this.currentSlide - 1);
+                    }
+                });
+            }
+
+            setupButtons() {
+                document.getElementById('prevBtn').addEventListener('click', () => {
+                    this.showSlide(this.currentSlide - 1);
+                });
+                document.getElementById('nextBtn').addEventListener('click', () => {
+                    this.showSlide(this.currentSlide + 1);
+                });
+            }
+
+            setupTouchNav() {
+                let startX = 0;
+                document.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+                document.addEventListener('touchend', (e) => {
+                    const diff = e.changedTouches[0].clientX - startX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff < 0) this.showSlide(this.currentSlide + 1);
+                        else this.showSlide(this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                this.slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === this.currentSlide);
+                    slide.classList.toggle('visible', i === this.currentSlide);
+                });
+                this.counter.textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            window.presentation = new SlidePresentation();
+        });
+    </script>
+</body>
+</html>

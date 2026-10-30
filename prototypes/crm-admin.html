@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Operations & Dispatch Control | CRIS Quality Solution LLC</title>
+    
+    <!-- Fonts & Tokens -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/tokens.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #0f172a;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Dark High-Tech CRM Sidebar */
+        .admin-sidebar {
+            width: 260px;
+            background: #0b1528;
+            border-right: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            padding: 0 0.5rem;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .brand-header h2 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+        }
+
+        .badge-admin {
+            font-size: 0.6875rem;
+            background: rgba(0, 180, 216, 0.2);
+            color: #38bdf8;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            flex: 1;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .menu-link:hover, .menu-link.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .menu-link.active {
+            background: linear-gradient(135deg, var(--color-brand-blue) 0%, #0b2545 100%);
+            border-left: 3px solid #38bdf8;
+        }
+
+        /* Main Workspace */
+        .admin-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: #0f172a;
+        }
+
+        .top-navbar {
+            background: #0b1528;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 169, 126, 0.15);
+            border: 1px solid rgba(15, 169, 126, 0.3);
+            color: #34d399;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* KPI Cards Row */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+            padding: 2rem 2rem 1.5rem;
+        }
+
+        .kpi-card {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8125rem;
+            color: #94a3b8;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .kpi-val {
+            font-family: var(--font-mono);
+            font-size: 1.875rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+        }
+
+        .kpi-badge {
+            font-size: 0.75rem;
+            color: #34d399;
+            font-weight: 700;
+            margin-top: 0.4rem;
+            display: inline-block;
+        }
+
+        /* Dispatch & Kanban Workspace */
+        .workspace-content {
+            padding: 0 2rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Active Crews Live Map Bar */
+        .crews-bar {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+        }
+
+        .bar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .bar-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .crews-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+        }
+
+        .crew-tile {
+            background: #0f172a;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+        }
+
+        .crew-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .crew-name {
+            font-weight: 700;
+            font-size: 0.875rem;
+            color: #38bdf8;
+        }
+
+        .crew-loc {
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        /* Kanban Board */
+        .kanban-section {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-xl);
+            padding: 1.5rem;
+        }
+
+        .kanban-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .kanban-cols {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .col-card {
+            background: #0f172a;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            min-height: 380px;
+        }
+
+        .col-title {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .wo-card {
+            background: #1e293b;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .wo-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+        }
+
+        .wo-id {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: #38bdf8;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .wo-facility {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.25rem;
+        }
+
+        .wo-type {
+            font-size: 0.75rem;
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+        }
+
+        .wo-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+            padding-top: 0.5rem;
+            border-top: 1px dashed rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-advance {
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-advance:hover {
+            background: #0052a3;
+        }
+
+        @media (max-width: 1024px) {
+            .kpi-grid, .crews-grid, .kanban-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+        <a href="landing.html" class="brand-header">
+            <img src="../assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height:40px; width:auto; border-radius:6px;">
+            <span class="badge-admin">HQ MIAMI</span>
+        </a>
+
+        <ul class="menu-list">
+            <li><a href="#" class="menu-link active"><i data-lucide="layout-dashboard" style="width:16px;"></i> Live Dispatch Board</a></li>
+            <li><a href="#" class="menu-link"><i data-lucide="clipboard-check" style="width:16px;"></i> QA Photo Audits (28)</a></li>
+            <li><a href="#" class="menu-link"><i data-lucide="truck" style="width:16px;"></i> Transit Fleet GPS</a></li>
+            <li><a href="#" class="menu-link"><i data-lucide="users" style="width:16px;"></i> Cleaners & Crews</a></li>
+            <li><a href="#" class="menu-link"><i data-lucide="receipt" style="width:16px;"></i> Billing & Plaid ACH</a></li>
+            <li><a href="../docs/brand-guidelines.html" class="menu-link" style="color:#34d399;"><i data-lucide="presentation" style="width:16px;"></i> Brand Manual Slides</a></li>
+        </ul>
+
+        <div style="font-size:0.75rem; color:#64748b; padding:0 0.5rem;">
+            Supervisor ID: #MGR-MIAMI-01<br>
+            Server Latency: 14ms (US-East)
+        </div>
+    </aside>
+
+    <!-- Main View -->
+    <main class="admin-main">
+        <!-- Top Navbar -->
+        <header class="top-navbar">
+            <div style="display:flex; align-items:center; gap:1.25rem;">
+                <h1 style="font-family:var(--font-display); font-size:1.25rem; font-weight:800;">Operations Control Center — Miami-Dade & Broward</h1>
+                <div class="status-pill">
+                    <span class="pulse-dot"></span>
+                    <span>18 Active Jobs Today • Zero Delays</span>
+                </div>
+            </div>
+
+            <div style="display:flex; gap:1rem; align-items:center;">
+                <a href="client-portal.html" class="menu-link" style="background:#1e293b; color:#38bdf8; font-size:0.8125rem;">
+                    <i data-lucide="external-link" style="width:14px;"></i> Switch to Client View
+                </a>
+                <a href="landing.html" class="menu-link" style="background:#1e293b; font-size:0.8125rem;">
+                    <i data-lucide="home" style="width:14px;"></i> Public Landing
+                </a>
+            </div>
+        </header>
+
+        <!-- KPI Summary Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-meta">
+                    <span>Active Contracts</span>
+                    <i data-lucide="building" style="width:16px; color:#38bdf8;"></i>
+                </div>
+                <div class="kpi-val">102</div>
+                <div class="kpi-badge">+14 new this month</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-meta">
+                    <span>Monthly Recurrent MRR</span>
+                    <i data-lucide="dollar-sign" style="width:16px; color:#34d399;"></i>
+                </div>
+                <div class="kpi-val">$84,250</div>
+                <div class="kpi-badge">+18.5% YoY growth</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-meta">
+                    <span>On-Time Arrival (GPS)</span>
+                    <i data-lucide="clock" style="width:16px; color:#fbbf24;"></i>
+                </div>
+                <div class="kpi-val">99.4%</div>
+                <div class="kpi-badge" style="color:#fbbf24;">Average 6 min early</div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-meta">
+                    <span>QA Audit Score</span>
+                    <i data-lucide="shield-check" style="width:16px; color:#a78bfa;"></i>
+                </div>
+                <div class="kpi-val">4.96 <span style="font-size:1rem; color:#94a3b8;">/ 5.0</span></div>
+                <div class="kpi-badge" style="color:#a78bfa;">100% EPA Compliant</div>
+            </div>
+        </div>
+
+        <!-- Main Body -->
+        <div class="workspace-content">
+            <!-- Active Dispatch Grid -->
+            <div class="crews-bar">
+                <div class="bar-header">
+                    <div>
+                        <h3>Active Transit Units in Field (South Florida)</h3>
+                        <p style="font-size:0.8125rem; color:#94a3b8;">Live telemetry and status from Ford Transit crew vans.</p>
+                    </div>
+                    <span style="font-size:0.75rem; color:#38bdf8; font-weight:700;">4 OF 4 UNITS DEPLOYED</span>
+                </div>
+
+                <div class="crews-grid">
+                    <div class="crew-tile">
+                        <div class="crew-head">
+                            <span class="crew-name">Crew #101 (Transit A)</span>
+                            <span style="font-size:0.6875rem; background:#064e3b; color:#34d399; padding:0.15rem 0.4rem; border-radius:3px;">IN SITE</span>
+                        </div>
+                        <div class="crew-loc">Brickell Bay Financial • Fl 14</div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:0.35rem;">Lead: Mateo V. | 3 Cleaners</div>
+                    </div>
+
+                    <div class="crew-tile">
+                        <div class="crew-head">
+                            <span class="crew-name">Crew #102 (Transit B)</span>
+                            <span style="font-size:0.6875rem; background:#1e3a8a; color:#93c5fd; padding:0.15rem 0.4rem; border-radius:3px;">EN ROUTE</span>
+                        </div>
+                        <div class="crew-loc">Doral Corporate Park • Bldg 3</div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:0.35rem;">ETA: 6:15 PM (Palmetto Expy)</div>
+                    </div>
+
+                    <div class="crew-tile">
+                        <div class="crew-head">
+                            <span class="crew-name">Crew #103 (Transit C)</span>
+                            <span style="font-size:0.6875rem; background:#064e3b; color:#34d399; padding:0.15rem 0.4rem; border-radius:3px;">IN SITE</span>
+                        </div>
+                        <div class="crew-loc">Coral Gables Plaza • Suite 400</div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:0.35rem;">Lead: Elena R. | 2 Cleaners</div>
+                    </div>
+
+                    <div class="crew-tile">
+                        <div class="crew-head">
+                            <span class="crew-name">Crew #104 (Transit D)</span>
+                            <span style="font-size:0.6875rem; background:#374151; color:#d1d5db; padding:0.15rem 0.4rem; border-radius:3px;">SCHEDULED</span>
+                        </div>
+                        <div class="crew-loc">Miami Beach Luxury Penthouse</div>
+                        <div style="font-size:0.75rem; color:#64748b; margin-top:0.35rem;">Shift starts at 7:00 PM</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operations Kanban -->
+            <div class="kanban-section">
+                <div class="kanban-header">
+                    <div>
+                        <h3>Work Order Execution Kanban</h3>
+                        <p style="font-size:0.8125rem; color:#94a3b8;">Click "Advance Status" on any order to simulate lifecycle progression.</p>
+                    </div>
+                </div>
+
+                <div class="kanban-cols">
+                    <!-- Col 1: Scheduled -->
+                    <div class="col-card" id="col-scheduled">
+                        <div class="col-title">
+                            <span>1. Scheduled</span>
+                            <span id="cnt-sched">1</span>
+                        </div>
+
+                        <div class="wo-card" id="card-8945">
+                            <div class="wo-id">#WO-2026-8945</div>
+                            <div class="wo-facility">Aventura Medical Dental Center</div>
+                            <div class="wo-type">Terminal Sanitization (4,200 sq ft)</div>
+                            <div class="wo-footer">
+                                <span>7:30 PM Shift</span>
+                                <button class="btn-advance" onclick="advanceOrder('card-8945', 'col-route')">Start Route →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Col 2: In Route -->
+                    <div class="col-card" id="col-route">
+                        <div class="col-title">
+                            <span>2. En Route</span>
+                            <span id="cnt-route">1</span>
+                        </div>
+
+                        <div class="wo-card" id="card-8944">
+                            <div class="wo-id">#WO-2026-8944</div>
+                            <div class="wo-facility">Doral Logistics Center HQ</div>
+                            <div class="wo-type">Commercial Office (8,500 sq ft)</div>
+                            <div class="wo-footer">
+                                <span>Transit Crew #102</span>
+                                <button class="btn-advance" onclick="advanceOrder('card-8944', 'col-progress')">Check-in →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Col 3: Cleaning In Progress -->
+                    <div class="col-card" id="col-progress">
+                        <div class="col-title">
+                            <span>3. In Progress</span>
+                            <span id="cnt-progress">1</span>
+                        </div>
+
+                        <div class="wo-card" id="card-8942">
+                            <div class="wo-id">#WO-2026-8942</div>
+                            <div class="wo-facility">Brickell Bay Tower — Suite 1400</div>
+                            <div class="wo-type">Hospital-Grade EPA Fogging</div>
+                            <div class="wo-footer">
+                                <span>Before Photos Logged</span>
+                                <button class="btn-advance" onclick="advanceOrder('card-8942', 'col-qa')">Submit QA →</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Col 4: QA Verified & Invoiced -->
+                    <div class="col-card" id="col-qa">
+                        <div class="col-title">
+                            <span>4. QA Approved & Invoiced</span>
+                            <span id="cnt-qa">1</span>
+                        </div>
+
+                        <div class="wo-card" id="card-8940">
+                            <div class="wo-id">#WO-2026-8940</div>
+                            <div class="wo-facility">Coral Gables Executive Suite 400</div>
+                            <div class="wo-type">Bi-Weekly Maintenance ($327.00)</div>
+                            <div class="wo-footer">
+                                <span style="color:#34d399;"><i data-lucide="check-check" style="width:12px; vertical-align:middle;"></i> Plaid ACH Paid</span>
+                                <span style="font-size:0.6875rem; color:#94a3b8;">100% Pass</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        function advanceOrder(cardId, nextColId) {
+            const card = document.getElementById(cardId);
+            const targetCol = document.getElementById(nextColId);
+            if (!card || !targetCol) return;
+
+            targetCol.appendChild(card);
+            
+            // Adjust button logic
+            const btn = card.querySelector('.btn-advance');
+            if (nextColId === 'col-route') {
+                btn.textContent = 'Check-in →';
+                btn.setAttribute('onclick', `advanceOrder('${cardId}', 'col-progress')`);
+            } else if (nextColId === 'col-progress') {
+                btn.textContent = 'Submit QA →';
+                btn.setAttribute('onclick', `advanceOrder('${cardId}', 'col-qa')`);
+            } else if (nextColId === 'col-qa') {
+                btn.outerHTML = '<span style="color:#34d399; font-weight:700;"><i data-lucide="check" style="width:12px;"></i> Verified</span>';
+                lucide.createIcons();
+            }
+        }
+    </script>
+</body>
+</html>

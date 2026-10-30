@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="100%">
+  <defs>
+    <filter id="badgeShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.15" />
+    </filter>
+  </defs>
+
+  <!-- Tarjeta contenedor blanca con esquinas redondeadas del flyer -->
+  <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" filter="url(#badgeShadow)" />
+
+  <!-- ISOTIPO TEAL -->
+  <g transform="translate(24, 14) scale(0.66)">
+    <!-- Destello -->
+    <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+    <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+
+    <!-- Casa & Torre -->
+    <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+    <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+    <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+    <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+    <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+  </g>
+
+  <!-- WORDMARK "CRIS QUALITY SOLUTIONS" -->
+  <g transform="translate(142, 6)">
+    <text x="0" y="70" font-family="'Montserrat', 'Barlow Condensed', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+    <text x="2" y="96" font-family="'Montserrat', 'Inter', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+  </g>
+</svg>

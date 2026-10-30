@@ -1,0 +1,1267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>02 - Mockups & Ecosistema Web Interactivo | CRIS Quality Solutions</title>
+    
+    <!-- Fuentes Google Fonts: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           FIXED 16:9 STAGE BASE CSS (MANDATORY)
+           Tipografía ampliada & Diseño de Alto Impacto
+           ========================================= */
+        :root {
+            --stage-bg: #050E18;
+            --slide-bg: #F8FAFC;
+            
+            /* Colores Oficiales CRIS Quality Solutions */
+            --navy-dark: #071624;
+            --navy-core: #0B2032;
+            --navy-light: #16344E;
+            --teal-clean: #1E857B;
+            --teal-bright: #249C90;
+            --teal-surface: #E6F5F3;
+            --coral-alert: #C0392B;
+            --coral-surface: #FDE8E8;
+            --gold-accent: #E6CA65;
+            
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-900: #0F172A;
+            --white: #FFFFFF;
+
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --shadow-subtle: 0 4px 14px rgba(11, 32, 50, 0.08);
+            --shadow-card: 0 12px 28px -6px rgba(11, 32, 50, 0.10);
+            --shadow-floating: 0 24px 44px -8px rgba(11, 32, 50, 0.20);
+
+            --radius-sm: 10px;
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --radius-full: 9999px;
+            --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg);
+            box-shadow: 0 0 80px rgba(0, 0, 0, 0.7);
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: var(--slide-bg);
+            padding: 55px 75px;
+            transition: opacity 0.35s ease, visibility 0.35s ease;
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        /* Header común */
+        .slide-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--slate-200);
+            position: relative;
+        }
+
+        .slide-header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 160px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--teal-clean), var(--teal-bright));
+            border-radius: 99px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .badge-module {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--teal-surface);
+            color: var(--teal-clean);
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 8px 18px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(30, 133, 123, 0.25);
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--navy-core);
+            letter-spacing: -0.02em;
+            line-height: 1.15;
+        }
+
+        .slide-subtitle {
+            font-size: 19px;
+            color: var(--slate-600);
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .slide-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Controls */
+        .deck-controls {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(11, 32, 50, 0.94);
+            backdrop-filter: blur(14px);
+            padding: 12px 26px;
+            border-radius: var(--radius-full);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+            z-index: 1000;
+        }
+
+        .deck-btn {
+            background: rgba(255, 255, 255, 0.14);
+            border: none;
+            color: #FFFFFF;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 700;
+            transition: var(--transition-smooth);
+        }
+
+        .deck-btn:hover {
+            background: var(--teal-clean);
+            transform: scale(1.1);
+        }
+
+        .deck-counter {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+            color: #FFFFFF;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .deck-tag {
+            color: var(--teal-bright);
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding-left: 14px;
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 26px;
+            border: 1px solid var(--slate-200);
+            box-shadow: var(--shadow-card);
+        }
+
+        .pill-tag {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 5px 14px;
+            border-radius: var(--radius-full);
+        }
+        .pill-teal { background: var(--teal-surface); color: var(--teal-clean); }
+        .pill-coral { background: var(--coral-surface); color: var(--coral-alert); }
+        .pill-navy { background: var(--navy-light); color: var(--white); }
+
+        /* Estilo Mockup Browser Frame */
+        .browser-stage-container {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--slate-300);
+            box-shadow: var(--shadow-floating);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .browser-top-bar {
+            background: var(--navy-core);
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .browser-traffic-lights {
+            display: flex;
+            gap: 8px;
+        }
+        .traffic-dot { width: 13px; height: 13px; border-radius: 50%; }
+        .dot-red { background: #FF5F56; }
+        .dot-yellow { background: #FFBD2E; }
+        .dot-green { background: #27C93F; }
+
+        .browser-url-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.12);
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browser-viewport-inner {
+            flex: 1;
+            overflow-y: auto;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        /* Estilos Calculadora */
+        .calculator-layout {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 36px;
+            padding: 30px 40px;
+            height: 100%;
+        }
+
+        .calc-form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .calc-label {
+            font-family: var(--font-display);
+            font-size: 15.5px;
+            font-weight: 700;
+            color: var(--navy-core);
+        }
+
+        .calc-select, .calc-input {
+            padding: 14px 18px;
+            border: 1px solid var(--slate-300);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-family: var(--font-body);
+            color: var(--slate-900);
+            background: #FFFFFF;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .calc-select:focus, .calc-input:focus {
+            border-color: var(--teal-clean);
+            box-shadow: 0 0 0 3px rgba(30, 133, 123, 0.18);
+        }
+
+        .calc-receipt-box {
+            background: linear-gradient(145deg, var(--navy-core) 0%, var(--navy-dark) 100%);
+            color: #FFFFFF;
+            border-radius: 20px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: var(--shadow-card);
+        }
+
+        .receipt-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            font-size: 15.5px;
+            color: var(--slate-300);
+        }
+
+        .receipt-total {
+            font-family: var(--font-display);
+            font-size: 52px;
+            font-weight: 900;
+            color: #249C90;
+            margin: 14px 0 6px;
+            line-height: 1;
+        }
+
+        /* Estilos Checkout */
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 32px 42px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ========================================================
+                 SLIDE 1: PORTADA
+                 ======================================================== -->
+            <section class="slide" style="background: radial-gradient(circle at 85% 15%, rgba(30, 133, 123, 0.3) 0%, transparent 45%), linear-gradient(135deg, var(--navy-dark) 0%, var(--navy-core) 100%); color: #fff; justify-content: center; padding: 80px 100px;">
+                <div style="width: 400px; margin-bottom: 36px;">
+                    <!-- Badge SVG -->
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="auto">
+                        <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" />
+                        <g transform="translate(24, 14) scale(0.66)">
+                            <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+                            <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+                            <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+                            <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                            <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                            <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                            <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                        </g>
+                        <g transform="translate(142, 6)">
+                            <text x="0" y="70" font-family="'Montserrat', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+                            <text x="2" y="96" font-family="'Montserrat', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <h1 style="font-family: var(--font-display); font-size: 68px; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; max-width: 1250px; margin-bottom: 22px;">
+                    ECOSISTEMA DIGITAL & <span style="color: #249C90;">MOCKUPS INTERACTIVOS DE ALTA FIDELIDAD</span>
+                </h1>
+                <p style="font-size: 26px; color: var(--slate-300); max-width: 1050px; line-height: 1.5; margin-bottom: 44px;">
+                    Demostración interactiva de la Home / Landing Page oficial, Calculadora reactiva de cotizaciones, Checkout Seguro y Despacho en Miami, FL.
+                </p>
+
+                <div style="display: flex; gap: 48px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.18);">
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Mercado Clave:</span> <strong style="display: block; font-size: 19px;">Miami-Dade & Broward</strong></div>
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Central Operativa:</span> <strong style="display: block; font-size: 19px;">+1 (405) 604-7424</strong></div>
+                    <div><span style="color: var(--slate-400); font-size: 13.5px; text-transform: uppercase;">Instagram:</span> <strong style="display: block; font-size: 19px;">@crisquality.miami</strong></div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 2: ARQUITECTURA DEL EMBUDO DE CONVERSIÓN
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Ecosistema 01</div>
+                        <div>
+                            <h2 class="slide-title">Arquitectura del Ecosistema Web & Embudo de Conversión</h2>
+                            <p class="slide-subtitle">El ciclo de vida del usuario desde la captura en redes hasta el despacho del servicio</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Funnel Digital B2C / B2B</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; height: 100%;">
+                        <div class="card" style="border-top: 6px solid var(--teal-clean); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-teal">Paso 1: Captura</span>
+                                <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core); margin: 12px 0 8px;">
+                                    Flyer & Redes Miami
+                                </h3>
+                                <p style="font-size: 15px; color: var(--slate-600); line-height: 1.5;">
+                                    Campaña en Instagram (`@crisquality.miami`) y Facebook con la "Oferta del Mes" ($135, $189, $239).
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 8px; font-size: 13px; color: var(--navy-core);">
+                                <strong>Llamado a la acción:</strong><br>
+                                "Agenda tu limpieza 👏🥰"<br>
+                                Call: +1 (405) 604-7424
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-top: 6px solid var(--navy-core); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-navy">Paso 2: Landing Page</span>
+                                <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core); margin: 12px 0 8px;">
+                                    Home / Landing
+                                </h3>
+                                <p style="font-size: 15px; color: var(--slate-600); line-height: 1.5;">
+                                    Página con badge oficial, vista a Biscayne Bay, desglose de planes y selector de dormitorios.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 8px; font-size: 13px; color: var(--navy-core);">
+                                <strong>3 Pilares destacados:</strong><br>
+                                • Servicio Confiable<br>
+                                • Atención al Detalle<br>
+                                • Resultados Visibles
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-top: 6px solid var(--coral-alert); display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-coral">Paso 3: Calculadora</span>
+                                <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core); margin: 12px 0 8px;">
+                                    Cotizador en Vivo
+                                </h3>
+                                <p style="font-size: 15px; color: var(--slate-600); line-height: 1.5;">
+                                    El usuario ajusta dormitorios, baños, frecuencia (descuento quincenal/semanal) y adicionales.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 8px; font-size: 13px; color: var(--navy-core);">
+                                <strong>Transparencia Total:</strong><br>
+                                Precio final garantizado antes de pagar sin costos ocultos.
+                            </div>
+                        </div>
+
+                        <div class="card" style="border-top: 6px solid #10B981; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <span class="pill-tag pill-teal">Paso 4: Checkout Seguro</span>
+                                <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core); margin: 12px 0 8px;">
+                                    Reserva & Despacho
+                                </h3>
+                                <p style="font-size: 15px; color: var(--slate-600); line-height: 1.5;">
+                                    Pago seguro con Stripe / Apple Pay. La orden ingresa al CRM para geocerca en Miami.
+                                </p>
+                            </div>
+                            <div style="background: var(--slate-100); padding: 14px; border-radius: 8px; font-size: 13px; color: var(--navy-core);">
+                                <strong>Confirmación:</strong><br>
+                                • SMS inmediato con fecha/hora<br>
+                                • Asignación de Van Transit
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 3: MOCKUP INTERACTIVO: LANDING / HOME
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Mockup 01</div>
+                        <div>
+                            <h2 class="slide-title">Mockup Interactivo: Home / Landing Page Oficial</h2>
+                            <p class="slide-subtitle">Reproducción interactiva de la oferta del mes y propuesta visual de Miami</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-coral">Landing Page en Vivo</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="browser-stage-container">
+                        <div class="browser-top-bar">
+                            <div class="browser-traffic-lights">
+                                <span class="traffic-dot dot-red"></span>
+                                <span class="traffic-dot dot-yellow"></span>
+                                <span class="traffic-dot dot-green"></span>
+                            </div>
+                            <div class="browser-url-input">🔒 https://www.crisqualitysolutions.com/miami</div>
+                        </div>
+
+                        <div class="browser-viewport-inner" style="padding: 24px 36px;">
+                            <!-- Navbar -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--slate-200); padding-bottom: 14px; margin-bottom: 20px;">
+                                <div style="width: 180px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="auto">
+                                        <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" />
+                                        <g transform="translate(24, 14) scale(0.66)">
+                                            <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+                                            <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+                                            <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+                                            <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                                            <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                                            <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                                            <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                                        </g>
+                                        <g transform="translate(142, 6)">
+                                            <text x="0" y="70" font-family="'Montserrat', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+                                            <text x="2" y="96" font-family="'Montserrat', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+                                        </g>
+                                    </svg>
+                                </div>
+
+                                <div style="display: flex; gap: 28px; font-size: 15px; font-weight: 700; color: var(--navy-core);">
+                                    <span style="color: var(--teal-clean); cursor: pointer;">Inicio</span>
+                                    <span style="cursor: pointer;">Servicios Residenciales</span>
+                                    <span style="cursor: pointer;">Comercial & Clínicas</span>
+                                    <span style="cursor: pointer;">Calculadora</span>
+                                </div>
+
+                                <div style="display: flex; align-items: center; gap: 18px;">
+                                    <span style="font-size: 15px; font-weight: 800; color: var(--navy-core);">📞 +1 (405) 604-7424</span>
+                                    <button style="background: var(--teal-clean); color: #fff; border: none; padding: 10px 22px; border-radius: var(--radius-full); font-weight: 800; font-size: 13.5px; cursor: pointer;">RESERVA EN OFERTA</button>
+                                </div>
+                            </div>
+
+                            <!-- Hero Content -->
+                            <div style="text-align: center; margin-bottom: 24px;">
+                                <span style="background: var(--teal-clean); color: #fff; font-size: 12px; font-weight: 800; padding: 6px 16px; border-radius: 999px; letter-spacing: 0.1em;">OFERTA DEL MES</span>
+                                <h1 style="font-family: var(--font-display); font-size: 38px; font-weight: 900; color: var(--navy-core); margin-top: 10px; line-height: 1.15;">
+                                    OFERTA ESPECIAL DE LIMPIEZA RESIDENCIAL PREMIUM
+                                </h1>
+                                <p style="font-size: 20px; color: var(--slate-600); margin-top: 6px; font-weight: 600;">
+                                    Un hogar más limpio. Más tiempo para ti.
+                                </p>
+                            </div>
+
+                            <!-- 3 Tarjetas de Precios del Flyer -->
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1200px; margin: 0 auto;">
+                                <div style="border: 2px solid var(--slate-200); border-radius: 14px; padding: 22px; text-align: center; background: #fff;">
+                                    <div style="font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--navy-core);">1 DORMITORIO</div>
+                                    <div style="font-family: var(--font-display); font-size: 50px; font-weight: 900; color: var(--navy-core); margin: 8px 0;">$135</div>
+                                    <div style="font-weight: 700; font-size: 14px; color: var(--slate-700);">REGULAR</div>
+                                    <span style="background: var(--navy-core); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-top: 6px;">OFERTA MENSUAL</span>
+                                </div>
+
+                                <div style="border: 2px solid var(--teal-clean); background: #F4FAF9; border-radius: 14px; padding: 22px; text-align: center; position: relative;">
+                                    <span style="position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--teal-clean); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 14px; border-radius: 999px;">MÁS POPULAR</span>
+                                    <div style="font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--navy-core);">2 DORMITORIOS</div>
+                                    <div style="font-family: var(--font-display); font-size: 50px; font-weight: 900; color: var(--teal-clean); margin: 8px 0;">$189</div>
+                                    <div style="font-weight: 800; font-size: 14px; color: var(--teal-clean);">EXPERTA</div>
+                                    <span style="background: var(--coral-alert); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-top: 6px;">PRECIO EXCLUSIVO ESTE MES</span>
+                                </div>
+
+                                <div style="border: 2px solid var(--slate-200); border-radius: 14px; padding: 22px; text-align: center; background: #fff;">
+                                    <div style="font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--navy-core);">3 DORMITORIOS</div>
+                                    <div style="font-family: var(--font-display); font-size: 50px; font-weight: 900; color: var(--navy-core); margin: 8px 0;">$239</div>
+                                    <div style="font-weight: 700; font-size: 14px; color: var(--slate-700);">DEFINITIVA</div>
+                                    <span style="background: var(--coral-alert); color: #fff; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 4px; display: inline-block; margin-top: 6px;">PRECIO EXCLUSIVO ESTE MES</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 4: MOCKUP INTERACTIVO: CALCULADORA EN VIVO
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Mockup 02</div>
+                        <div>
+                            <h2 class="slide-title">Mockup Interactivo: Calculadora de Presupuestos</h2>
+                            <p class="slide-subtitle">Cotizador dinámico reactivo con selección de dormitorios, frecuencia y servicios extras</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Calculadora 100% Funcional</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="browser-stage-container">
+                        <div class="browser-top-bar">
+                            <div class="browser-traffic-lights">
+                                <span class="traffic-dot dot-red"></span>
+                                <span class="traffic-dot dot-yellow"></span>
+                                <span class="traffic-dot dot-green"></span>
+                            </div>
+                            <div class="browser-url-input">🔒 https://www.crisqualitysolutions.com/calculator</div>
+                        </div>
+
+                        <div class="browser-viewport-inner">
+                            <div class="calculator-layout">
+                                <!-- Formulario Izquierdo -->
+                                <div>
+                                    <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--navy-core); margin-bottom: 20px;">
+                                        Configura tu Limpieza Residencial o Comercial
+                                    </h3>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">1. Número de Dormitorios / Despachos:</label>
+                                        <select class="calc-select" id="slide2Beds" onchange="calcFullEngine()">
+                                            <option value="135">1 Dormitorio (Tarifa Regular $135)</option>
+                                            <option value="189" selected>2 Dormitorios (Tarifa Experta $189)</option>
+                                            <option value="239">3 Dormitorios (Tarifa Definitiva $239)</option>
+                                            <option value="289">4+ Dormitorios / Penthouse ($289)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">2. Número de Baños Completos:</label>
+                                        <select class="calc-select" id="slide2Baths" onchange="calcFullEngine()">
+                                            <option value="0">1 Baño (Incluido)</option>
+                                            <option value="25" selected>2 Baños (+ $25)</option>
+                                            <option value="50">3 Baños (+ $50)</option>
+                                            <option value="75">4+ Baños (+ $75)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">3. Frecuencia del Servicio (Ahorro recurrente):</label>
+                                        <select class="calc-select" id="slide2Freq" onchange="calcFullEngine()">
+                                            <option value="1">Única vez (Tarifa base sin recurrencia)</option>
+                                            <option value="0.90">Mensual (10% de descuento)</option>
+                                            <option value="0.85" selected>Quincenal (15% de ahorro preferente)</option>
+                                            <option value="0.80">Semanal (20% de máximo ahorro VIP)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">4. Servicios Adicionales (Add-ons):</label>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;">
+                                            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--slate-700); cursor: pointer;">
+                                                <input type="checkbox" id="addOven" value="35" onchange="calcFullEngine()"> Horno Interior (+$35)
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--slate-700); cursor: pointer;">
+                                                <input type="checkbox" id="addFridge" value="30" onchange="calcFullEngine()"> Nevera Profunda (+$30)
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--slate-700); cursor: pointer;">
+                                                <input type="checkbox" id="addBalcony" value="25" onchange="calcFullEngine()"> Balcón / Terraza (+$25)
+                                            </label>
+                                            <label style="display: flex; align-items: center; gap: 10px; font-size: 15px; color: var(--slate-700); cursor: pointer;">
+                                                <input type="checkbox" id="addWindows" value="40" onchange="calcFullEngine()"> Cristales Bahía (+$40)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ticket Desglose Derecho -->
+                                <div class="calc-receipt-box">
+                                    <div>
+                                        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 14px;">
+                                            <span style="font-family: var(--font-display); font-weight: 800; font-size: 18px;">CRIS ESTIMATE TICKET</span>
+                                            <span class="pill-tag pill-teal" style="background: rgba(30,133,123,0.4); color: #73DEC9;">MIAMI AREA</span>
+                                        </div>
+
+                                        <div class="receipt-row" style="margin-top: 14px;">
+                                            <span>Paquete Base Seleccionado:</span>
+                                            <strong id="recBasePrice">$189.00</strong>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span>Baños Adicionales:</span>
+                                            <strong id="recBathsPrice">+$25.00</strong>
+                                        </div>
+                                        <div class="receipt-row">
+                                            <span>Servicios Add-ons:</span>
+                                            <strong id="recAddonsPrice">$0.00</strong>
+                                        </div>
+                                        <div class="receipt-row" style="color: #73DEC9;">
+                                            <span>Ahorro por Frecuencia:</span>
+                                            <strong id="recDiscountPrice">-$32.10 (15%)</strong>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <span style="font-size: 14px; color: var(--slate-400); text-transform: uppercase;">Total Estimado por Visita</span>
+                                        <div class="receipt-total" id="recFinalTotal">$181.90</div>
+                                        <p style="font-size: 14px; color: var(--slate-300); margin-bottom: 18px; line-height: 1.4;">
+                                            Incluye 2 profesionales asegurados, insumos hospitalarios EPA y seguro de responsabilidad civil de $2M.
+                                        </p>
+                                        <button onclick="goToSlide(4)" style="width: 100%; background: #1E857B; color: #fff; border: none; padding: 16px; border-radius: 10px; font-family: var(--font-display); font-weight: 800; font-size: 16px; cursor: pointer; transition: 0.2s;">
+                                            RESERVAR CON ESTA TARIFA →
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 5: MOCKUP INTERACTIVO: CHECKOUT
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Mockup 03</div>
+                        <div>
+                            <h2 class="slide-title">Mockup Interactivo: Checkout Seguro & Agenda</h2>
+                            <p class="slide-subtitle">Reserva en 3 pasos con validación de zonas de Miami y pasarela de pago Stripe</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-coral">Checkout en Vivo</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="browser-stage-container">
+                        <div class="browser-top-bar">
+                            <div class="browser-traffic-lights">
+                                <span class="traffic-dot dot-red"></span>
+                                <span class="traffic-dot dot-yellow"></span>
+                                <span class="traffic-dot dot-green"></span>
+                            </div>
+                            <div class="browser-url-input">🔒 https://www.crisqualitysolutions.com/checkout/secure</div>
+                        </div>
+
+                        <div class="browser-viewport-inner">
+                            <div class="checkout-layout">
+                                <!-- Columna Izquierda: Datos y Fecha -->
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--teal-clean); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px;">1</div>
+                                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core);">
+                                            Ubicación en Miami & Fecha del Servicio
+                                        </h3>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">Zona de Cobertura:</label>
+                                        <select class="calc-select">
+                                            <option>Brickell & Downtown Miami (33129, 33130, 33131)</option>
+                                            <option>Coral Gables & Coconut Grove (33134, 33146)</option>
+                                            <option>Doral & Sweetwater (33178, 33172)</option>
+                                            <option>Miami Beach & South Beach (33139, 33140)</option>
+                                            <option>Sunny Isles & Aventura (33160)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">Dirección Exacta del Inmueble:</label>
+                                        <input type="text" class="calc-input" value="1421 Brickell Ave, Apt 2404, Miami, FL 33131">
+                                    </div>
+
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                                        <div class="calc-form-group">
+                                            <label class="calc-label">Fecha Preferida:</label>
+                                            <input type="date" class="calc-input" value="2026-11-04">
+                                        </div>
+                                        <div class="calc-form-group">
+                                            <label class="calc-label">Franja Horaria:</label>
+                                            <select class="calc-select">
+                                                <option>Mañana (08:30 AM - 12:30 PM)</option>
+                                                <option selected>Tarde (01:30 PM - 05:30 PM)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="calc-form-group">
+                                        <label class="calc-label">Instrucciones de Acceso al Condominio:</label>
+                                        <input type="text" class="calc-input" placeholder="Front Desk / Llave en Portería / Código de acceso">
+                                    </div>
+                                </div>
+
+                                <!-- Columna Derecha: Pago y Resumen -->
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                                        <div style="width: 32px; height: 32px; border-radius: 50%; background: var(--navy-core); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px;">2</div>
+                                        <h3 style="font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--navy-core);">
+                                            Método de Pago Seguro (Stripe Encrypted)
+                                        </h3>
+                                    </div>
+
+                                    <div style="background: var(--slate-50); border: 1px solid var(--slate-300); border-radius: 14px; padding: 22px; margin-bottom: 18px;">
+                                        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+                                            <button style="flex: 1; padding: 12px; border-radius: 8px; border: 2px solid var(--teal-clean); background: #fff; font-weight: 800; color: var(--navy-core); font-size: 14px;">💳 Tarjeta de Crédito</button>
+                                            <button style="flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--slate-300); background: #fff; font-weight: 600; color: var(--slate-600); font-size: 14px;"> Apple Pay</button>
+                                        </div>
+
+                                        <input type="text" class="calc-input" value="•••• •••• •••• 4242" style="margin-bottom: 12px;">
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                                            <input type="text" class="calc-input" value="12/28">
+                                            <input type="text" class="calc-input" value="842">
+                                        </div>
+                                    </div>
+
+                                    <div class="card" style="padding: 18px; background: var(--teal-surface); border: 1px solid rgba(30,133,123,0.3);">
+                                        <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 20px; color: var(--navy-core);">
+                                            <span>Total a Cargar:</span>
+                                            <span style="color: var(--teal-clean);">$181.90</span>
+                                        </div>
+                                        <small style="color: var(--slate-600); display: block; margin-top: 4px; font-size: 13px;">Sin cargos de cancelación hasta 24 horas antes.</small>
+                                    </div>
+
+                                    <button onclick="alert('¡Reserva Confirmada! Se ha emitido la orden #WO-9912 y enviado un SMS a tu móvil.')" style="width: 100%; margin-top: 16px; background: var(--teal-clean); color: #fff; border: none; padding: 16px; border-radius: 10px; font-family: var(--font-display); font-weight: 800; font-size: 16px; cursor: pointer;">
+                                        PAGAR & CONFIRMAR SERVICIO
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 6: MOCKUP: CRM ADMINISTRATIVO (DESPACHO)
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">CRM Ops</div>
+                        <div>
+                            <h2 class="slide-title">Mockup: CRM Administrativo & Tablero de Despacho</h2>
+                            <p class="slide-subtitle">Control integral de flotas en Miami-Dade, asignación de cuadrillas y auditorías QA</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-navy">Backoffice Corporativo</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="browser-stage-container">
+                        <div class="browser-top-bar">
+                            <div class="browser-traffic-lights">
+                                <span class="traffic-dot dot-red"></span>
+                                <span class="traffic-dot dot-yellow"></span>
+                                <span class="traffic-dot dot-green"></span>
+                            </div>
+                            <div class="browser-url-input">🔒 https://crm.crisqualitysolutions.com/dispatch/board</div>
+                        </div>
+
+                        <div class="browser-viewport-inner" style="padding: 26px;">
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-bottom: 22px;">
+                                <div style="background: var(--slate-100); border-radius: 10px; padding: 16px; border-left: 5px solid var(--teal-clean);">
+                                    <small style="color: var(--slate-500); font-weight: 800; font-size: 12px;">ÓRDENES ACTIVAS HOY</small>
+                                    <div style="font-size: 32px; font-weight: 900; color: var(--navy-core);">28 / 32</div>
+                                </div>
+                                <div style="background: var(--slate-100); border-radius: 10px; padding: 16px; border-left: 5px solid var(--navy-core);">
+                                    <small style="color: var(--slate-500); font-weight: 800; font-size: 12px;">CUADRILLAS EN RUTA</small>
+                                    <div style="font-size: 32px; font-weight: 900; color: var(--navy-core);">6 Vans Transit</div>
+                                </div>
+                                <div style="background: var(--slate-100); border-radius: 10px; padding: 16px; border-left: 5px solid #10B981;">
+                                    <small style="color: var(--slate-500); font-weight: 800; font-size: 12px;">SCORE QA PROMEDIO</small>
+                                    <div style="font-size: 32px; font-weight: 900; color: #10B981;">98.4%</div>
+                                </div>
+                                <div style="background: var(--slate-100); border-radius: 10px; padding: 16px; border-left: 5px solid var(--coral-alert);">
+                                    <small style="color: var(--slate-500); font-weight: 800; font-size: 12px;">TIEMPO DE RESPUESTA</small>
+                                    <div style="font-size: 32px; font-weight: 900; color: var(--coral-alert);">&lt; 15 min</div>
+                                </div>
+                            </div>
+
+                            <!-- Tabla de Despacho Operativo -->
+                            <table style="width: 100%; border-collapse: collapse; font-size: 14.5px;">
+                                <thead>
+                                    <tr style="background: var(--navy-core); color: #fff; text-align: left;">
+                                        <th style="padding: 12px 16px;">WO #</th>
+                                        <th style="padding: 12px 16px;">CLIENTE / CONDOMINIO</th>
+                                        <th style="padding: 12px 16px;">ZONA MIAMI</th>
+                                        <th style="padding: 12px 16px;">CUADRILLA ASIGNADA</th>
+                                        <th style="padding: 12px 16px;">PLAN</th>
+                                        <th style="padding: 12px 16px;">ESTADO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid var(--slate-200);">
+                                        <td style="padding: 14px 16px; font-weight: 800;">#WO-4091</td>
+                                        <td style="padding: 14px 16px;">Elena Rossi (Brickell Ave)</td>
+                                        <td style="padding: 14px 16px;">Brickell</td>
+                                        <td style="padding: 14px 16px;">Van 101 (C. Mendez)</td>
+                                        <td style="padding: 14px 16px;"><span class="pill-tag pill-teal">2 Dorm ($189)</span></td>
+                                        <td style="padding: 14px 16px;"><strong style="color: #10B981;">✓ Completado</strong></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--slate-200); background: var(--slate-50);">
+                                        <td style="padding: 14px 16px; font-weight: 800;">#WO-4092</td>
+                                        <td style="padding: 14px 16px;">Boutique Legal (Ponce de Leon)</td>
+                                        <td style="padding: 14px 16px;">Coral Gables</td>
+                                        <td style="padding: 14px 16px;">Van 102 (M. Torres)</td>
+                                        <td style="padding: 14px 16px;"><span class="pill-tag pill-navy">Comercial 4h</span></td>
+                                        <td style="padding: 14px 16px;"><strong style="color: var(--teal-clean);">● En Proceso</strong></td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid var(--slate-200);">
+                                        <td style="padding: 14px 16px; font-weight: 800;">#WO-4093</td>
+                                        <td style="padding: 14px 16px;">Villa Sol (Key Biscayne)</td>
+                                        <td style="padding: 14px 16px;">Key Biscayne</td>
+                                        <td style="padding: 14px 16px;">Van 103 (J. Diaz)</td>
+                                        <td style="padding: 14px 16px;"><span class="pill-tag pill-coral">3 Dorm ($239)</span></td>
+                                        <td style="padding: 14px 16px;"><strong style="color: var(--coral-alert);">🚐 En Ruta (ETA 10m)</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 7: FLUJO DE NAVEGACIÓN DIAGRAMADO
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Arquitectura 02</div>
+                        <div>
+                            <h2 class="slide-title">Flujo de Navegación del Ecosistema Web Diagramado</h2>
+                            <p class="slide-subtitle">Mapa de interacciones entre usuario público, cliente recurrente y administración central</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Diagrama End-to-End</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="card" style="height: 100%; display: flex; flex-direction: column; justify-content: space-around; padding: 26px;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; text-align: center;">
+                            <div style="background: var(--navy-core); color: #fff; padding: 18px; border-radius: 10px;">
+                                <strong style="display: block; font-size: 16px;">1. Captura en Redes</strong>
+                                <small style="font-size: 13px; color: var(--slate-300);">Instagram @crisquality.miami</small>
+                            </div>
+                            <div style="background: var(--teal-clean); color: #fff; padding: 18px; border-radius: 10px;">
+                                <strong style="display: block; font-size: 16px;">2. Landing Oficial</strong>
+                                <small style="font-size: 13px; color: #fff;">Oferta $135, $189, $239</small>
+                            </div>
+                            <div style="background: var(--navy-core); color: #fff; padding: 18px; border-radius: 10px;">
+                                <strong style="display: block; font-size: 16px;">3. Calculadora</strong>
+                                <small style="font-size: 13px; color: var(--slate-300);">Configuración de recámaras y add-ons</small>
+                            </div>
+                            <div style="background: var(--coral-alert); color: #fff; padding: 18px; border-radius: 10px;">
+                                <strong style="display: block; font-size: 16px;">4. Checkout & Despacho</strong>
+                                <small style="font-size: 13px; color: #fff;">Geocerca Miami & Stripe</small>
+                            </div>
+                        </div>
+
+                        <div style="background: var(--slate-100); border-radius: 12px; padding: 22px; border: 1px dashed var(--slate-300);">
+                            <h4 style="font-family: var(--font-display); font-size: 18px; color: var(--navy-core); margin-bottom: 8px;">
+                                Conexión Tecnológica entre Capas:
+                            </h4>
+                            <p style="font-size: 15px; color: var(--slate-700); line-height: 1.6;">
+                                • <strong>Frontend React / Vanilla:</strong> Conexión mediante API REST `/api/v1/quotes` y `/api/v1/orders`.<br>
+                                • <strong>Motor de Geocerca:</strong> Validación de códigos postales en Miami-Dade para asignar la Van Ford Transit más cercana.<br>
+                                • <strong>Notificaciones Push:</strong> Mensajería SMS de confirmación instantánea con enlace al itinerario de servicio.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 8: CÓMO SE VERÍA LA PÁGINA DE INICIO COMPLETA (NUEVO)
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">Home Real</div>
+                        <div>
+                            <h2 class="slide-title">Cómo se Vería la Página de Inicio Oficial (Con Imágenes & Datos)</h2>
+                            <p class="slide-subtitle">Composición visual fiel con estética de Miami Luxury Living, ofertas y testimonios</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Diseño Final de Producción</span>
+                </div>
+
+                <div class="slide-body">
+                    <div class="browser-stage-container">
+                        <div class="browser-top-bar">
+                            <div class="browser-traffic-lights">
+                                <span class="traffic-dot dot-red"></span>
+                                <span class="traffic-dot dot-yellow"></span>
+                                <span class="traffic-dot dot-green"></span>
+                            </div>
+                            <div class="browser-url-input">🔒 https://www.crisqualitysolutions.com (Home Oficial)</div>
+                        </div>
+
+                        <div class="browser-viewport-inner" style="padding: 24px 36px; background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);">
+                            <!-- Barra Topbar Oficial -->
+                            <div style="display: flex; justify-content: space-between; align-items: center; background: var(--navy-core); color: #fff; padding: 8px 20px; border-radius: 8px; font-size: 13px; margin-bottom: 16px;">
+                                <span>📍 Miami, Florida • Cobertura: Brickell, Coral Gables, Doral, Sunny Isles</span>
+                                <div style="display: flex; gap: 20px; font-weight: 700;">
+                                    <span>📞 +1 (405) 604-7424</span>
+                                    <span>📸 Instagram: @crisquality.miami</span>
+                                </div>
+                            </div>
+
+                            <!-- Hero Banner con Gráfica Simulada del Flyer -->
+                            <div style="background: linear-gradient(135deg, rgba(7, 22, 36, 0.85) 0%, rgba(11, 32, 50, 0.7) 100%), radial-gradient(circle at 70% 30%, rgba(30,133,123,0.35) 0%, transparent 60%); border-radius: 16px; padding: 36px 40px; color: #fff; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-card);">
+                                <div style="max-width: 650px;">
+                                    <span style="background: var(--teal-clean); color: #fff; font-size: 12px; font-weight: 800; padding: 4px 14px; border-radius: 999px;">OFERTA DEL MES</span>
+                                    <h2 style="font-family: var(--font-display); font-size: 34px; font-weight: 900; line-height: 1.15; margin: 10px 0 6px;">
+                                        OFERTA ESPECIAL DE LIMPIEZA RESIDENCIAL PREMIUM
+                                    </h2>
+                                    <p style="font-size: 20px; color: var(--slate-200); font-weight: 600;">
+                                        Un hogar más limpio. Más tiempo para ti.
+                                    </p>
+                                    <div style="display: flex; gap: 16px; margin-top: 18px;">
+                                        <button style="background: var(--teal-clean); color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 800; font-size: 15px; cursor: pointer;">RESERVA EN OFERTA</button>
+                                        <button style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.25); padding: 12px 24px; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer;">CALCULAR PRESUPUESTO</button>
+                                    </div>
+                                </div>
+
+                                <!-- Tarjetas de Precios en el Hero -->
+                                <div style="display: flex; gap: 14px;">
+                                    <div style="background: #fff; color: var(--navy-core); padding: 16px; border-radius: 12px; text-align: center; width: 140px; box-shadow: var(--shadow-card);">
+                                        <small style="font-size: 11px; font-weight: 800;">1 DORM</small>
+                                        <div style="font-size: 32px; font-weight: 900; margin: 4px 0;">$135</div>
+                                        <span style="background: var(--navy-core); color: #fff; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px;">REGULAR</span>
+                                    </div>
+                                    <div style="background: #fff; color: var(--navy-core); padding: 16px; border-radius: 12px; text-align: center; width: 150px; border: 2px solid var(--teal-clean); transform: scale(1.05); box-shadow: var(--shadow-card);">
+                                        <small style="font-size: 11px; font-weight: 800; color: var(--teal-clean);">2 DORM</small>
+                                        <div style="font-size: 34px; font-weight: 900; color: var(--teal-clean); margin: 4px 0;">$189</div>
+                                        <span style="background: var(--coral-alert); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">EXPERTA</span>
+                                    </div>
+                                    <div style="background: #fff; color: var(--navy-core); padding: 16px; border-radius: 12px; text-align: center; width: 140px; box-shadow: var(--shadow-card);">
+                                        <small style="font-size: 11px; font-weight: 800;">3 DORM</small>
+                                        <div style="font-size: 32px; font-weight: 900; margin: 4px 0;">$239</div>
+                                        <span style="background: var(--coral-alert); color: #fff; font-size: 9px; font-weight: 800; padding: 2px 6px; border-radius: 4px;">DEFINITIVA</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Los 3 Pilares y Testimonios -->
+                            <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; margin-top: 18px;">
+                                <div style="display: flex; gap: 20px; align-items: center; background: #fff; padding: 16px 20px; border-radius: 12px; border: 1px solid var(--slate-200);">
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--navy-core);">
+                                        <span style="color: var(--teal-clean); font-size: 20px;">🛡️</span> SERVICIO CONFIABLE
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--navy-core);">
+                                        <span style="color: var(--teal-clean); font-size: 20px;">🔍</span> ATENCIÓN AL DETALLE
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; color: var(--navy-core);">
+                                        <span style="color: var(--teal-clean); font-size: 20px;">✨</span> RESULTADOS VISIBLES
+                                    </div>
+                                </div>
+
+                                <div style="background: #fff; padding: 14px 20px; border-radius: 12px; border: 1px solid var(--slate-200); display: flex; align-items: center; justify-content: space-between;">
+                                    <div>
+                                        <span style="color: #F59E0B; font-size: 15px;">★★★★★</span>
+                                        <span style="font-size: 13px; font-weight: 700; color: var(--navy-core); margin-left: 6px;">4.9 / 5 en Google Reviews</span>
+                                        <small style="display: block; font-size: 12px; color: var(--slate-500);">Más de 350 clientes satisfechos en Miami</small>
+                                    </div>
+                                    <span style="background: var(--teal-surface); color: var(--teal-clean); font-weight: 800; font-size: 12px; padding: 4px 10px; border-radius: 4px;">VERIFICADO</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 9: CRITERIOS DE ACEPTACIÓN (DoD) WEB
+                 ======================================================== -->
+            <section class="slide">
+                <div class="slide-header">
+                    <div class="header-left">
+                        <div class="badge-module">DoD Web</div>
+                        <div>
+                            <h2 class="slide-title">Criterios de Aceptación (DoD) del Ecosistema Web</h2>
+                            <p class="slide-subtitle">Condiciones obligatorias para validación y despliegue del frontend</p>
+                        </div>
+                    </div>
+                    <span class="pill-tag pill-teal">Requisitos de Despliegue</span>
+                </div>
+
+                <div class="slide-body">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; height: 100%;">
+                        <div class="card" style="border-left: 6px solid var(--teal-clean);">
+                            <span class="pill-tag pill-teal">1. Home & Landing DoD</span>
+                            <ul style="font-size: 15px; color: var(--slate-700); line-height: 1.6; margin-top: 14px; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                                <li>✅ Despliegue idéntico de tarifas del flyer: $135, $189 y $239.</li>
+                                <li>✅ Presencia del teléfono oficial `+1 (405) 604-7424` con enlace `tel:`.</li>
+                                <li>✅ Enlaces directos a Instagram `@crisquality.miami`.</li>
+                                <li>✅ Carga de imágenes hero en WebP con compresión menor a 150kb.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card" style="border-left: 6px solid var(--navy-core);">
+                            <span class="pill-tag pill-navy">2. Calculadora & Checkout DoD</span>
+                            <ul style="font-size: 15px; color: var(--slate-700); line-height: 1.6; margin-top: 14px; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                                <li>✅ Cálculo reactivo con actualización instantánea (&lt; 50ms).</li>
+                                <li>✅ Validación de códigos postales en Miami-Dade y Broward.</li>
+                                <li>✅ Selección de franja horaria sin solapamiento de cuadrillas.</li>
+                                <li>✅ Cumplimiento PCI-DSS con Stripe Elements.</li>
+                            </ul>
+                        </div>
+
+                        <div class="card" style="border-left: 6px solid var(--coral-alert);">
+                            <span class="pill-tag pill-coral">3. CRM & Operaciones DoD</span>
+                            <ul style="font-size: 15px; color: var(--slate-700); line-height: 1.6; margin-top: 14px; list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                                <li>✅ Creación de Orden de Trabajo (WO) en CRM en tiempo real.</li>
+                                <li>✅ Soporte para carga de fotos Antes/Después desde app de cuadrilla.</li>
+                                <li>✅ Descarga de invoice en PDF con desglose fiscal de Florida.</li>
+                                <li>✅ Puntuación Lighthouse en Performance, SEO y Accesibilidad &gt; 90.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Barra de Control Flotante -->
+    <div class="deck-controls">
+        <button class="deck-btn" id="prevBtn" title="Diapositiva Anterior (←)">‹</button>
+        <span class="deck-counter" id="deckCounter">1 / 9</span>
+        <button class="deck-btn" id="nextBtn" title="Diapositiva Siguiente (→)">›</button>
+        <span class="deck-tag">CRIS Web Ecosystem</span>
+    </div>
+
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.stage = document.getElementById('deckStage');
+                this.counter = document.getElementById('deckCounter');
+
+                this.setupStageScale();
+                this.setupKeyboardNav();
+                this.setupButtons();
+                this.setupTouchNav();
+                this.showSlide(0);
+            }
+
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+                    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        this.showSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        this.showSlide(this.currentSlide - 1);
+                    }
+                });
+            }
+
+            setupButtons() {
+                document.getElementById('prevBtn').addEventListener('click', () => {
+                    this.showSlide(this.currentSlide - 1);
+                });
+                document.getElementById('nextBtn').addEventListener('click', () => {
+                    this.showSlide(this.currentSlide + 1);
+                });
+            }
+
+            setupTouchNav() {
+                let startX = 0;
+                document.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+                document.addEventListener('touchend', (e) => {
+                    const diff = e.changedTouches[0].clientX - startX;
+                    if (Math.abs(diff) > 50) {
+                        if (diff < 0) this.showSlide(this.currentSlide + 1);
+                        else this.showSlide(this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                this.slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === this.currentSlide);
+                    slide.classList.toggle('visible', i === this.currentSlide);
+                });
+                this.counter.textContent = `${this.currentSlide + 1} / ${this.slides.length}`;
+            }
+        }
+
+        // Motor de cálculo en Slide 4
+        function calcFullEngine() {
+            const base = parseFloat(document.getElementById('slide2Beds').value);
+            const baths = parseFloat(document.getElementById('slide2Baths').value);
+            const freq = parseFloat(document.getElementById('slide2Freq').value);
+
+            let addons = 0;
+            if (document.getElementById('addOven').checked) addons += 35;
+            if (document.getElementById('addFridge').checked) addons += 30;
+            if (document.getElementById('addBalcony').checked) addons += 25;
+            if (document.getElementById('addWindows').checked) addons += 40;
+
+            const subtotal = base + baths + addons;
+            const discountPct = (1 - freq);
+            const discountAmt = subtotal * discountPct;
+            const finalTotal = subtotal - discountAmt;
+
+            document.getElementById('recBasePrice').textContent = `$${base.toFixed(2)}`;
+            document.getElementById('recBathsPrice').textContent = `+$${baths.toFixed(2)}`;
+            document.getElementById('recAddonsPrice').textContent = `+$${addons.toFixed(2)}`;
+            document.getElementById('recDiscountPrice').textContent = discountPct > 0 ? `-$${discountAmt.toFixed(2)} (${Math.round(discountPct*100)}%)` : '$0.00';
+            document.getElementById('recFinalTotal').textContent = `$${finalTotal.toFixed(2)}`;
+        }
+
+        function goToSlide(idx) {
+            if (window.presentation) window.presentation.showSlide(idx);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            window.presentation = new SlidePresentation();
+            calcFullEngine();
+        });
+    </script>
+</body>
+</html>

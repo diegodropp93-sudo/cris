@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centro de Presentaciones Ejecutivas | CRIS Quality Solutions Miami</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --navy-dark: #071624;
+            --navy-core: #0B2032;
+            --navy-light: #16344E;
+            --teal-clean: #1E857B;
+            --teal-bright: #249C90;
+            --teal-surface: #E6F5F3;
+            --coral-alert: #C0392B;
+            --coral-surface: #FDE8E8;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-300: #CBD5E1;
+            --slate-400: #94A3B8;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-900: #0F172A;
+            --white: #FFFFFF;
+
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            --radius-md: 16px;
+            --radius-lg: 24px;
+            --shadow-card: 0 12px 28px -6px rgba(11, 32, 50, 0.12);
+            --shadow-floating: 0 24px 50px -10px rgba(11, 32, 50, 0.25);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: linear-gradient(180deg, #050E18 0%, #0B2032 100%);
+            font-family: var(--font-body);
+            color: #FFFFFF;
+            min-height: 100vh;
+            padding: 60px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .hub-container {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .hub-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .badge-logo-wrap {
+            max-width: 360px;
+            margin: 0 auto 24px;
+            filter: drop-shadow(0 15px 35px rgba(0,0,0,0.5));
+        }
+
+        .hub-title {
+            font-family: var(--font-display);
+            font-size: 48px;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            margin-bottom: 14px;
+        }
+
+        .hub-title span {
+            color: var(--teal-bright);
+        }
+
+        .hub-subtitle {
+            font-size: 20px;
+            color: var(--slate-300);
+            max-width: 860px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .decks-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-bottom: 50px;
+        }
+
+        .deck-card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            color: var(--slate-900);
+            box-shadow: var(--shadow-floating);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(30, 133, 123, 0.3);
+            border-color: var(--teal-bright);
+        }
+
+        .deck-card-banner {
+            height: 160px;
+            background: linear-gradient(135deg, var(--navy-core) 0%, var(--navy-dark) 100%);
+            padding: 26px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .deck-number-tag {
+            align-self: flex-start;
+            background: var(--teal-clean);
+            color: #FFFFFF;
+            font-family: var(--font-display);
+            font-size: 12px;
+            font-weight: 800;
+            padding: 5px 14px;
+            border-radius: 999px;
+            letter-spacing: 0.1em;
+        }
+
+        .deck-card-title {
+            font-family: var(--font-display);
+            font-size: 24px;
+            font-weight: 900;
+            color: #FFFFFF;
+            line-height: 1.2;
+        }
+
+        .deck-card-body {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #FFFFFF;
+        }
+
+        .deck-features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            font-size: 15px;
+            color: var(--slate-700);
+            margin-bottom: 28px;
+        }
+
+        .deck-features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.45;
+        }
+
+        .deck-features-list li strong {
+            color: var(--navy-core);
+        }
+
+        .check-icon {
+            color: var(--teal-clean);
+            font-weight: 900;
+            flex-shrink: 0;
+            font-size: 16px;
+        }
+
+        .deck-open-btn {
+            display: block;
+            text-align: center;
+            background: var(--teal-clean);
+            color: #FFFFFF;
+            text-decoration: none;
+            padding: 16px 26px;
+            border-radius: 12px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 15px;
+            letter-spacing: 0.05em;
+            transition: all 0.25s ease;
+        }
+
+        .deck-open-btn:hover {
+            background: var(--teal-bright);
+            box-shadow: 0 10px 24px rgba(30, 133, 123, 0.35);
+        }
+
+        .global-requirements-box {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            backdrop-filter: blur(12px);
+        }
+
+        .req-title {
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--teal-bright);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
+        .req-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 22px;
+        }
+
+        .req-item {
+            background: rgba(11, 32, 50, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 14px;
+            color: var(--slate-300);
+            line-height: 1.5;
+        }
+
+        .req-item strong {
+            color: #FFFFFF;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+
+        @media (max-width: 1100px) {
+            .decks-grid { grid-template-columns: 1fr; }
+            .req-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hub-container">
+        <header class="hub-header">
+            <div class="badge-logo-wrap">
+                <!-- SVG Badge Oficial de CRIS Quality Solutions -->
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 140" width="100%" height="auto">
+                    <rect x="8" y="8" width="364" height="124" rx="14" fill="#FFFFFF" />
+                    <g transform="translate(24, 14) scale(0.66)">
+                        <path d="M 44 20 Q 44 32 56 32 Q 44 32 44 44 Q 44 32 32 32 Q 44 32 44 20 Z" fill="#1e857b" />
+                        <circle cx="44" cy="32" r="2" fill="#FFFFFF" />
+                        <path d="M 40 70 L 80 34 L 120 70 L 120 145 L 40 145 Z" fill="none" stroke="#1e857b" stroke-width="10" stroke-linejoin="round" stroke-linecap="round" />
+                        <path d="M 80 34 L 80 145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                        <path d="M 60 70 L 60 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                        <path d="M 100 70 L 100 145" stroke="#1e857b" stroke-width="8" stroke-linecap="round" />
+                        <line x1="26" y1="145" x2="134" y2="145" stroke="#1e857b" stroke-width="10" stroke-linecap="round" />
+                    </g>
+                    <g transform="translate(142, 6)">
+                        <text x="0" y="70" font-family="'Montserrat', sans-serif" font-size="54" font-weight="900" letter-spacing="-0.02em" fill="#0B2032">CRIS</text>
+                        <text x="2" y="96" font-family="'Montserrat', sans-serif" font-size="13" font-weight="700" letter-spacing="0.18em" fill="#1E857B">QUALITY SOLUTIONS</text>
+                    </g>
+                </svg>
+            </div>
+
+            <h1 class="hub-title">CENTRO DE PRESENTACIONES <span>EJECUTIVAS</span></h1>
+            <p class="hub-subtitle">
+                Ecosistema de diseño de alta fidelidad, manual de marca, mockups web reactivos y arquitectura técnica para CRIS Quality Solutions Miami.
+            </p>
+        </header>
+
+        <!-- Grilla de las 3 Presentaciones -->
+        <div class="decks-grid">
+            <!-- Deck 1 -->
+            <div class="deck-card">
+                <div class="deck-card-banner">
+                    <span class="deck-number-tag">PRESENTACIÓN 01 • 9 SLIDES</span>
+                    <h2 class="deck-card-title">Manual de Marca & Sistema Integral</h2>
+                </div>
+                <div class="deck-card-body">
+                    <ul class="deck-features-list">
+                        <li><span class="check-icon">✓</span> <div><strong>Voz y Tono:</strong> Matriz de comunicación, pilares y bilingüismo en Miami.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Uso de Logotipo:</strong> Badge oficial, versiones, clearspace y restricciones.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Imágenes & Iconografía:</strong> Estilo Miami luxury y los 3 pilares del flyer.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Aplicaciones Corporativas:</strong> Flota Vans Ford Transit, uniformes técnicos y gafetes QR.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Criterios de Aceptación (DoD):</strong> Requisitos de diseño, ingeniería, seguridad y performance.</div></li>
+                    </ul>
+                    <a href="01-manual-de-marca.html" target="_blank" class="deck-open-btn">ABRIR PRESENTACIÓN 01 →</a>
+                </div>
+            </div>
+
+            <!-- Deck 2 -->
+            <div class="deck-card">
+                <div class="deck-card-banner" style="background: linear-gradient(135deg, #0A2540 0%, #1E857B 100%);">
+                    <span class="deck-number-tag" style="background: #C0392B;">PRESENTACIÓN 02 • 9 SLIDES</span>
+                    <h2 class="deck-card-title">Mockups & Ecosistema Web Interactivo</h2>
+                </div>
+                <div class="deck-card-body">
+                    <ul class="deck-features-list">
+                        <li><span class="check-icon">✓</span> <div><strong>Home / Landing:</strong> Oferta del mes ($135, $189, $239) y selector interactivo.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Calculadora en Vivo:</strong> Cotizador dinámico con dormitorios, baños y add-ons.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Checkout Seguro:</strong> 3 pasos con validación de zonas de Miami y Stripe.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>CRM de Despacho:</strong> Tablero Kanban de órdenes y geocercas en Miami.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Página de Inicio Completa:</strong> Render visual realista con imágenes y testimonios.</div></li>
+                    </ul>
+                    <a href="02-mockups-ecosistema-web.html" target="_blank" class="deck-open-btn">ABRIR PRESENTACIÓN 02 →</a>
+                </div>
+            </div>
+
+            <!-- Deck 3 -->
+            <div class="deck-card">
+                <div class="deck-card-banner" style="background: linear-gradient(135deg, #071624 0%, #16344E 100%);">
+                    <span class="deck-number-tag">PRESENTACIÓN 03 • 9 SLIDES</span>
+                    <h2 class="deck-card-title">Identidad Corporativa & Design Tokens</h2>
+                </div>
+                <div class="deck-card-body">
+                    <ul class="deck-features-list">
+                        <li><span class="check-icon">✓</span> <div><strong>Tokens de Color:</strong> Tabla formalizada (Navy, Teal, Bright Mint, Coral Alert).</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Tipografía:</strong> Montserrat & Inter con escala modular en px y rem.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Espaciado 8pt:</strong> Radios de 14px, sombras y componentes atómicos UI.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Mockups Integrados:</strong> Demostración de Home, Calculadora y Checkout.</div></li>
+                        <li><span class="check-icon">✓</span> <div><strong>Flujos CRM & Clientes:</strong> Diagramación operativa de despacho y autogestión.</div></li>
+                    </ul>
+                    <a href="03-identidad-y-design-tokens.html" target="_blank" class="deck-open-btn">ABRIR PRESENTACIÓN 03 →</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caja de Cumplimiento de Requerimientos -->
+        <div class="global-requirements-box">
+            <h3 class="req-title">✦ PILARES DE DISEÑO & NAVEGACIÓN IMPLEMENTADOS</h3>
+            <div class="req-grid">
+                <div class="req-item">
+                    <strong>1. Criterios de Aceptación (DoD)</strong>
+                    Checklists formales de ingeniería, diseño, rendimiento (Lighthouse &gt; 90) y seguridad PCI-DSS.
+                </div>
+                <div class="req-item">
+                    <strong>2. Tokens del Sistema CRIS</strong>
+                    Colores Navy Core (`#0B2032`), Sea Teal (`#1E857B`), Coral (`#C0392B`), Montserrat e Inter.
+                </div>
+                <div class="req-item">
+                    <strong>3. Mockups Interactivos en Vivo</strong>
+                    Landing interactiva con precios del flyer ($135, $189, $239), Calculadora reactiva y Checkout.
+                </div>
+                <div class="req-item">
+                    <strong>4. Diagramación CRM & Despacho</strong>
+                    Arquitectura de rutas, geocerca de vans Ford Transit, fotos Antes/Después y autogestión.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

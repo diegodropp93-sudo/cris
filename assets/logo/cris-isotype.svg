@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="100%" height="100%">
+  <defs>
+    <!-- Gradiente Navy a Cian Limpio para el anillo 'C' -->
+    <linearGradient id="crisNavyCian" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0A2540" />
+      <stop offset="50%" stop-color="#0E2B4C" />
+      <stop offset="100%" stop-color="#0080A8" />
+    </linearGradient>
+
+    <!-- Gradiente Verde Ecológico Clean Green para el núcleo 'Q' -->
+    <linearGradient id="crisCleanGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0080A8" />
+      <stop offset="40%" stop-color="#009E49" />
+      <stop offset="100%" stop-color="#28A745" />
+    </linearGradient>
+
+    <!-- Filtro de resplandor para el destello central -->
+    <filter id="crisGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- FONDO TRANSPARENTE CON GEOMETRÍA CENTRAL -->
+  <g transform="translate(20, 20)">
+    <!-- 1. Anillo Exterior: La letra 'C' envolvente (Protección y Cuidado Sanitario) -->
+    <path d="M 152 44 A 76 76 0 1 0 152 156" 
+          fill="none" 
+          stroke="url(#crisNavyCian)" 
+          stroke-width="20" 
+          stroke-linecap="round" />
+
+    <!-- 2. Núcleo Interior: La letra 'Q' (Calidad y Control de Higiene) -->
+    <circle cx="114" cy="100" r="46" 
+            fill="none" 
+            stroke="url(#crisCleanGreen)" 
+            stroke-width="16" 
+            stroke-linecap="round" />
+
+    <!-- 3. Trazo Dinámico de la 'Q' proyectado a 45° (Rayo de Desinfección Activa) -->
+    <path d="M 136 122 L 180 166" 
+          stroke="url(#crisCleanGreen)" 
+          stroke-width="18" 
+          stroke-linecap="round" />
+
+    <!-- 4. Destello Geométrico de 4 Puntas (Sparkle de Brillo Inmaculado) -->
+    <g filter="url(#crisGlow)">
+      <path d="M 114 78 Q 114 100 136 100 Q 114 100 114 122 Q 114 100 92 100 Q 114 100 114 78 Z" 
+            fill="#0097B2" />
+      <!-- Núcleo de luz blanca pura -->
+      <circle cx="114" cy="100" r="4" fill="#FFFFFF" />
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <!-- ISOTIPO EN BLANCO -->
+  <g transform="translate(15, 10) scale(0.7)">
+    <!-- Anillo 'C' -->
+    <path d="M 148 48 A 72 72 0 1 0 148 152" 
+          fill="none" 
+          stroke="#FFFFFF" 
+          stroke-width="18" 
+          stroke-linecap="round" />
+
+    <!-- Óvalo 'Q' -->
+    <circle cx="112" cy="100" r="44" 
+            fill="none" 
+            stroke="#FFFFFF" 
+            stroke-width="14" 
+            stroke-linecap="round" />
+
+    <!-- Trazo 'Q' -->
+    <path d="M 132 120 L 172 160" 
+          stroke="#FFFFFF" 
+          stroke-width="15" 
+          stroke-linecap="round" />
+
+    <!-- Destello Central -->
+    <path d="M 112 82 Q 112 100 130 100 Q 112 100 112 118 Q 112 100 94 100 Q 112 100 112 82 Z" 
+          fill="#FFFFFF" />
+  </g>
+
+  <!-- WORDMARK EN BLANCO -->
+  <text x="175" y="82" 
+        font-family="'Plus Jakarta Sans', 'Montserrat', -apple-system, sans-serif" 
+        font-size="64" 
+        font-weight="800" 
+        letter-spacing="-0.02em" 
+        fill="#FFFFFF">
+    CRIS.
+  </text>
+
+  <text x="178" y="116" 
+        font-family="'Plus Jakarta Sans', 'Montserrat', -apple-system, sans-serif" 
+        font-size="22" 
+        font-weight="700" 
+        letter-spacing="0.12em" 
+        fill="#FFFFFF">
+    QUALITY SOLUTION LLC
+  </text>
+
+  <text x="180" y="138" 
+        font-family="'Inter', 'Roboto', -apple-system, sans-serif" 
+        font-size="11" 
+        font-weight="500" 
+        letter-spacing="0.22em" 
+        fill="#CBD5E1">
+    COMMERCIAL &amp; RESIDENTIAL FACILITY SERVICES • MIAMI, FL
+  </text>
+</svg>

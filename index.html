@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprende Git desde Antigravity con Azure Repos | Guía Interactiva</title>
+  <meta name="description" content="Presentación interactiva para dominar Git en Antigravity IDE con Azure Repos: comandos esenciales, configuración, flujos de trabajo, ramas, PRs y asistencia con IA.">
+  
+  <!-- Tipografías modernas desde Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Luces ambientales de fondo -->
+  <div class="ambient-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+  </div>
+
+  <div id="app-container">
+    
+    <!-- Encabezado superior -->
+    <header class="presentation-header">
+      <div class="brand-section">
+        <div class="brand-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="m4.93 4.93 4.24 4.24"></path>
+            <path d="m14.83 9.17 4.24-4.24"></path>
+            <path d="m14.83 14.83 4.24 4.24"></path>
+            <path d="m9.17 14.83-4.24 4.24"></path>
+            <circle cx="12" cy="12" r="4"></circle>
+          </svg>
+          Antigravity IDE
+        </div>
+        <span class="brand-divider">/</span>
+        <div class="presentation-title">
+          <span>Git & Azure Repos</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <button id="btn-shortcuts" class="control-btn" title="Atajos de teclado (?)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="18" height="12" x="3" y="6" rx="2"></rect>
+            <path d="M7 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M17 10h.01"></path>
+            <path d="M7 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M17 14h.01"></path>
+          </svg>
+          <span>Atajos</span>
+        </button>
+
+        <button id="btn-overview" class="control-btn" title="Ver todas las diapositivas (G)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="7" height="7" x="3" y="3" rx="1"></rect>
+            <rect width="7" height="7" x="14" y="3" rx="1"></rect>
+            <rect width="7" height="7" x="14" y="14" rx="1"></rect>
+            <rect width="7" height="7" x="3" y="14" rx="1"></rect>
+          </svg>
+          <span>Diapositivas</span>
+        </button>
+
+        <button id="btn-fullscreen" class="control-btn" title="Pantalla completa (F)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3"></path>
+            <path d="M21 8V5a2 2 0 0 0-2-2h-3"></path>
+            <path d="M3 16v3a2 2 0 0 0 2 2h3"></path>
+            <path d="M16 21h3a2 2 0 0 0 2-2v-3"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Barra de progreso lineal -->
+    <div class="progress-container">
+      <div id="progress-bar-fill" class="progress-bar-fill"></div>
+    </div>
+
+    <!-- Escenario central de diapositivas -->
+    <main class="slides-stage">
+
+      <!-- SLIDE 1: Portada -->
+      <section class="slide active" id="slide-1" data-index="1">
+        <div class="slide-content-wrapper hero-slide">
+          <div class="hero-tags">
+            <span class="tag tag-antigravity">Antigravity 2.0</span>
+            <span class="tag tag-azure">Azure DevOps / Repos</span>
+            <span class="tag">Control de Versiones</span>
+          </div>
+
+          <h1>Aprende Git desde Antigravity con Azure Repos</h1>
+
+          <p class="hero-subtitle">
+            Guía interactiva paso a paso para dominar el control de versiones moderno. Aprende a crear, versionar, ramificar y publicar tu código en Azure Repos aprovechando la potencia y el pair-programming con IA de Antigravity.
+          </p>
+
+          <div class="hero-features-grid">
+            <div class="feature-box">
+              <span class="feature-icon">⚡</span>
+              <h4>Terminal & Agente</h4>
+              <p>Ejecuta comandos Git directamente desde la terminal de Antigravity o apóyate en el asistente con IA.</p>
+            </div>
+            <div class="feature-box">
+              <span class="feature-icon">☁️</span>
+              <h4>Azure Repos</h4>
+              <p>Conexión segura vía HTTPS/SSH, autenticación con tokens PAT y sincronización remota continua.</p>
+            </div>
+            <div class="feature-box">
+              <span class="feature-icon">🛡️</span>
+              <h4>Flujos Profesionales</h4>
+              <p>Estrategia de ramas, Pull Requests protegidos y resolución visual de conflictos de fusión.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: Las 4 Áreas de Git (Interactivo) -->
+      <section class="slide" id="slide-2" data-index="2">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Fundamentos de Arquitectura</div>
+              <h2>El Ciclo de Vida del Código en Git</h2>
+              <p>Haz clic en cada zona para explorar cómo viajan tus cambios desde tu editor local hasta Azure Repos.</p>
+            </div>
+            <div class="slide-badge-num">02 / 09</div>
+          </div>
+
+          <div class="git-architecture-interactive">
+            <div class="zones-container">
+              <div class="git-zone-card selected" data-zone="workdir">
+                <div class="zone-number">FASE 1</div>
+                <div class="zone-title">Working Directory</div>
+                <div class="zone-desc">Archivos locales en tu espacio de trabajo en Antigravity.</div>
+                <div class="zone-command-chip">Estado: Modificado</div>
+              </div>
+
+              <div class="git-zone-card" data-zone="staging">
+                <div class="zone-number">FASE 2</div>
+                <div class="zone-title">Staging Area</div>
+                <div class="zone-desc">Área de preparación (Index) lista para el commit.</div>
+                <div class="zone-command-chip">git add .</div>
+              </div>
+
+              <div class="git-zone-card" data-zone="local">
+                <div class="zone-number">FASE 3</div>
+                <div class="zone-title">Local Repository</div>
+                <div class="zone-desc">Historial permanente en tu máquina (.git local).</div>
+                <div class="zone-command-chip">git commit -m</div>
+              </div>
+
+              <div class="git-zone-card" data-zone="azure">
+                <div class="zone-number">FASE 4</div>
+                <div class="zone-title">Azure Repos</div>
+                <div class="zone-desc">Repositorio remoto en la nube de Azure DevOps.</div>
+                <div class="zone-command-chip">git push origin</div>
+              </div>
+            </div>
+
+            <div class="zone-detail-panel" id="zone-detail-panel">
+              <div class="zone-detail-info">
+                <h4 id="zone-detail-title">Directorio de Trabajo (Working Directory)</h4>
+                <p id="zone-detail-desc">
+                  Es donde editas tus archivos en Antigravity. Los archivos pueden estar en estado <em>Untracked</em> (nuevos) o <em>Modified</em> (cambiados desde el último commit). Todavía no están guardados en el historial de Git.
+                </p>
+              </div>
+              <div class="zone-detail-action">
+                <button class="control-btn" id="zone-detail-btn" onclick="highlightNextZone()">
+                  Siguiente fase &rarr;
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Configuración Inicial en Antigravity -->
+      <section class="slide" id="slide-3" data-index="3">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Configuración de Entorno</div>
+              <h2>Primeros Pasos en Antigravity IDE</h2>
+              <p>Prepara tu identidad de autor y arranca tu repositorio local en segundos.</p>
+            </div>
+            <div class="slide-badge-num">03 / 09</div>
+          </div>
+
+          <div class="grid-2-col">
+            <div class="info-card">
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                1. Identidad de Usuario
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Azure DevOps y Git requieren saber quién firma cada cambio. Configura tu nombre y correo antes de hacer tu primer commit.
+              </p>
+              
+              <div class="terminal-window">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+                  <span class="terminal-title">Terminal Antigravity</span>
+                  <button class="copy-btn" data-clipboard="git config --global user.name 'Tu Nombre'&#10;git config --global user.email 'tu_correo@empresa.com'">
+                    Copiar
+                  </button>
+                </div>
+                <div class="terminal-body">
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git config --global user.name "Tu Nombre"</code>
+                  </div>
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git config --global user.email "tu_correo@empresa.com"</code>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"></path>
+                </svg>
+                2. Inicializar el Proyecto
+              </h3>
+              <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5;">
+                Dentro de la carpeta de tu proyecto en Antigravity, inicializa la estructura interna de Git (crea el directorio oculto <code>.git</code>).
+              </p>
+              
+              <div class="terminal-window">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+                  <span class="terminal-title">Terminal Antigravity</span>
+                  <button class="copy-btn" data-clipboard="git init -b main">Copiar</button>
+                </div>
+                <div class="terminal-body">
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git init -b main</code>
+                  </div>
+                  <div class="code-output">
+                    Initialized empty Git repository in C:/Users/usuario/proyecto/.git/
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Conectar con Azure Repos -->
+      <section class="slide" id="slide-4" data-index="4">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Integración Cloud</div>
+              <h2>Conexión con Azure Repos</h2>
+              <p>Vincula tu repositorio local con tu organización de Azure DevOps.</p>
+            </div>
+            <div class="slide-badge-num">04 / 09</div>
+          </div>
+
+          <div class="grid-2-col">
+            <div class="steps-list">
+              <div class="step-item">
+                <div class="step-num">1</div>
+                <div class="step-text">
+                  <h4>Crea el Repositorio en Azure DevOps</h4>
+                  <p>Accede a <code>dev.azure.com/{tu-organizacion}/{tu-proyecto}</code> y dirígete a <strong>Repos &gt; Files</strong> para crear un nuevo repo o copiar la URL del existente.</p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-num">2</div>
+                <div class="step-text">
+                  <h4>Autenticación (GCM o Token PAT)</h4>
+                  <p>En Windows, <strong>Git Credential Manager</strong> abrirá la ventana de inicio de sesión de Microsoft automáticamente. Alternativamente, genera un <em>Personal Access Token (PAT)</em> con alcance <strong>Code (Read &amp; Write)</strong>.</p>
+                </div>
+              </div>
+
+              <div class="step-item">
+                <div class="step-num">3</div>
+                <div class="step-text">
+                  <h4>Añade el Origen Remoto</h4>
+                  <p>Configura el alias <code>origin</code> apuntando a la URL segura de Azure DevOps.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card" style="justify-content: center;">
+              <h3>Comandos de Vinculación</h3>
+              <div class="terminal-window">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+                  <span class="terminal-title">Terminal PowerShell / Bash</span>
+                  <button class="copy-btn" data-clipboard="git remote add origin https://dev.azure.com/MI-ORG/MI-PROYECTO/_git/MI-REPO&#10;git remote -v">
+                    Copiar
+                  </button>
+                </div>
+                <div class="terminal-body">
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git remote add origin https://dev.azure.com/ORG/PROJ/_git/REPO</code>
+                  </div>
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git remote -v</code>
+                  </div>
+                  <div class="code-output">
+                    origin  https://dev.azure.com/ORG/PROJ/_git/REPO (fetch)<br>
+                    origin  https://dev.azure.com/ORG/PROJ/_git/REPO (push)
+                  </div>
+                </div>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem;">
+                💡 <strong>Tip en Antigravity:</strong> Puedes pedirle al agente: <em>"Ayúdame a clonar o vincular mi repo de Azure con mi PAT"</em> y lo configurará por ti.
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: Flujo de Trabajo Diario -->
+      <section class="slide" id="slide-5" data-index="5">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Operaciones Diarias</div>
+              <h2>El Flujo de Desarrollo Diario (Add &rarr; Commit &rarr; Push)</h2>
+              <p>Los 4 comandos fundamentales que utilizarás en el 90% de tu jornada de desarrollo.</p>
+            </div>
+            <div class="slide-badge-num">05 / 09</div>
+          </div>
+
+          <div class="grid-2-col">
+            <div class="info-card">
+              <h3>1. Revisar Estado y Preparar</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Comprueba qué archivos cambiaron con <code>git status</code> y agrégalos a staging:
+              </p>
+              
+              <div class="terminal-window">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+                  <span class="terminal-title">Paso 1 & 2</span>
+                  <button class="copy-btn" data-clipboard="git status&#10;git add .">Copiar</button>
+                </div>
+                <div class="terminal-body">
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git status</code>
+                  </div>
+                  <div class="code-output">
+                    Untracked files:<br>
+                    &nbsp;&nbsp;<span style="color: #f43f5e;">main.py</span><br>
+                    &nbsp;&nbsp;<span style="color: #f43f5e;">config.json</span>
+                  </div>
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git add .</code>
+                  </div>
+                  <div class="code-output" style="color: #10b981;">
+                    Changes to be committed: [main.py, config.json]
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3>2. Confirmar y Publicar en Azure</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Guarda una instantánea con mensaje semántico y envíala a la nube:
+              </p>
+
+              <div class="terminal-window">
+                <div class="terminal-header">
+                  <div class="terminal-dots"><span class="dot dot-red"></span><span class="dot dot-yellow"></span><span class="dot dot-green"></span></div>
+                  <span class="terminal-title">Paso 3 & 4</span>
+                  <button class="copy-btn" data-clipboard="git commit -m 'feat: inicio del proyecto'&#10;git push -u origin main">Copiar</button>
+                </div>
+                <div class="terminal-body">
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git commit -m "feat: arquitectura base"</code>
+                  </div>
+                  <div class="code-output">
+                    [main (root-commit) 9a3c8e1] feat: arquitectura base<br>
+                    2 files changed, 48 insertions(+)
+                  </div>
+                  <div class="command-line">
+                    <span class="prompt-symbol">$</span>
+                    <code>git push -u origin main</code>
+                  </div>
+                  <div class="code-output" style="color: #38bdf8;">
+                    To https://dev.azure.com/ORG/PROJ/_git/REPO<br>
+                    * [new branch] main -&gt; main
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: Ramas y Pull Requests en Azure -->
+      <section class="slide" id="slide-6" data-index="6">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Colaboración en Equipo</div>
+              <h2>Estrategia de Ramas & Pull Requests en Azure</h2>
+              <p>Nunca subas código directamente a <code>main</code>. Trabaja en aislamiento seguro.</p>
+            </div>
+            <div class="slide-badge-num">06 / 09</div>
+          </div>
+
+          <div class="grid-3-col">
+            <div class="feature-box">
+              <span class="feature-icon">🌿</span>
+              <h4>1. Crear Feature Branch</h4>
+              <p>Crea y cambia de rama de inmediato para tu nueva funcionalidad:</p>
+              <div class="terminal-window" style="margin-top: 0.75rem;">
+                <div class="terminal-body" style="padding: 0.75rem; font-size: 0.78rem;">
+                  <code>git checkout -b feature/login-azure</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-box">
+              <span class="feature-icon">🚀</span>
+              <h4>2. Publicar la Rama</h4>
+              <p>Envía tu rama dedicada al repositorio en Azure Repos:</p>
+              <div class="terminal-window" style="margin-top: 0.75rem;">
+                <div class="terminal-body" style="padding: 0.75rem; font-size: 0.78rem;">
+                  <code>git push -u origin feature/login-azure</code>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-box">
+              <span class="feature-icon">🔍</span>
+              <h4>3. Pull Request en Azure</h4>
+              <p>En Azure DevOps, abre el PR. Requiere aprobaciones de compañeros y validación por pipelines de CI/CD automáticos.</p>
+            </div>
+          </div>
+
+          <div class="info-card" style="margin-top: 1.5rem; background: rgba(0, 120, 212, 0.08); border-color: rgba(0, 164, 239, 0.25);">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+              <div>
+                <h4 style="color: #38bdf8; font-size: 1rem; margin-bottom: 0.25rem;">Reglas de Protección (Branch Policies) en Azure DevOps</h4>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                  Configura en Azure Repos: <em>Mínimo 1 revisor requerido</em>, <em>Resolución obligatoria de comentarios</em> y <em>Compilación exitosa del pipeline</em> antes del merge.
+                </p>
+              </div>
+              <span class="tag tag-azure">Mejores Prácticas DevOps</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: Conflictos y Comandos Salvavidas -->
+      <section class="slide" id="slide-7" data-index="7">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Solución de Problemas</div>
+              <h2>Resolución de Conflictos & Comandos Salvavidas</h2>
+              <p>Mantén la calma cuando dos desarrolladores tocan las mismas líneas de código.</p>
+            </div>
+            <div class="slide-badge-num">07 / 09</div>
+          </div>
+
+          <div class="grid-2-col">
+            <div class="info-card">
+              <h3>
+                <span style="color: var(--amber-orange);">⚠️</span>
+                Anatomía de un Conflicto
+              </h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary);">
+                Cuando Git encuentra cambios incompatibles durante un <code>git merge</code> o <code>git pull</code>, inserta marcadores visuales:
+              </p>
+
+              <div class="terminal-window">
+                <div class="terminal-body" style="font-size: 0.8rem; line-height: 1.5;">
+                  <span style="color: #f43f5e;">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD (Tu versión actual)</span><br>
+                  &nbsp;&nbsp;apiKey = os.getenv("AZURE_KEY")<br>
+                  <span style="color: #94a3b8;">=======</span><br>
+                  &nbsp;&nbsp;apiKey = vault.get_secret("AZURE_KEY")<br>
+                  <span style="color: #38bdf8;">&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main (Versión entrante)</span>
+                </div>
+              </div>
+              <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Antigravity resalta automáticamente estos bloques con botones para <em>Accept Current</em>, <em>Accept Incoming</em> o <em>Accept Both</em>.
+              </p>
+            </div>
+
+            <div class="info-card">
+              <h3>
+                <span style="color: var(--emerald-green);">🛟</span>
+                Comandos de Emergencia
+              </h3>
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="background: rgba(255,255,255,0.03); padding: 0.6rem 0.8rem; border-radius: 8px; border-left: 3px solid var(--azure-cyan);">
+                  <strong style="color: #fff; font-family: var(--font-mono); font-size: 0.82rem;">git stash</strong>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);">Guarda cambios temporalmente sin commitear para cambiar de rama rápidamente.</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.03); padding: 0.6rem 0.8rem; border-radius: 8px; border-left: 3px solid var(--antigravity-purple);">
+                  <strong style="color: #fff; font-family: var(--font-mono); font-size: 0.82rem;">git log --oneline --graph</strong>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);">Visualiza el árbol histórico de ramas y merges en una sola vista limpia.</p>
+                </div>
+
+                <div style="background: rgba(255,255,255,0.03); padding: 0.6rem 0.8rem; border-radius: 8px; border-left: 3px solid var(--amber-orange);">
+                  <strong style="color: #fff; font-family: var(--font-mono); font-size: 0.82rem;">git revert &lt;commit-hash&gt;</strong>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary);">Deshace un commit público de forma segura creando un nuevo commit inverso.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: Superpoderes con Antigravity IA -->
+      <section class="slide" id="slide-8" data-index="8">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Pair Programming Inteligente</div>
+              <h2>Superpoderes de Git con la IA de Antigravity</h2>
+              <p>Acelera tu productividad combinando prompts conversacionales con operaciones de Git.</p>
+            </div>
+            <div class="slide-badge-num">08 / 09</div>
+          </div>
+
+          <div class="grid-3-col">
+            <div class="info-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">✍️</span>
+                <h4>Commits Convencionales</h4>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                Pídele a Antigravity: <em>"Analiza mis cambios no commiteados y redacta un commit en formato Conventional Commits con descripción clara"</em>.
+              </p>
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-card); border-radius: 6px; padding: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: #a7f3d0;">
+                feat(auth): integrate azure ad single sign-on
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">🔎</span>
+                <h4>Revisión de Diff Pre-Push</h4>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                Pídele al agente: <em>"Revisa el diff de mi rama antes de subirla a Azure y busca posibles vulnerabilidades, fugas de secretos o malas prácticas"</em>.
+              </p>
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-card); border-radius: 6px; padding: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: #38bdf8;">
+                Auditoría automatizada en tiempo real
+              </div>
+            </div>
+
+            <div class="info-card">
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.5rem;">🤖</span>
+                <h4>Generación de Descripción de PR</h4>
+              </div>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5;">
+                Genera automáticamente el cuerpo de tu Pull Request para Azure DevOps con lista de cambios, tests ejecutados y notas de despliegue.
+              </p>
+              <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-card); border-radius: 6px; padding: 0.5rem; font-family: var(--font-mono); font-size: 0.75rem; color: #c084fc;">
+                Alineado con los estándares del equipo
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: Cheatsheet & Quiz Interactivo -->
+      <section class="slide" id="slide-9" data-index="9">
+        <div class="slide-content-wrapper">
+          <div class="slide-header-bar">
+            <div class="slide-title-area">
+              <div class="slide-category">Evaluación & Resumen</div>
+              <h2>Cheatsheet y Prueba de Conocimientos</h2>
+              <p>Pon a prueba lo aprendido antes de comenzar tu siguiente proyecto en Azure Repos.</p>
+            </div>
+            <div class="slide-badge-num">09 / 09</div>
+          </div>
+
+          <div class="grid-2-col">
+            <!-- Cheatsheet -->
+            <div class="info-card">
+              <h3>📋 Comandos Más Utilizados</h3>
+              <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem;">
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.35rem;">
+                  <code style="color: var(--azure-cyan);">git clone &lt;url&gt;</code>
+                  <span style="color: var(--text-muted);">Clona repo de Azure</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.35rem;">
+                  <code style="color: var(--azure-cyan);">git pull origin main</code>
+                  <span style="color: var(--text-muted);">Descarga cambios remotos</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.35rem;">
+                  <code style="color: var(--azure-cyan);">git checkout -b rama</code>
+                  <span style="color: var(--text-muted);">Nueva rama local</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.35rem;">
+                  <code style="color: var(--azure-cyan);">git add . && git commit</code>
+                  <span style="color: var(--text-muted);">Stage y guardado</span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                  <code style="color: var(--azure-cyan);">git push -u origin rama</code>
+                  <span style="color: var(--text-muted);">Publicar en Azure Repos</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quiz Interactivo -->
+            <div class="quiz-container">
+              <div class="quiz-score-banner">
+                <div class="score-text">Puntuación: <span id="quiz-score">0</span> / 3 acertadas</div>
+                <button class="reset-quiz-btn" id="btn-reset-quiz">Reiniciar Quiz</button>
+              </div>
+
+              <!-- Pregunta 1 -->
+              <div class="quiz-card" data-question="1">
+                <div class="quiz-question">
+                  <span>1. ¿Qué comando mueve archivos modificados a la Staging Area?</span>
+                </div>
+                <div class="quiz-options">
+                  <button class="quiz-btn" data-correct="false">git commit -m</button>
+                  <button class="quiz-btn" data-correct="true">git add .</button>
+                  <button class="quiz-btn" data-correct="false">git push origin</button>
+                  <button class="quiz-btn" data-correct="false">git checkout</button>
+                </div>
+              </div>
+
+              <!-- Pregunta 2 -->
+              <div class="quiz-card" data-question="2">
+                <div class="quiz-question">
+                  <span>2. ¿Dónde se configuran las Branch Policies para proteger ramas?</span>
+                </div>
+                <div class="quiz-options">
+                  <button class="quiz-btn" data-correct="false">En el archivo .gitignore</button>
+                  <button class="quiz-btn" data-correct="true">En el portal web de Azure Repos</button>
+                  <button class="quiz-btn" data-correct="false">En git config local</button>
+                  <button class="quiz-btn" data-correct="false">En git stash</button>
+                </div>
+              </div>
+
+              <!-- Pregunta 3 -->
+              <div class="quiz-card" data-question="3">
+                <div class="quiz-question">
+                  <span>3. Para trabajar en un feature sin afectar main, ¿qué haces primero?</span>
+                </div>
+                <div class="quiz-options">
+                  <button class="quiz-btn" data-correct="true">git checkout -b feature/nombre</button>
+                  <button class="quiz-btn" data-correct="false">git push --force origin main</button>
+                  <button class="quiz-btn" data-correct="false">git reset --hard HEAD</button>
+                  <button class="quiz-btn" data-correct="false">git remote rm origin</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Barra inferior de navegación de diapositivas -->
+    <footer class="presentation-footer">
+      <div class="footer-meta">
+        <div class="slide-counter">
+          Diapositiva <span id="current-slide-num">1</span> de <span id="total-slides-num">9</span>
+        </div>
+        <div class="keyboard-hint">
+          Navegación: <span class="key-badge">&larr;</span> <span class="key-badge">&rarr;</span> o <span class="key-badge">Espacio</span>
+        </div>
+      </div>
+
+      <div class="nav-buttons-group">
+        <button id="btn-prev-slide" class="nav-btn" disabled>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m15 18-6-6 6-6"></path>
+          </svg>
+          Anterior
+        </button>
+
+        <button id="btn-next-slide" class="nav-btn primary">
+          Siguiente
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m9 18 6-6-6-6"></path>
+          </svg>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Modal: Vista general de todas las diapositivas (Grid) -->
+  <div id="overview-modal" class="overview-modal">
+    <div class="overview-header">
+      <h2>Todas las Diapositivas</h2>
+      <button id="btn-close-overview" class="control-btn">
+        Cerrar (Esc)
+      </button>
+    </div>
+    <div class="overview-grid" id="overview-grid">
+      <!-- Se inyectan dinámicamente con app.js -->
+    </div>
+  </div>
+
+  <!-- Modal: Atajos de teclado -->
+  <div id="shortcuts-modal" class="shortcuts-modal">
+    <div class="shortcuts-box">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3>Atajos de Teclado</h3>
+        <button id="btn-close-shortcuts" class="control-btn" style="padding: 0.2rem 0.5rem;">&times;</button>
+      </div>
+      <div class="shortcuts-table">
+        <div class="shortcut-row">
+          <span>Siguiente Diapositiva</span>
+          <div><span class="key-badge">&rarr;</span> / <span class="key-badge">Espacio</span></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Diapositiva Anterior</span>
+          <div><span class="key-badge">&larr;</span></div>
+        </div>
+        <div class="shortcut-row">
+          <span>Vista General de Diapositivas</span>
+          <span class="key-badge">G</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Pantalla Completa</span>
+          <span class="key-badge">F</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Cerrar Modales</span>
+          <span class="key-badge">Esc</span>
+        </div>
+        <div class="shortcut-row">
+          <span>Abrir esta ayuda</span>
+          <span class="key-badge">?</span>
+        </div>
+      </div>
+      <button class="nav-btn primary" style="width: 100%; justify-content: center;" onclick="document.getElementById('shortcuts-modal').classList.remove('open')">
+        Entendido
+      </button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

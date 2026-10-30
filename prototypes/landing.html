@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRIS Quality Solutions | Limpieza Residencial Premium & Facility Services Miami</title>
+    <meta name="description" content="CRIS Quality Solutions: Limpieza residencial premium y mantenimiento de instalaciones en Miami, FL. Un hogar más limpio. Más tiempo para ti.">
+    
+    <!-- Tipografías: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/tokens.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --navy-core: #0b2032;
+            --navy-dark: #071624;
+            --teal-clean: #1e857b;
+            --teal-bright: #249c90;
+            --coral-alert: #c0392b;
+            --slate-100: #f4f6f8;
+            --slate-200: #e2e8f0;
+            --slate-700: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-bg-base);
+            color: var(--slate-700);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Top Announcement Bar */
+        .announcement-bar {
+            background-color: var(--navy-core);
+            color: #fff;
+            font-size: 0.8125rem;
+            padding: 0.6rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .announcement-bar a {
+            color: #38bdf8;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 700;
+        }
+
+        /* Header Navigation */
+        .navbar {
+            background: #ffffff;
+            box-shadow: 0 4px 14px rgba(11, 32, 50, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            padding: 0.75rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--slate-200);
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-brand img {
+            height: 48px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.75rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--navy-core);
+            font-weight: 700;
+            font-size: 0.9375rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--teal-clean);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.875rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-teal {
+            background: var(--teal-clean);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(30, 133, 123, 0.35);
+        }
+
+        .btn-teal:hover {
+            background: var(--teal-bright);
+            transform: translateY(-1px);
+        }
+
+        .btn-outline {
+            background: #fff;
+            color: var(--navy-core);
+            border: 1.5px solid var(--slate-200);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--teal-clean);
+            color: var(--teal-clean);
+        }
+
+        /* Hero Promo Section (Inspirado en el Flyer Oficial) */
+        .promo-hero {
+            background: linear-gradient(180deg, #071624 0%, #0b2032 40%, #f4f6f8 40%, #f4f6f8 100%);
+            padding: 3rem 2rem 5rem;
+        }
+
+        .promo-container {
+            max-width: 1040px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid var(--slate-200);
+            overflow: hidden;
+        }
+
+        .promo-header {
+            background: var(--navy-core);
+            color: #fff;
+            padding: 2.25rem 2rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge-month {
+            display: inline-block;
+            background: var(--teal-clean);
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 0.8125rem;
+            font-weight: 800;
+            padding: 0.35rem 1rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 1rem;
+        }
+
+        .promo-title {
+            font-family: var(--font-display);
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1.15;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        .promo-subtitle {
+            font-size: 1.25rem;
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* Luxury Penthouse Backdrop Representation */
+        .promo-image-box {
+            position: relative;
+            height: 380px;
+            background: linear-gradient(rgba(11, 32, 50, 0.25), rgba(11, 32, 50, 0.4)), 
+                        url('../../.gemini/antigravity-ide/brain/8fe7d181-db61-4b6c-b7ac-c18bcfeb3ff4/miami_luxury_condo_1793161085575.jpg') center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+            color: #fff;
+        }
+
+        .image-overlay-text {
+            background: rgba(11, 32, 50, 0.85);
+            backdrop-filter: blur(8px);
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-left: 4px solid var(--teal-clean);
+        }
+
+        /* 3 Pricing Cards Tiers */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 2.5rem 2rem 2rem;
+            background: #fff;
+        }
+
+        .price-card {
+            background: #ffffff;
+            border: 2px solid var(--slate-200);
+            border-radius: 8px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.25s;
+        }
+
+        .price-card:hover {
+            border-color: var(--teal-clean);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(30, 133, 123, 0.12);
+        }
+
+        .room-type {
+            font-family: var(--font-display);
+            font-size: 0.9375rem;
+            font-weight: 800;
+            color: var(--slate-600);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .price-amount {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--navy-core);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-name {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--navy-core);
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+        }
+
+        .badge-offer-navy {
+            display: inline-block;
+            background: var(--navy-core);
+            color: #fff;
+            font-size: 0.6875rem;
+            font-weight: 800;
+            padding: 0.3rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .badge-exclusive-red {
+            display: inline-block;
+            background: var(--coral-alert);
+            color: #fff;
+            font-size: 0.6875rem;
+            font-weight: 800;
+            padding: 0.3rem 0.75rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* 3 Trust Pillars Row */
+        .trust-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 1.5rem 2rem;
+            background: #f8fafc;
+            border-top: 1px solid var(--slate-200);
+            border-bottom: 1px solid var(--slate-200);
+            text-align: center;
+        }
+
+        .trust-col {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.9375rem;
+            color: var(--navy-core);
+            text-transform: uppercase;
+        }
+
+        .trust-col i {
+            color: var(--teal-clean);
+        }
+
+        /* Bottom Booking Action Strip */
+        .action-strip {
+            background: var(--navy-core);
+            color: #fff;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .action-btn {
+            background: var(--teal-clean);
+            color: #fff;
+            padding: 0.85rem 1.75rem;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 0.9375rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 4px 14px rgba(30, 133, 123, 0.4);
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--teal-bright);
+            transform: translateY(-2px);
+        }
+
+        .call-info {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--navy-dark);
+            color: #94a3b8;
+            padding: 4rem 2rem 2rem;
+            font-size: 0.875rem;
+        }
+
+        .footer-grid {
+            max-width: 1040px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.4fr repeat(3, 1fr);
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-col h4 {
+            color: #fff;
+            font-family: var(--font-display);
+            font-size: 0.9375rem;
+            font-weight: 800;
+            margin-bottom: 1.25rem;
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: #38bdf8;
+        }
+
+        @media (max-width: 850px) {
+            .pricing-grid, .trust-row, .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .action-strip {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Announcement Bar -->
+    <div class="announcement-bar">
+        <div>
+            <span><i data-lucide="shield-check" style="width:14px; vertical-align:middle; color:#249c90"></i> $2,000,000 Póliza de Seguro &amp; Fianza</span>
+            <span style="margin-left: 1.5rem;"><i data-lucide="map-pin" style="width:14px; vertical-align:middle; color:#38bdf8"></i> Cobertura Miami-Dade &amp; Broward</span>
+        </div>
+        <div style="display:flex; gap:1.25rem; align-items:center;">
+            <a href="tel:14056047424"><i data-lucide="phone" style="width:14px;"></i> CALL: +1 (405) 604-7424</a>
+            <span style="color:#64748b;">|</span>
+            <span style="font-weight:700; color:#38bdf8;">@crisquality.miami</span>
+        </div>
+    </div>
+
+    <!-- Header Navbar -->
+    <header class="navbar">
+        <a href="landing.html" class="nav-brand">
+            <img src="../assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions">
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="#oferta">Oferta Residencial</a></li>
+            <li><a href="calculator.html">Calculadora</a></li>
+            <li><a href="checkout.html">Reservar Cita</a></li>
+            <li><a href="../docs/brand-guidelines.html">Manual de Marca</a></li>
+        </ul>
+
+        <div class="nav-actions">
+            <a href="client-portal.html" class="btn btn-outline">
+                <i data-lucide="user" style="width:15px;"></i> <span>Portal Clientes</span>
+            </a>
+            <a href="crm-admin.html" class="btn btn-outline">
+                <i data-lucide="layout-dashboard" style="width:15px;"></i> <span>CRM Admin</span>
+            </a>
+            <a href="calculator.html" class="btn btn-teal">
+                <i data-lucide="calendar" style="width:15px;"></i> <span>Agenda tu Limpieza</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Flyer Promotional Section -->
+    <section class="promo-hero" id="oferta">
+        <div class="promo-container">
+            <!-- Header Flyer -->
+            <div class="promo-header">
+                <div class="badge-month">OFERTA DEL MES</div>
+                <h1 class="promo-title">OFERTA ESPECIAL DE LIMPIEZA RESIDENCIAL PREMIUM</h1>
+                <p class="promo-subtitle">Un hogar más limpio. Más tiempo para ti.</p>
+            </div>
+
+            <!-- Penthouse View Real Estate Photography -->
+            <div class="promo-image-box">
+                <div class="image-overlay-text">
+                    <i data-lucide="sparkles" style="width:15px; vertical-align:middle; color:#249c90; margin-right:6px;"></i>
+                    Residencias de Lujo, Condominios y Penthouses en Miami
+                </div>
+            </div>
+
+            <!-- 3 Pricing Columns -->
+            <div class="pricing-grid">
+                <!-- 1 Dormitorio -->
+                <div class="price-card">
+                    <div class="room-type">1 DORMITORIO</div>
+                    <div class="price-amount">$135</div>
+                    <div class="plan-name">REGULAR</div>
+                    <div class="badge-offer-navy">OFERTA MENSUAL</div>
+                    <p style="font-size: 0.8125rem; color: #64748b; margin-top: 1rem; line-height: 1.5;">
+                        Cocina integral, 1 baño completo, sala-comedor y aspirado profundo con insumos no tóxicos.
+                    </p>
+                    <a href="checkout.html?plan=1dorm&price=135" class="btn btn-outline" style="width:100%; margin-top:1.25rem;">
+                        Reservar $135 →
+                    </a>
+                </div>
+
+                <!-- 2 Dormitorios (Featured) -->
+                <div class="price-card" style="border-color: var(--teal-clean); box-shadow: 0 8px 24px rgba(30,133,123,0.15);">
+                    <div class="room-type">2 DORMITORIO</div>
+                    <div class="price-amount" style="color:var(--teal-clean);">$189</div>
+                    <div class="plan-name">EXPERTA</div>
+                    <div class="badge-exclusive-red">PRECIO EXCLUSIVO ESTE MES</div>
+                    <p style="font-size: 0.8125rem; color: #64748b; margin-top: 1rem; line-height: 1.5;">
+                        Plan preferido en Brickell. 2 habitaciones, hasta 2 baños, balcón interior y aspirado HEPA.
+                    </p>
+                    <a href="checkout.html?plan=2dorm&price=189" class="btn btn-teal" style="width:100%; margin-top:1.25rem;">
+                        Reservar $189 →
+                    </a>
+                </div>
+
+                <!-- 3 Dormitorios -->
+                <div class="price-card">
+                    <div class="room-type">3 DORMITORIO</div>
+                    <div class="price-amount">$239</div>
+                    <div class="plan-name">DEFINITIVA</div>
+                    <div class="badge-exclusive-red">PRECIO EXCLUSIVO ESTE MES</div>
+                    <p style="font-size: 0.8125rem; color: #64748b; margin-top: 1rem; line-height: 1.5;">
+                        Cobertura integral para apartamentos familiares grandes. Incluye ventanales interiores y lavado.
+                    </p>
+                    <a href="checkout.html?plan=3dorm&price=239" class="btn btn-outline" style="width:100%; margin-top:1.25rem;">
+                        Reservar $239 →
+                    </a>
+                </div>
+            </div>
+
+            <!-- 3 Trust Pillars Row -->
+            <div class="trust-row">
+                <div class="trust-col">
+                    <i data-lucide="shield-check" style="width:24px;"></i>
+                    <span>SERVICIO CONFIABLE</span>
+                </div>
+                <div class="trust-col">
+                    <i data-lucide="search" style="width:24px;"></i>
+                    <span>ATENCIÓN AL DETALLE</span>
+                </div>
+                <div class="trust-col">
+                    <i data-lucide="sparkles" style="width:24px;"></i>
+                    <span>RESULTADOS VISIBLES</span>
+                </div>
+            </div>
+
+            <!-- Bottom Action Strip -->
+            <div class="action-strip">
+                <a href="checkout.html" class="action-btn">
+                    <span>RESERVA TU LIMPIEZA EN OFERTA</span>
+                    <i data-lucide="arrow-right" style="width:16px;"></i>
+                </a>
+                <div class="call-info">
+                    <i data-lucide="phone-call" style="width:20px;"></i>
+                    <span>CALL: +1 (405) 604-7424</span>
+                </div>
+                <div style="font-size: 0.8125rem; color: #cbd5e1;">
+                    Agenda tu limpieza 👏🥰
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Institucional -->
+    <footer class="footer">
+        <div class="footer-grid">
+            <div>
+                <img src="../assets/logo/cris-logo-monochrome-white.svg" alt="CRIS Quality Solutions" style="height:36px; margin-bottom:1rem;">
+                <p style="line-height:1.6; margin-bottom:1rem;">
+                    Soluciones integrales de higiene y mantenimiento residencial y comercial en Miami, Florida.
+                </p>
+                <div style="font-size:0.8125rem; color:#cbd5e1;">
+                    Instagram: <strong>@crisquality.miami</strong><br>
+                    Facebook: <strong>Cris Quality Solutions</strong><br>
+                    Teléfono: <strong>+1 (405) 604-7424</strong>
+                </div>
+            </div>
+
+            <div class="footer-col">
+                <h4>Ofertas Residenciales</h4>
+                <ul class="footer-links">
+                    <li><a href="checkout.html?plan=1dorm&price=135">1 Dormitorio ($135)</a></li>
+                    <li><a href="checkout.html?plan=2dorm&price=189">2 Dormitorios ($189)</a></li>
+                    <li><a href="checkout.html?plan=3dorm&price=239">3 Dormitorios ($239)</a></li>
+                    <li><a href="calculator.html">Calculadora Personalizada</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Prototipos UX</h4>
+                <ul class="footer-links">
+                    <li><a href="calculator.html">Calculadora de Tarifas</a></li>
+                    <li><a href="checkout.html">Checkout &amp; Reserva</a></li>
+                    <li><a href="client-portal.html">Portal de Clientes</a></li>
+                    <li><a href="crm-admin.html">CRM Operativo</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Identidad Oficial</h4>
+                <ul class="footer-links">
+                    <li><a href="../docs/brand-guidelines.html" style="color:#249c90; font-weight:700;">Manual de Marca (Diapositivas)</a></li>
+                    <li><a href="../docs/brand-guidelines.md">Manual en Markdown</a></li>
+                    <li><a href="../portal-hub.html">Master Brand Hub</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="max-width:1040px; margin:0 auto; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; font-size:0.8125rem;">
+            <div>© 2026 CRIS Quality Solutions. Todos los derechos reservados.</div>
+            <div>Miami, Florida • Póliza de $2M Asegurada</div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

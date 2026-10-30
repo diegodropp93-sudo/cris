@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Quote Calculator | CRIS Quality Solution LLC</title>
+    
+    <!-- Fonts & Tokens: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/tokens.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --navy-core: #0e2b4c;
+            --green-clean: #009e49;
+            --cyan-tech: #0080a8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #f1f5f9;
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .top-nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--color-border-subtle);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .nav-brand h2 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+        }
+
+        /* Main Container */
+        .calc-wrapper {
+            max-width: 1140px;
+            margin: 2.5rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .calc-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .calc-header h1 {
+            font-family: var(--font-display);
+            font-size: 2.25rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .calc-header p {
+            color: var(--color-text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Two-Column Grid */
+        .calc-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Left Config Panel */
+        .config-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            padding: 2.25rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--color-border-subtle);
+        }
+
+        .step-block {
+            margin-bottom: 2rem;
+            padding-bottom: 1.75rem;
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .step-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .step-title {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            margin-bottom: 1rem;
+        }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            background: #e0f2fe;
+            color: var(--color-brand-blue);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+        }
+
+        /* Facility Type Selector */
+        .types-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.875rem;
+        }
+
+        .type-pill {
+            border: 2px solid var(--color-border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .type-pill:hover {
+            border-color: var(--color-brand-blue);
+            background: #f8fafc;
+        }
+
+        .type-pill.active {
+            border-color: var(--color-brand-blue);
+            background: #eff6ff;
+        }
+
+        .type-pill i {
+            color: var(--color-brand-blue);
+        }
+
+        .type-pill-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .type-pill-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+        }
+
+        .type-pill-sub {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Range Slider */
+        .slider-wrapper {
+            margin-top: 1rem;
+        }
+
+        .slider-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .sqft-display {
+            font-family: var(--font-mono);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-brand-blue);
+        }
+
+        .range-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--color-brand-navy);
+            border: 3px solid #38bdf8;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* Frequency Selector */
+        .freq-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.625rem;
+        }
+
+        .freq-card {
+            border: 2px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .freq-card:hover {
+            border-color: var(--color-brand-teal);
+        }
+
+        .freq-card.active {
+            border-color: var(--color-brand-teal);
+            background: #ecfdf5;
+        }
+
+        .freq-label {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            display: block;
+        }
+
+        .freq-discount {
+            font-size: 0.6875rem;
+            color: var(--color-brand-teal);
+            font-weight: 700;
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        /* Add-ons checkboxes */
+        .addons-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.625rem;
+        }
+
+        .addon-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }
+
+        .addon-item:hover {
+            background: #f1f5f9;
+        }
+
+        .addon-item.selected {
+            border-color: var(--color-brand-blue);
+            background: #eff6ff;
+        }
+
+        .addon-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--color-slate-800);
+        }
+
+        .addon-price {
+            font-family: var(--font-mono);
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--color-brand-blue);
+        }
+
+        /* Right Summary Sticky Card */
+        .summary-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            padding: 2.25rem;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--color-border-subtle);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .summary-title {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+            margin-bottom: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.65rem 0;
+            font-size: 0.875rem;
+            border-bottom: 1px dashed #e2e8f0;
+            color: var(--color-slate-700);
+        }
+
+        .summary-row.total-row {
+            border-bottom: none;
+            border-top: 2px solid var(--color-border-subtle);
+            margin-top: 1rem;
+            padding-top: 1.25rem;
+            align-items: baseline;
+        }
+
+        .price-badge {
+            font-family: var(--font-mono);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+            line-height: 1;
+        }
+
+        .price-sub {
+            font-size: 0.8125rem;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .savings-tag {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 0.25rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .specs-chip-row {
+            display: flex;
+            gap: 0.5rem;
+            margin: 1.25rem 0;
+            flex-wrap: wrap;
+        }
+
+        .spec-chip {
+            background: #f1f5f9;
+            color: var(--color-slate-700);
+            padding: 0.35rem 0.65rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .book-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--color-brand-teal) 0%, #0b8763 100%);
+            color: #ffffff;
+            border: none;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(15, 169, 126, 0.35);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            text-decoration: none;
+        }
+
+        .book-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(15, 169, 126, 0.5);
+        }
+
+        .guarantee-note {
+            margin-top: 1.25rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+
+        @media (max-width: 850px) {
+            .calc-grid {
+                grid-template-columns: 1fr;
+            }
+            .freq-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navbar -->
+    <header class="top-nav">
+        <a href="landing.html" class="nav-brand">
+            <img src="../assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height:46px;">
+        </a>
+
+        <div style="display:flex; gap:1rem; align-items:center;">
+            <span style="font-size:0.875rem; color:#64748b;">Need help? <strong>(305) 555-CRIS</strong></span>
+            <a href="landing.html" style="font-size:0.875rem; color:var(--color-brand-blue); text-decoration:none; font-weight:600;">← Back to Home</a>
+        </div>
+    </header>
+
+    <!-- Content -->
+    <div class="calc-wrapper">
+        <div class="calc-header">
+            <h1>Transparent Price Estimator</h1>
+            <p>Select your property specifications below to calculate an exact quote with zero surprise fees.</p>
+        </div>
+
+        <div class="calc-grid">
+            <!-- Left Config -->
+            <div class="config-card">
+                <!-- Step 1: Type -->
+                <div class="step-block">
+                    <div class="step-title">
+                        <span class="step-num">1</span>
+                        <span>Select Property Type</span>
+                    </div>
+                    <div class="types-grid">
+                        <div class="type-pill active" onclick="selectType('commercial', 0.11, this)">
+                            <i data-lucide="building-2"></i>
+                            <div class="type-pill-text">
+                                <span class="type-pill-title">Commercial Office</span>
+                                <span class="type-pill-sub">$0.11 / sq ft baseline</span>
+                            </div>
+                        </div>
+                        <div class="type-pill" onclick="selectType('residential', 0.14, this)">
+                            <i data-lucide="home"></i>
+                            <div class="type-pill-text">
+                                <span class="type-pill-title">Luxury Residential</span>
+                                <span class="type-pill-sub">$0.14 / sq ft baseline</span>
+                            </div>
+                        </div>
+                        <div class="type-pill" onclick="selectType('medical', 0.16, this)">
+                            <i data-lucide="cross"></i>
+                            <div class="type-pill-text">
+                                <span class="type-pill-title">Medical / Clinic</span>
+                                <span class="type-pill-sub">Terminal EPA sanitization</span>
+                            </div>
+                        </div>
+                        <div class="type-pill" onclick="selectType('post-construction', 0.22, this)">
+                            <i data-lucide="hard-hat"></i>
+                            <div class="type-pill-text">
+                                <span class="type-pill-title">Post-Construction</span>
+                                <span class="type-pill-sub">Debris & deep HEPA dust</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Sq Ft Slider -->
+                <div class="step-block">
+                    <div class="step-title">
+                        <span class="step-num">2</span>
+                        <span>Facility Area (Square Feet)</span>
+                    </div>
+                    <div class="slider-wrapper">
+                        <div class="slider-meta">
+                            <span style="font-size:0.875rem; color:#64748b;">Estimated Surface</span>
+                            <div class="sqft-display"><span id="sqftLabel">3,500</span> sq ft</div>
+                        </div>
+                        <input type="range" class="range-slider" id="sqftSlider" min="1000" max="25000" step="250" value="3500" oninput="updateSqft(this.value)">
+                        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94a3b8; margin-top:0.4rem;">
+                            <span>1,000 sq ft</span>
+                            <span>10,000 sq ft</span>
+                            <span>25,000+ sq ft</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Frequency -->
+                <div class="step-block">
+                    <div class="step-title">
+                        <span class="step-num">3</span>
+                        <span>Service Frequency</span>
+                    </div>
+                    <div class="freq-grid">
+                        <div class="freq-card active" onclick="selectFreq('weekly', 0.15, this)">
+                            <span class="freq-label">Weekly</span>
+                            <span class="freq-discount">-15% OFF</span>
+                        </div>
+                        <div class="freq-card" onclick="selectFreq('biweekly', 0.05, this)">
+                            <span class="freq-label">Bi-Weekly</span>
+                            <span class="freq-discount">-5% OFF</span>
+                        </div>
+                        <div class="freq-card" onclick="selectFreq('daily', 0.25, this)">
+                            <span class="freq-label">Daily (M-F)</span>
+                            <span class="freq-discount">-25% OFF</span>
+                        </div>
+                        <div class="freq-card" onclick="selectFreq('onetime', 0.00, this)">
+                            <span class="freq-label">One-Time</span>
+                            <span class="freq-discount" style="color:#94a3b8;">Standard</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Add-on Services -->
+                <div class="step-block">
+                    <div class="step-title">
+                        <span class="step-num">4</span>
+                        <span>Specialized EPA & Floor Add-Ons</span>
+                    </div>
+                    <div class="addons-list">
+                        <div class="addon-item" onclick="toggleAddon('fogging', 120, this)">
+                            <div class="addon-left">
+                                <input type="checkbox" id="addon-fogging" style="pointer-events:none;">
+                                <span>EPA Hospital-Grade Nebulizer Fogging</span>
+                            </div>
+                            <span class="addon-price">+$120</span>
+                        </div>
+
+                        <div class="addon-item" onclick="toggleAddon('windows', 95, this)">
+                            <div class="addon-left">
+                                <input type="checkbox" id="addon-windows" style="pointer-events:none;">
+                                <span>Interior/Exterior Window Washing & Glass</span>
+                            </div>
+                            <span class="addon-price">+$95</span>
+                        </div>
+
+                        <div class="addon-item" onclick="toggleAddon('buffing', 180, this)">
+                            <div class="addon-left">
+                                <input type="checkbox" id="addon-buffing" style="pointer-events:none;">
+                                <span>Hard Floor Scrubbing & High-Speed Buffing</span>
+                            </div>
+                            <span class="addon-price">+$180</span>
+                        </div>
+
+                        <div class="addon-item" onclick="toggleAddon('carpet', 140, this)">
+                            <div class="addon-left">
+                                <input type="checkbox" id="addon-carpet" style="pointer-events:none;">
+                                <span>Carpet Hot-Water Deep Steam Extraction</span>
+                            </div>
+                            <span class="addon-price">+$140</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sticky Summary -->
+            <div class="summary-card">
+                <div class="summary-title">
+                    <span>Investment Summary</span>
+                    <span class="savings-tag" id="savingsBadge">15% SAVED</span>
+                </div>
+
+                <div class="summary-row">
+                    <span>Baseline Surface Rate</span>
+                    <strong id="sumBaseline">$385.00</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Frequency Discount</span>
+                    <strong style="color:var(--color-brand-teal);" id="sumDiscount">-$57.75</strong>
+                </div>
+
+                <div class="summary-row">
+                    <span>Specialized Add-ons</span>
+                    <strong id="sumAddons">$0.00</strong>
+                </div>
+
+                <div class="specs-chip-row">
+                    <span class="spec-chip"><i data-lucide="clock" style="width:12px;"></i> <span id="estHours">3.5 hrs</span> service</span>
+                    <span class="spec-chip"><i data-lucide="users" style="width:12px;"></i> <span id="estCrew">2 Cleaners</span> crew</span>
+                    <span class="spec-chip"><i data-lucide="shield" style="width:12px;"></i> $2M Insured</span>
+                </div>
+
+                <div class="summary-row total-row">
+                    <div>
+                        <div class="price-sub">Total per Service</div>
+                        <div class="price-badge">$<span id="finalPrice">327</span></div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="price-sub" id="monthlyLabel">Est. Monthly: $1,308</span>
+                    </div>
+                </div>
+
+                <a href="checkout.html" id="proceedBtn" class="book-btn">
+                    <span>Proceed to Booking</span>
+                    <i data-lucide="arrow-right" style="width:18px;"></i>
+                </a>
+
+                <div class="guarantee-note">
+                    <i data-lucide="check-circle-2" style="width:14px; color:#0fa97e;"></i>
+                    <span>100% Satisfaction Guarantee. Pay after service or with corporate NET-30.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // State
+        let state = {
+            type: 'commercial',
+            baseRatePerSqft: 0.11,
+            sqft: 3500,
+            frequency: 'weekly',
+            freqDiscount: 0.15,
+            addonsTotal: 0,
+            selectedAddons: {}
+        };
+
+        // Read URL query params if present
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('sqft')) {
+            state.sqft = parseInt(urlParams.get('sqft'));
+            document.getElementById('sqftSlider').value = state.sqft;
+            document.getElementById('sqftLabel').textContent = state.sqft.toLocaleString();
+        }
+
+        function selectType(typeKey, rate, el) {
+            state.type = typeKey;
+            state.baseRatePerSqft = rate;
+            document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+            el.classList.add('active');
+            recalculate();
+        }
+
+        function updateSqft(val) {
+            state.sqft = parseInt(val);
+            document.getElementById('sqftLabel').textContent = state.sqft.toLocaleString();
+            recalculate();
+        }
+
+        function selectFreq(freqKey, discount, el) {
+            state.frequency = freqKey;
+            state.freqDiscount = discount;
+            document.querySelectorAll('.freq-card').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            recalculate();
+        }
+
+        function toggleAddon(key, price, el) {
+            const chk = document.getElementById(`addon-${key}`);
+            if (state.selectedAddons[key]) {
+                delete state.selectedAddons[key];
+                el.classList.remove('selected');
+                chk.checked = false;
+            } else {
+                state.selectedAddons[key] = price;
+                el.classList.add('selected');
+                chk.checked = true;
+            }
+            
+            state.addonsTotal = Object.values(state.selectedAddons).reduce((a, b) => a + b, 0);
+            recalculate();
+        }
+
+        function recalculate() {
+            // Raw base
+            const rawBase = state.sqft * state.baseRatePerSqft;
+            const discountAmt = rawBase * state.freqDiscount;
+            const netService = (rawBase - discountAmt) + state.addonsTotal;
+
+            // Operational estimation
+            const estimatedHours = Math.max(2, Math.round((state.sqft / 1000) * 1.05 * 10) / 10);
+            const crewCount = state.sqft > 8000 ? 3 : (state.sqft > 3000 ? 2 : 1);
+
+            // Update DOM
+            document.getElementById('sumBaseline').textContent = `$${rawBase.toFixed(2)}`;
+            document.getElementById('sumDiscount').textContent = `-$${discountAmt.toFixed(2)}`;
+            document.getElementById('sumAddons').textContent = `$${state.addonsTotal.toFixed(2)}`;
+            document.getElementById('finalPrice').textContent = Math.round(netService).toLocaleString();
+            
+            document.getElementById('estHours').textContent = `${estimatedHours} hrs`;
+            document.getElementById('estCrew').textContent = `${crewCount} Cleaners`;
+
+            // Savings badge
+            const pct = Math.round(state.freqDiscount * 100);
+            document.getElementById('savingsBadge').textContent = pct > 0 ? `${pct}% SAVED` : 'STANDARD';
+
+            // Monthly billing preview
+            let monthly = netService;
+            if (state.frequency === 'weekly') monthly = netService * 4;
+            if (state.frequency === 'biweekly') monthly = netService * 2;
+            if (state.frequency === 'daily') monthly = netService * 20;
+
+            document.getElementById('monthlyLabel').textContent = state.frequency === 'onetime' 
+                ? 'Single Visit' 
+                : `Est. Monthly: $${Math.round(monthly).toLocaleString()}`;
+
+            // Update Proceed Button URL
+            const query = `type=${state.type}&sqft=${state.sqft}&freq=${state.frequency}&price=${Math.round(netService)}`;
+            document.getElementById('proceedBtn').href = `checkout.html?${query}`;
+        }
+
+        // Initial calc
+        recalculate();
+    </script>
+</body>
+</html>

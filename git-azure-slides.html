@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprende Git en Antigravity con Azure Repos | Guía Práctica</title>
+    
+    <!-- Tipografías seleccionadas: Clash Display y Satoshi (Fontshare) + JetBrains Mono (Google Fonts) -->
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&f[]=satoshi@700,500,400&display=swap">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           1. CSS CUSTOM PROPERTIES (THEME: NEON CYBER)
+           ========================================= */
+        :root {
+            /* Colores de la paleta Neon Cyber + Azure */
+            --stage-bg: #040711;
+            --slide-bg: #070c1b;
+            --card-bg: rgba(13, 22, 44, 0.72);
+            --card-border: rgba(0, 245, 255, 0.22);
+            --card-border-glow: rgba(0, 245, 255, 0.55);
+
+            --neon-cyan: #00f5ff;
+            --neon-magenta: #e024c3;
+            --neon-purple: #8b5cf6;
+            --azure-blue: #0078d4;
+            --terminal-green: #10b981;
+            --alert-amber: #f59e0b;
+
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --text-cyan: #38bdf8;
+
+            /* Tipografía (Diseñada para escala fija 1920x1080) */
+            --font-display: 'Clash Display', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-body: 'Satoshi', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            /* Transiciones y Microanimaciones */
+            --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+            --duration-normal: 0.65s;
+            --glow-cyan: 0 0 35px rgba(0, 245, 255, 0.25);
+            --glow-magenta: 0 0 35px rgba(224, 36, 195, 0.25);
+        }
+
+        /* =========================================
+           2. RESET BÁSICO
+           ========================================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* =========================================
+           3. FIXED 16:9 STAGE (MANDATORY VIEWPORT-BASE.CSS)
+           Include this ENTIRE file in every presentation.
+           Slides are authored at 1920×1080 and scaled as a whole.
+           ========================================= */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+            font-family: var(--font-body);
+            color: var(--text-primary);
+            user-select: none;
+        }
+
+        .deck-viewport {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            background: var(--stage-bg, #000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .deck-stage {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            transform-origin: 0 0;
+            background: var(--slide-bg, #070c1b);
+            /* Fondo sutil con malla cibernética y luces de neón */
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(0, 245, 255, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(224, 36, 195, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 50% 50%, rgba(0, 120, 212, 0.08) 0%, transparent 60%),
+                linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 80px 80px, 80px 80px;
+        }
+
+        .slide {
+            position: absolute;
+            inset: 0;
+            width: 1920px;
+            height: 1080px;
+            overflow: hidden;
+            display: block;
+            visibility: hidden;
+            opacity: 0;
+            pointer-events: none;
+            background: transparent;
+            padding: 80px 100px;
+        }
+
+        .slide.active,
+        .slide.visible {
+            visibility: visible;
+            opacity: 1;
+            pointer-events: auto;
+            z-index: 1;
+        }
+
+        img,
+        video,
+        canvas,
+        svg {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Controles fuera del escenario */
+        .deck-controls {
+            position: fixed;
+            left: 50%;
+            bottom: 24px;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: rgba(7, 12, 27, 0.85);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            padding: 8px 18px;
+            border-radius: 9999px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), var(--glow-cyan);
+        }
+
+        .deck-ctrl-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #fff;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-size: 14px;
+        }
+
+        .deck-ctrl-btn:hover:not(:disabled) {
+            background: var(--neon-cyan);
+            color: #040711;
+            border-color: var(--neon-cyan);
+            transform: scale(1.08);
+        }
+
+        .deck-ctrl-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .deck-page-counter {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            letter-spacing: 0.08em;
+            padding: 0 8px;
+        }
+
+        /* Impresión (1 diapositiva por página) */
+        @media print {
+            html, body {
+                width: 1920px;
+                height: auto;
+                overflow: visible;
+                background: #fff;
+            }
+            .deck-viewport {
+                position: static;
+                overflow: visible;
+                background: #fff;
+            }
+            .deck-stage {
+                position: static;
+                width: auto;
+                height: auto;
+                transform: none !important;
+                background: none;
+            }
+            .slide {
+                position: relative;
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                width: 1920px;
+                height: 1080px;
+                break-after: page;
+                page-break-after: always;
+            }
+            .slide:last-child {
+                break-after: auto;
+                page-break-after: auto;
+            }
+            .deck-controls {
+                display: none !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.2s !important;
+            }
+        }
+
+        /* =========================================
+           4. ANIMACIONES CON .reveal Y .visible
+           ========================================= */
+        .reveal {
+            opacity: 0;
+            transform: translateY(32px);
+            transition: opacity var(--duration-normal) var(--ease-out-expo),
+                        transform var(--duration-normal) var(--ease-out-expo);
+        }
+
+        .slide.visible .reveal {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal:nth-child(1) { transition-delay: 0.08s; }
+        .reveal:nth-child(2) { transition-delay: 0.16s; }
+        .reveal:nth-child(3) { transition-delay: 0.24s; }
+        .reveal:nth-child(4) { transition-delay: 0.32s; }
+        .reveal:nth-child(5) { transition-delay: 0.40s; }
+
+        /* =========================================
+           5. COMPONENTES Y LAYOUTS NEON CYBER
+           ========================================= */
+        .slide-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 54px;
+            border-bottom: 1px solid rgba(0, 245, 255, 0.2);
+            padding-bottom: 24px;
+        }
+
+        .slide-tag {
+            font-family: var(--font-mono);
+            font-size: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            color: var(--neon-cyan);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .slide-tag::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--neon-cyan);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .slide-title {
+            font-family: var(--font-display);
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            color: #ffffff;
+            letter-spacing: -0.02em;
+        }
+
+        .slide-title-cyan {
+            color: var(--neon-cyan);
+            text-shadow: 0 0 24px rgba(0, 245, 255, 0.4);
+        }
+
+        .slide-title-magenta {
+            color: var(--neon-magenta);
+            text-shadow: 0 0 24px rgba(224, 36, 195, 0.4);
+        }
+
+        .slide-subtitle {
+            font-size: 20px;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            max-width: 1000px;
+            line-height: 1.5;
+        }
+
+        .slide-index-badge {
+            font-family: var(--font-mono);
+            font-size: 32px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 0.05em;
+        }
+
+        /* Estructuras de Cuadrícula (1920x1080) */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            height: calc(1080px - 270px);
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 36px;
+            height: calc(1080px - 270px);
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 28px;
+            height: calc(1080px - 270px);
+        }
+
+        /* Tarjeta Cyber */
+        .cyber-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 36px;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(16px);
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .cyber-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            width: 40px;
+            height: 2px;
+            background: var(--neon-cyan);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .cyber-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: var(--glow-cyan);
+            transform: translateY(-4px);
+        }
+
+        .cyber-card-magenta::after {
+            background: var(--neon-magenta);
+            box-shadow: 0 0 10px var(--neon-magenta);
+        }
+
+        .cyber-card-magenta:hover {
+            border-color: var(--neon-magenta);
+            box-shadow: var(--glow-magenta);
+        }
+
+        .card-header-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: inline-block;
+        }
+
+        .card-title {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 14px;
+        }
+
+        .card-text {
+            font-size: 18px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        .card-bullet-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 14px;
+        }
+
+        .card-bullet-list li {
+            font-size: 17px;
+            color: #e2e8f0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            line-height: 1.5;
+        }
+
+        .card-bullet-list li::before {
+            content: '▹';
+            color: var(--neon-cyan);
+            font-weight: bold;
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        /* Bloque Terminal Cyber */
+        .cyber-terminal {
+            background: #020409;
+            border: 1px solid rgba(0, 245, 255, 0.35);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 245, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            margin-top: 16px;
+        }
+
+        .terminal-top-bar {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .t-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+        .t-dot-red { background: #ef4444; }
+        .t-dot-yellow { background: #f59e0b; }
+        .t-dot-green { background: #10b981; }
+
+        .terminal-title-text {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: var(--text-muted);
+            letter-spacing: 0.05em;
+        }
+
+        .terminal-code-body {
+            padding: 20px;
+            font-family: var(--font-mono);
+            font-size: 16px;
+            line-height: 1.7;
+            color: #f1f5f9;
+            user-select: text;
+        }
+
+        .term-prompt {
+            color: var(--neon-cyan);
+            font-weight: 700;
+        }
+
+        .term-path {
+            color: var(--neon-purple);
+        }
+
+        .term-comment {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .term-success {
+            color: var(--terminal-green);
+        }
+
+        .term-azure {
+            color: #38bdf8;
+        }
+
+        /* Slide 1: Hero Cover */
+        .hero-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: calc(1080px - 160px);
+            max-width: 1500px;
+        }
+
+        .hero-badge-group {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .hero-badge {
+            background: rgba(0, 245, 255, 0.12);
+            border: 1px solid rgba(0, 245, 255, 0.35);
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            letter-spacing: 0.06em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .hero-badge.magenta {
+            background: rgba(224, 36, 195, 0.12);
+            border-color: rgba(224, 36, 195, 0.35);
+            color: var(--neon-magenta);
+        }
+
+        .hero-badge.azure {
+            background: rgba(0, 120, 212, 0.15);
+            border-color: rgba(0, 120, 212, 0.4);
+            color: #38bdf8;
+        }
+
+        .hero-title {
+            font-family: var(--font-display);
+            font-size: 88px;
+            font-weight: 700;
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+            margin-bottom: 24px;
+            color: #ffffff;
+        }
+
+        .hero-description {
+            font-size: 26px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            max-width: 1200px;
+            margin-bottom: 48px;
+        }
+
+        .hero-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            width: 100%;
+        }
+
+        /* Slide 2: Diagrama de 4 Áreas */
+        .cycle-step-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 14px;
+            padding: 28px 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .cycle-num {
+            font-family: var(--font-mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neon-cyan);
+            margin-bottom: 8px;
+        }
+
+        .cycle-arrow {
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 28px;
+            color: var(--neon-cyan);
+            z-index: 10;
+            text-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .cmd-pill {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(0, 245, 255, 0.3);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: var(--font-mono);
+            font-size: 14px;
+            color: var(--neon-cyan);
+            margin-top: 14px;
+            display: block;
+            text-align: center;
+        }
+
+        /* =========================================
+           6. INLINE EDITING (E KEY / HOTZONE)
+           ========================================= */
+        .edit-hotzone {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .edit-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            width: 44px;
+            height: 44px;
+            background: rgba(7, 12, 27, 0.9);
+            border: 1px solid var(--neon-cyan);
+            border-radius: 10px;
+            color: var(--neon-cyan);
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            z-index: 10001;
+            box-shadow: var(--glow-cyan);
+        }
+
+        .edit-toggle.show,
+        .edit-toggle.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .edit-toggle.active {
+            background: var(--neon-cyan);
+            color: #040711;
+        }
+
+        [contenteditable="true"] {
+            outline: 2px dashed var(--neon-cyan) !important;
+            outline-offset: 4px;
+            border-radius: 4px;
+            background: rgba(0, 245, 255, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="deck-viewport">
+        <main class="deck-stage" id="deckStage">
+
+            <!-- ========================================================
+                 SLIDE 1: PORTADA PRINCIPAL (HERO)
+                 ======================================================== -->
+            <section class="slide active visible" id="slide-1" data-index="1">
+                <div class="hero-container">
+                    <div class="hero-badge-group reveal">
+                        <span class="hero-badge">⚡ Antigravity IDE</span>
+                        <span class="hero-badge azure">☁️ Azure Repos</span>
+                        <span class="hero-badge magenta">🛡️ Git Version Control</span>
+                    </div>
+
+                    <h1 class="hero-title reveal">
+                        Aprende Git desde <span class="slide-title-cyan">Antigravity</span> con <span class="slide-title-magenta">Azure Repos</span>
+                    </h1>
+
+                    <p class="hero-description reveal">
+                        Guía de aprendizaje paso a paso para desarrolladores. Domina la arquitectura interna de Git, el flujo de desarrollo diario, la configuración segura de credenciales en Azure DevOps y la colaboración moderna mediante ramas y Pull Requests asistidos por IA.
+                    </p>
+
+                    <div class="hero-meta-grid reveal">
+                        <div class="cyber-card">
+                            <span class="card-header-icon">💻</span>
+                            <h3 class="card-title">Terminal Integrada & Agente</h3>
+                            <p class="card-text">Combina comandos Git de consola de alta precisión con la asistencia inteligente del modelo de Antigravity.</p>
+                        </div>
+
+                        <div class="cyber-card cyber-card-magenta">
+                            <span class="card-header-icon">🔑</span>
+                            <h3 class="card-title">Azure DevOps & PATs</h3>
+                            <p class="card-text">Conexión corporativa segura mediante Git Credential Manager (GCM) y Personal Access Tokens con permisos limitados.</p>
+                        </div>
+
+                        <div class="cyber-card">
+                            <span class="card-header-icon">🌿</span>
+                            <h3 class="card-title">Branch Policies & PRs</h3>
+                            <p class="card-text">Estrategia de ramas protegidas para evitar errores en producción y facilitar revisiones de código de alta calidad.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 2: ARQUITECTURA DE GIT (LAS 4 ZONAS)
+                 ======================================================== -->
+            <section class="slide" id="slide-2" data-index="2">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag">Arquitectura & Estados</div>
+                        <h2 class="slide-title">El Ciclo de Vida del Código en <span class="slide-title-cyan">4 Áreas</span></h2>
+                        <p class="slide-subtitle">Comprender dónde reside tu código en cada segundo es el secreto para no perder jamás un cambio.</p>
+                    </div>
+                    <div class="slide-index-badge">02 / 06</div>
+                </div>
+
+                <div class="grid-4">
+                    <!-- Área 1 -->
+                    <div class="cycle-step-card reveal">
+                        <div class="cycle-num">ETAPA 01</div>
+                        <h3 class="card-title">Working Directory</h3>
+                        <p class="card-text">Tus archivos en el disco duro donde editas código con Antigravity. Los archivos pueden ser nuevos (<em>untracked</em>) o modificados.</p>
+                        <div class="card-bullet-list">
+                            <li>Estado en vivo sin congelar</li>
+                            <li>Visible con <code>git status</code></li>
+                        </div>
+                        <span class="cmd-pill">Edición en Antigravity</span>
+                        <div class="cycle-arrow">&rarr;</div>
+                    </div>
+
+                    <!-- Área 2 -->
+                    <div class="cycle-step-card reveal">
+                        <div class="cycle-num">ETAPA 02</div>
+                        <h3 class="card-title">Staging Area (Index)</h3>
+                        <p class="card-text">La antesala del guardado. Aquí seleccionas qué cambios específicos van al próximo commit mediante <code>git add</code>.</p>
+                        <div class="card-bullet-list">
+                            <li>Permite commits limpios y atómicos</li>
+                            <li>Revisión previa con <code>git diff --staged</code></li>
+                        </div>
+                        <span class="cmd-pill">git add &lt;archivos&gt;</span>
+                        <div class="cycle-arrow">&rarr;</div>
+                    </div>
+
+                    <!-- Área 3 -->
+                    <div class="cycle-step-card reveal">
+                        <div class="cycle-num">ETAPA 03</div>
+                        <h3 class="card-title">Local Repository</h3>
+                        <p class="card-text">Tu base de datos local (<code>.git</code>). Guarda una fotografía inmutable de los archivos en staging con un autor y mensaje.</p>
+                        <div class="card-bullet-list">
+                            <li>Instantánea con hash SHA-1</li>
+                            <li>No requiere conexión a internet</li>
+                        </div>
+                        <span class="cmd-pill">git commit -m "..."</span>
+                        <div class="cycle-arrow">&rarr;</div>
+                    </div>
+
+                    <!-- Área 4 -->
+                    <div class="cycle-step-card cyber-card-magenta reveal">
+                        <div class="cycle-num" style="color: var(--neon-magenta);">ETAPA 04</div>
+                        <h3 class="card-title">Azure Repos</h3>
+                        <p class="card-text">Repositorio remoto en la nube de Azure DevOps. Es la fuente de la verdad para el equipo y los pipelines de CI/CD.</p>
+                        <div class="card-bullet-list">
+                            <li>Sincronización para colaboración</li>
+                            <li>Dispara compilaciones automáticas</li>
+                        </div>
+                        <span class="cmd-pill" style="border-color: var(--neon-magenta); color: var(--neon-magenta);">git push origin &lt;rama&gt;</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 3: CONFIGURACIÓN EN ANTIGRAVITY IDE
+                 ======================================================== -->
+            <section class="slide" id="slide-3" data-index="3">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag">Configuración de Entorno</div>
+                        <h2 class="slide-title">Primeros Pasos en <span class="slide-title-cyan">Antigravity</span></h2>
+                        <p class="slide-subtitle">Firma de autoría e inicialización del repositorio local antes de comenzar a escribir código.</p>
+                    </div>
+                    <div class="slide-index-badge">03 / 06</div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="cyber-card reveal">
+                        <span class="card-header-icon">👤</span>
+                        <h3 class="card-title">1. Configurar tu Identidad Global</h3>
+                        <p class="card-text">
+                            Git estampa tu nombre y correo en cada commit. Esto es imprescindible para que Azure DevOps asocie tus cambios a tu cuenta de usuario corporativa.
+                        </p>
+
+                        <div class="cyber-terminal">
+                            <div class="terminal-top-bar">
+                                <div class="terminal-dots"><span class="t-dot t-dot-red"></span><span class="t-dot t-dot-yellow"></span><span class="t-dot t-dot-green"></span></div>
+                                <span class="terminal-title-text">Terminal Antigravity (PowerShell / Bash)</span>
+                            </div>
+                            <div class="terminal-code-body">
+                                <p class="term-comment"># Define tu nombre de autor visible</p>
+                                <p><span class="term-prompt">$</span> git config --global user.name "Tu Nombre"</p>
+                                <br>
+                                <p class="term-comment"># Usa el correo asociado a tu cuenta de Azure DevOps</p>
+                                <p><span class="term-prompt">$</span> git config --global user.email "usuario@empresa.com"</p>
+                                <br>
+                                <p class="term-comment"># Verifica que la configuración esté activa</p>
+                                <p><span class="term-prompt">$</span> git config --list --show-origin</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card reveal">
+                        <span class="card-header-icon">📁</span>
+                        <h3 class="card-title">2. Inicializar el Proyecto Local</h3>
+                        <p class="card-text">
+                            Convierte la carpeta abierta en Antigravity en un repositorio Git versionado. La rama por convención moderna debe llamarse <code>main</code>.
+                        </p>
+
+                        <div class="cyber-terminal">
+                            <div class="terminal-top-bar">
+                                <div class="terminal-dots"><span class="t-dot t-dot-red"></span><span class="t-dot t-dot-yellow"></span><span class="t-dot t-dot-green"></span></div>
+                                <span class="terminal-title-text">Terminal Antigravity</span>
+                            </div>
+                            <div class="terminal-code-body">
+                                <p class="term-comment"># Inicializa con 'main' como rama predeterminada</p>
+                                <p><span class="term-prompt">$</span> git init -b main</p>
+                                <p class="term-success">Initialized empty Git repository in C:/Users/usuario/proyecto/.git/</p>
+                                <br>
+                                <p class="term-comment"># Crea un .gitignore para evitar subir archivos temporales</p>
+                                <p><span class="term-prompt">$</span> echo "__pycache__/\n.env\nnode_modules/" &gt; .gitignore</p>
+                                <br>
+                                <p class="term-comment"># Consulta el estado del espacio de trabajo</p>
+                                <p><span class="term-prompt">$</span> git status</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 4: CONEXIÓN CON AZURE REPOS
+                 ======================================================== -->
+            <section class="slide" id="slide-4" data-index="4">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag">Nube & Autenticación</div>
+                        <h2 class="slide-title">Conexión Segura con <span class="slide-title-cyan">Azure Repos</span></h2>
+                        <p class="slide-subtitle">Añadir el remoto y configurar credenciales con Git Credential Manager (GCM) o Tokens PAT.</p>
+                    </div>
+                    <div class="slide-index-badge">04 / 06</div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="cyber-card reveal">
+                        <span class="card-header-icon">🔗</span>
+                        <h3 class="card-title">1. Vincular el Remoto 'origin'</h3>
+                        <p class="card-text">
+                            En Azure DevOps (<code>dev.azure.com/{organizacion}/{proyecto}/_git/{repo}</code>) obtendrás la URL HTTPS de tu repositorio. Enlázala a tu repo local:
+                        </p>
+
+                        <div class="cyber-terminal">
+                            <div class="terminal-top-bar">
+                                <div class="terminal-dots"><span class="t-dot t-dot-red"></span><span class="t-dot t-dot-yellow"></span><span class="t-dot t-dot-green"></span></div>
+                                <span class="terminal-title-text">Configuración de Remoto</span>
+                            </div>
+                            <div class="terminal-code-body">
+                                <p class="term-comment"># Conecta tu repo local al remoto de Azure Repos</p>
+                                <p><span class="term-prompt">$</span> git remote add origin https://dev.azure.com/MI-ORG/MI-PROYECTO/_git/MI-REPO</p>
+                                <br>
+                                <p class="term-comment"># Comprueba la URL de entrada (fetch) y salida (push)</p>
+                                <p><span class="term-prompt">$</span> git remote -v</p>
+                                <p class="term-azure">origin https://dev.azure.com/MI-ORG/MI-PROYECTO/_git/MI-REPO (fetch)</p>
+                                <p class="term-azure">origin https://dev.azure.com/MI-ORG/MI-PROYECTO/_git/MI-REPO (push)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card cyber-card-magenta reveal">
+                        <span class="card-header-icon">🛡️</span>
+                        <h3 class="card-title">2. Autenticación en Azure DevOps</h3>
+                        <p class="card-text">Azure DevOps ofrece dos métodos principales de autenticación segura:</p>
+                        
+                        <div class="card-bullet-list">
+                            <li>
+                                <strong>Git Credential Manager (GCM - Recomendado):</strong> Se incluye automáticamente en Git para Windows. Al ejecutar tu primer <code>git push</code>, abrirá una ventana emergente de Microsoft para autenticarte con tu cuenta corporativa y MFA.
+                            </li>
+                            <li>
+                                <strong>Personal Access Token (PAT):</strong> Si trabajas en entornos desatendidos o terminales sin interfaz gráfica:
+                                <ul style="margin-top: 6px; padding-left: 18px; color: var(--text-secondary); font-size: 15px;">
+                                    <li>En Azure DevOps: <em>User Settings &gt; Personal Access Tokens</em>.</li>
+                                    <li>Alcance mínimo recomendado: <strong>Code (Read &amp; Write)</strong>.</li>
+                                    <li>Usa tu token como contraseña en el prompt de la terminal.</li>
+                                </ul>
+                            </li>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 5: FLUJO DE DESARROLLO DIARIO
+                 ======================================================== -->
+            <section class="slide" id="slide-5" data-index="5">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag">Flujo Diario (Daily Routine)</div>
+                        <h2 class="slide-title">El Ciclo: <span class="slide-title-cyan">Status</span> &rarr; <span class="slide-title-cyan">Add</span> &rarr; <span class="slide-title-cyan">Commit</span> &rarr; <span class="slide-title-magenta">Push</span></h2>
+                        <p class="slide-subtitle">La rutina de 4 pasos que aplicarás cada vez que construyas una funcionalidad o corrijas un bug.</p>
+                    </div>
+                    <div class="slide-index-badge">05 / 06</div>
+                </div>
+
+                <div class="grid-2">
+                    <div class="cyber-card reveal">
+                        <h3 class="card-title">Fase Local: Preparar y Guardar</h3>
+                        <p class="card-text">Audita tus cambios locales y confirma sólo los archivos que correspondan a una unidad lógica de trabajo:</p>
+
+                        <div class="cyber-terminal">
+                            <div class="terminal-top-bar">
+                                <div class="terminal-dots"><span class="t-dot t-dot-red"></span><span class="t-dot t-dot-yellow"></span><span class="t-dot t-dot-green"></span></div>
+                                <span class="terminal-title-text">Terminal Antigravity</span>
+                            </div>
+                            <div class="terminal-code-body">
+                                <p class="term-comment"># 1. Comprueba qué archivos han sido editados</p>
+                                <p><span class="term-prompt">$</span> git status -s</p>
+                                <p style="color: #f43f5e;"> M main.py</p>
+                                <p style="color: #f43f5e;">?? azure_client.py</p>
+                                <br>
+                                <p class="term-comment"># 2. Agrega al área de Staging</p>
+                                <p><span class="term-prompt">$</span> git add main.py azure_client.py</p>
+                                <br>
+                                <p class="term-comment"># 3. Confirma la instantánea con mensaje semántico</p>
+                                <p><span class="term-prompt">$</span> git commit -m "feat(azure): conectar con cliente de blobs"</p>
+                                <p class="term-success">[main 3f91a2c] feat(azure): conectar con cliente de blobs</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card reveal">
+                        <h3 class="card-title">Fase Remota: Sincronizar con Azure</h3>
+                        <p class="card-text">Antes de publicar, siempre actualiza tus cambios locales con los que hayan subido tus compañeros:</p>
+
+                        <div class="cyber-terminal">
+                            <div class="terminal-top-bar">
+                                <div class="terminal-dots"><span class="t-dot t-dot-red"></span><span class="t-dot t-dot-yellow"></span><span class="t-dot t-dot-green"></span></div>
+                                <span class="terminal-title-text">Terminal Antigravity</span>
+                            </div>
+                            <div class="terminal-code-body">
+                                <p class="term-comment"># 4. Trae y fusiona los últimos cambios de Azure</p>
+                                <p><span class="term-prompt">$</span> git pull origin main --rebase</p>
+                                <p class="term-success">Current branch main is up to date.</p>
+                                <br>
+                                <p class="term-comment"># 5. Publica tus commits en Azure Repos</p>
+                                <p><span class="term-prompt">$</span> git push -u origin main</p>
+                                <p class="term-azure">Enumerating objects: 6, done.</p>
+                                <p class="term-azure">To https://dev.azure.com/ORG/PROJ/_git/REPO</p>
+                                <p class="term-azure">* [new branch] main -&gt; main</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================================
+                 SLIDE 6: RAMAS, PULL REQUESTS & IA EN ANTIGRAVITY
+                 ======================================================== -->
+            <section class="slide" id="slide-6" data-index="6">
+                <div class="slide-header">
+                    <div>
+                        <div class="slide-tag">Colaboración Profesional & IA</div>
+                        <h2 class="slide-title">Ramas, <span class="slide-title-cyan">Pull Requests</span> & <span class="slide-title-magenta">Antigravity IA</span></h2>
+                        <p class="slide-subtitle">Trabajo en aislamiento seguro y superpoderes de inteligencia artificial para tu código.</p>
+                    </div>
+                    <div class="slide-index-badge">06 / 06</div>
+                </div>
+
+                <div class="grid-3">
+                    <div class="cyber-card reveal">
+                        <span class="card-header-icon">🌿</span>
+                        <h3 class="card-title">1. Feature Branches</h3>
+                        <p class="card-text">Nunca trabajes directamente sobre <code>main</code>. Crea una rama dedicada para cada tarea:</p>
+                        <div class="cyber-terminal" style="margin-top: 10px;">
+                            <div class="terminal-code-body" style="font-size: 14px; padding: 14px;">
+                                <p class="term-comment"># Crea y salta a una rama aislada</p>
+                                <p><span class="term-prompt">$</span> git checkout -b feature/auth-azure</p>
+                                <p class="term-comment"># Sube la rama a Azure Repos</p>
+                                <p><span class="term-prompt">$</span> git push -u origin feature/auth-azure</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="cyber-card reveal">
+                        <span class="card-header-icon">🔀</span>
+                        <h3 class="card-title">2. Pull Requests en Azure</h3>
+                        <p class="card-text">
+                            En el portal de Azure Repos abre un PR hacia <code>main</code>. Configura <em>Branch Policies</em> para exigir:
+                        </p>
+                        <ul class="card-bullet-list" style="margin-top: 10px;">
+                            <li>Aprobación mínima de 1 desarrollador.</li>
+                            <li>Resolución obligatoria de comentarios.</li>
+                            <li>Pase exitoso del Pipeline de CI/CD.</li>
+                        </ul>
+                    </div>
+
+                    <div class="cyber-card cyber-card-magenta reveal">
+                        <span class="card-header-icon">🤖</span>
+                        <h3 class="card-title">3. Antigravity Pair-Programming</h3>
+                        <p class="card-text">
+                            Aprovecha el agente de Antigravity como tu copiloto en tareas de Git:
+                        </p>
+                        <ul class="card-bullet-list" style="margin-top: 10px;">
+                            <li><strong>"Genera un commit semántico":</strong> El agente analiza tu diff y redacta mensajes descriptivos.</li>
+                            <li><strong>"Audita mi diff antes del push":</strong> Busca secretos filtrados, tokens o errores de sintaxis.</li>
+                            <li><strong>"Resuelve conflictos de merge":</strong> Ayuda visual para elegir la versión correcta.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Barra de control flotante (fuera del escenario 16:9) -->
+    <div class="deck-controls">
+        <button id="btnPrev" class="deck-ctrl-btn" title="Anterior (Flecha Izquierda)" disabled>&larr;</button>
+        <div class="deck-page-counter">
+            <span id="slideCurrentNum">1</span> / <span id="slideTotalNum">6</span>
+        </div>
+        <button id="btnNext" class="deck-ctrl-btn" title="Siguiente (Flecha Derecha o Espacio)">&rarr;</button>
+    </div>
+
+    <!-- Zona activa y botón para modo edición (E key o hover) -->
+    <div class="edit-hotzone"></div>
+    <button class="edit-toggle" id="editToggle" title="Modo edición interactiva (E)">✏️</button>
+
+    <!-- ========================================================
+         7. SLIDE PRESENTATION CONTROLLER & INLINE EDITOR
+         ======================================================== -->
+    <script>
+        class SlidePresentation {
+            constructor() {
+                this.slides = document.querySelectorAll('.slide');
+                this.currentSlide = 0;
+                this.stage = document.getElementById('deckStage');
+                this.prevBtn = document.getElementById('btnPrev');
+                this.nextBtn = document.getElementById('btnNext');
+                this.currNumEl = document.getElementById('slideCurrentNum');
+                this.totalNumEl = document.getElementById('slideTotalNum');
+
+                if (this.totalNumEl) this.totalNumEl.textContent = this.slides.length;
+
+                this.setupStageScale();
+                this.setupKeyboardNav();
+                this.setupTouchNav();
+                this.setupButtonEvents();
+                this.setupInlineEditing();
+                this.showSlide(0);
+            }
+
+            // Escala uniforme del canvas 1920x1080 (letterbox / pillarbox)
+            setupStageScale() {
+                const scale = () => {
+                    const factor = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+                    const x = (window.innerWidth - 1920 * factor) / 2;
+                    const y = (window.innerHeight - 1080 * factor) / 2;
+                    this.stage.style.transform = `translate(${x}px, ${y}px) scale(${factor})`;
+                };
+                scale();
+                window.addEventListener('resize', scale);
+            }
+
+            setupKeyboardNav() {
+                document.addEventListener('keydown', (e) => {
+                    // Si estamos editando texto en vivo, permitir navegación con flechas en el texto
+                    if (e.target.getAttribute('contenteditable') === 'true') return;
+
+                    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide + 1);
+                    } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+                        e.preventDefault();
+                        this.showSlide(this.currentSlide - 1);
+                    } else if (e.key === 'Home') {
+                        e.preventDefault();
+                        this.showSlide(0);
+                    } else if (e.key === 'End') {
+                        e.preventDefault();
+                        this.showSlide(this.slides.length - 1);
+                    }
+                });
+            }
+
+            setupTouchNav() {
+                let startX = 0;
+                document.addEventListener('touchstart', (e) => {
+                    startX = e.touches[0].clientX;
+                }, { passive: true });
+
+                document.addEventListener('touchend', (e) => {
+                    const diff = e.changedTouches[0].clientX - startX;
+                    if (Math.abs(diff) > 60) {
+                        if (diff < 0) this.showSlide(this.currentSlide + 1);
+                        else this.showSlide(this.currentSlide - 1);
+                    }
+                }, { passive: true });
+            }
+
+            setupButtonEvents() {
+                if (this.prevBtn) {
+                    this.prevBtn.addEventListener('click', () => this.showSlide(this.currentSlide - 1));
+                }
+                if (this.nextBtn) {
+                    this.nextBtn.addEventListener('click', () => this.showSlide(this.currentSlide + 1));
+                }
+            }
+
+            showSlide(index) {
+                this.currentSlide = Math.max(0, Math.min(index, this.slides.length - 1));
+                
+                this.slides.forEach((slide, i) => {
+                    const isActive = i === this.currentSlide;
+                    slide.classList.toggle('active', isActive);
+                    slide.classList.toggle('visible', isActive);
+                });
+
+                if (this.currNumEl) this.currNumEl.textContent = this.currentSlide + 1;
+                if (this.prevBtn) this.prevBtn.disabled = this.currentSlide === 0;
+                if (this.nextBtn) this.nextBtn.disabled = this.currentSlide === this.slides.length - 1;
+            }
+
+            // Modo edición en vivo (<kbd>E</kbd> o hover en la esquina)
+            setupInlineEditing() {
+                const hotzone = document.querySelector('.edit-hotzone');
+                const editToggle = document.getElementById('editToggle');
+                let isEditMode = false;
+                let hideTimeout = null;
+
+                const toggleEdit = () => {
+                    isEditMode = !isEditMode;
+                    editToggle.classList.toggle('active', isEditMode);
+                    
+                    const editableElements = document.querySelectorAll('h1, h2, h3, p, li, span.cmd-pill');
+                    editableElements.forEach((el) => {
+                        el.setAttribute('contenteditable', isEditMode ? 'true' : 'false');
+                    });
+                };
+
+                if (editToggle) {
+                    editToggle.addEventListener('click', toggleEdit);
+                }
+
+                if (hotzone && editToggle) {
+                    hotzone.addEventListener('mouseenter', () => {
+                        clearTimeout(hideTimeout);
+                        editToggle.classList.add('show');
+                    });
+
+                    hotzone.addEventListener('mouseleave', () => {
+                        hideTimeout = setTimeout(() => {
+                            if (!isEditMode) editToggle.classList.remove('show');
+                        }, 400);
+                    });
+
+                    editToggle.addEventListener('mouseenter', () => clearTimeout(hideTimeout));
+                    editToggle.addEventListener('mouseleave', () => {
+                        hideTimeout = setTimeout(() => {
+                            if (!isEditMode) editToggle.classList.remove('show');
+                        }, 400);
+                    });
+                }
+
+                document.addEventListener('keydown', (e) => {
+                    if ((e.key === 'e' || e.key === 'E') && !e.target.getAttribute('contenteditable')) {
+                        toggleEdit();
+                    }
+                });
+            }
+        }
+
+        // Inicializar la presentación al cargar el DOM
+        document.addEventListener('DOMContentLoaded', () => {
+            window.presentation = new SlidePresentation();
+        });
+    </script>
+</body>
+</html>

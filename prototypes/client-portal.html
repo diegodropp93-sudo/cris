@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal | CRIS Quality Solution LLC</title>
+    
+    <!-- Fonts & Tokens -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/tokens.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --font-display: 'Plus Jakarta Sans', sans-serif;
+            --font-body: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #f1f5f9;
+            color: var(--color-text-primary);
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        .portal-sidebar {
+            width: 260px;
+            background: var(--color-brand-navy-dark);
+            color: #fff;
+            padding: 1.75rem 1.25rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2.5rem;
+            text-decoration: none;
+            color: #fff;
+        }
+
+        .sidebar-brand h2 {
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            flex: 1;
+        }
+
+        .menu-item a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-md);
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .menu-item.active a, .menu-item a:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .menu-item.active a {
+            background: var(--color-brand-blue);
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1.25rem;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        /* Main Content */
+        .portal-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .portal-topbar {
+            background: #fff;
+            border-bottom: 1px solid var(--color-border-subtle);
+            padding: 1rem 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .client-profile-chip {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .avatar-circle {
+            width: 38px;
+            height: 38px;
+            background: #e0f2fe;
+            color: var(--color-brand-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .client-info h4 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+        }
+
+        .client-info span {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+        }
+
+        .content-area {
+            padding: 2.5rem;
+            max-width: 1180px;
+            width: 100%;
+        }
+
+        /* Live Service Status Banner */
+        .status-banner {
+            background: linear-gradient(135deg, #0b2545 0%, #0066cc 100%);
+            border-radius: var(--radius-xl);
+            padding: 2rem 2.5rem;
+            color: #fff;
+            margin-bottom: 2.5rem;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(15, 169, 126, 0.25);
+            border: 1px solid rgba(15, 169, 126, 0.5);
+            color: #34d399;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .status-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-timeline {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+            font-size: 0.75rem;
+            color: #cbd5e1;
+        }
+
+        .timeline-step.done {
+            color: #38bdf8;
+            font-weight: 700;
+        }
+
+        .timeline-bar {
+            height: 4px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.2);
+            width: 70px;
+        }
+
+        .timeline-step.done .timeline-bar {
+            background: #38bdf8;
+        }
+
+        /* Photo QA Viewer Card */
+        .card {
+            background: #fff;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 1px solid var(--color-border-subtle);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 2.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header h3 {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+        }
+
+        /* Before & After Interactive Comparison */
+        .photo-viewer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .photo-pane {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--color-border-subtle);
+            background: #f8fafc;
+            position: relative;
+        }
+
+        .photo-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        .tag-before {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .tag-after {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .photo-canvas {
+            height: 240px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: #fff;
+        }
+
+        .canvas-clean {
+            background: linear-gradient(135deg, #064e3b 0%, #0b2545 100%);
+        }
+
+        .photo-meta {
+            padding: 1rem 1.25rem;
+            background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8125rem;
+            color: var(--color-slate-600);
+        }
+
+        /* Invoices Table */
+        .invoices-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .invoices-table th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            border-bottom: 2px solid var(--color-border-subtle);
+            color: var(--color-slate-600);
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .invoices-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--color-border-subtle);
+            color: var(--color-slate-800);
+        }
+
+        .badge-paid {
+            background: #ecfdf5;
+            color: #047857;
+            padding: 0.2rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .action-link {
+            color: var(--color-brand-blue);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="portal-sidebar">
+        <a href="landing.html" class="sidebar-brand">
+            <img src="../assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height:44px; width:auto; border-radius:6px;">
+        </a>
+
+        <ul class="sidebar-menu">
+            <li class="menu-item active">
+                <a href="#dashboard"><i data-lucide="layout-dashboard" style="width:18px;"></i> Dashboard</a>
+            </li>
+            <li class="menu-item">
+                <a href="#inspections"><i data-lucide="camera" style="width:18px;"></i> QA Photo Inspections</a>
+            </li>
+            <li class="menu-item">
+                <a href="#schedule"><i data-lucide="calendar" style="width:18px;"></i> Service Calendar</a>
+            </li>
+            <li class="menu-item">
+                <a href="#billing"><i data-lucide="receipt" style="width:18px;"></i> Invoices & ACH</a>
+            </li>
+            <li class="menu-item">
+                <a href="calculator.html"><i data-lucide="plus-circle" style="width:18px;"></i> Request Add-On</a>
+            </li>
+        </ul>
+
+        <div class="sidebar-footer">
+            <div>Contract #CRIS-BKL-2026</div>
+            <div style="margin-top:0.25rem;">Support: (305) 555-CRIS</div>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="portal-main">
+        <!-- Topbar -->
+        <header class="portal-topbar">
+            <div>
+                <span style="font-size:0.75rem; color:#64748b; font-weight:600; text-transform:uppercase;">Facility Account</span>
+                <h3 style="font-family:var(--font-display); font-size:1.125rem; font-weight:800; color:var(--color-brand-navy);">Brickell Bay Tower — Suite 1400</h3>
+            </div>
+
+            <div class="client-profile-chip">
+                <div class="avatar-circle">CR</div>
+                <div class="client-info">
+                    <h4>Carlos Rodriguez</h4>
+                    <span>Facility Director (Commercial)</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class="content-area">
+            <!-- Active Service Banner -->
+            <div class="status-banner">
+                <div>
+                    <span class="status-badge"><i data-lucide="activity" style="width:12px;"></i> LIVE STATUS: IN PROGRESS</span>
+                    <h2 class="status-title">Today's Evening Disinfection Cycle</h2>
+                    <p style="color:#dbeafe; font-size:0.875rem;">Assigned to Crew #102 • Ford Transit Unit 04 • Supervisor Mateo V.</p>
+
+                    <div class="status-timeline">
+                        <div class="timeline-step done">
+                            <div class="timeline-bar"></div>
+                            <span>1. In-Route (5:45 PM)</span>
+                        </div>
+                        <div class="timeline-step done">
+                            <div class="timeline-bar"></div>
+                            <span>2. Check-in (6:02 PM)</span>
+                        </div>
+                        <div class="timeline-step done">
+                            <div class="timeline-bar"></div>
+                            <span>3. Cleaning Now</span>
+                        </div>
+                        <div class="timeline-step">
+                            <div class="timeline-bar"></div>
+                            <span>4. QA Audit Pending</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(255,255,255,0.1); border-radius:var(--radius-lg); padding:1.25rem; border:1px solid rgba(255,255,255,0.2);">
+                    <div style="font-size:0.75rem; text-transform:uppercase; color:#93c5fd; font-weight:700;">Service Protocol</div>
+                    <div style="font-weight:700; font-size:1.125rem; margin:0.35rem 0;">Weekly Deep Hospital Sanitization</div>
+                    <div style="font-size:0.8125rem; color:#cbd5e1;">EPA Registered Fogger + 28 High-Touch Disinfection Points</div>
+                </div>
+            </div>
+
+            <!-- Photographic QA Inspection -->
+            <div class="card" id="inspections">
+                <div class="card-header">
+                    <div>
+                        <h3>Live Digital Inspection Audit (Before vs. After)</h3>
+                        <p style="font-size:0.875rem; color:#64748b;">Uploaded with cryptographic GPS & timestamp verification.</p>
+                    </div>
+                    <button class="action-link" style="background:#f1f5f9; padding:0.5rem 1rem; border-radius:var(--radius-md); border:none; cursor:pointer;" onclick="alert('Downloading Certified QA Inspection PDF...')">
+                        <i data-lucide="download" style="width:14px;"></i> Download Certificate PDF
+                    </button>
+                </div>
+
+                <div class="photo-viewer-grid">
+                    <!-- Before Photo -->
+                    <div class="photo-pane">
+                        <span class="photo-tag tag-before">Before Cleaning</span>
+                        <div class="photo-canvas">
+                            <i data-lucide="alert-circle" style="width:36px; height:36px; color:#f87171; margin-bottom:0.5rem;"></i>
+                            <div style="font-weight:600; font-size:0.9375rem;">Main Boardroom & Glass Partition</div>
+                            <div style="font-size:0.75rem; color:#94a3b8;">High dust accumulation & surface smudges</div>
+                        </div>
+                        <div class="photo-meta">
+                            <span>Time: <strong>6:05 PM EST</strong></span>
+                            <span>Photo Tag: <strong>#GEO-BKL-01</strong></span>
+                        </div>
+                    </div>
+
+                    <!-- After Photo -->
+                    <div class="photo-pane">
+                        <span class="photo-tag tag-after">After Clean & Sanitized</span>
+                        <div class="photo-canvas canvas-clean">
+                            <i data-lucide="sparkles" style="width:36px; height:36px; color:#34d399; margin-bottom:0.5rem;"></i>
+                            <div style="font-weight:600; font-size:0.9375rem;">Sanitized & Polished Surface</div>
+                            <div style="font-size:0.75rem; color:#a7f3d0;">EPA Hospital-Grade Zero VOC Formulation</div>
+                        </div>
+                        <div class="photo-meta">
+                            <span>Time: <strong>8:20 PM EST</strong></span>
+                            <span>Supervisor: <strong style="color:var(--color-brand-teal);">Mateo V. (Verified)</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoices Card -->
+            <div class="card" id="billing">
+                <div class="card-header">
+                    <h3>Recent Invoices & Payment Receipts</h3>
+                    <span style="font-size:0.8125rem; color:#0fa97e; font-weight:700;"><i data-lucide="check" style="width:14px; vertical-align:middle;"></i> NET-30 ACH Auto-Pay Active</span>
+                </div>
+
+                <table class="invoices-table">
+                    <thead>
+                        <tr>
+                            <th>Invoice #</th>
+                            <th>Service Period</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>#INV-2026-042</strong></td>
+                            <td>Oct 1 – Oct 7, 2026</td>
+                            <td>Weekly Corporate Facility Maintenance (4 visits)</td>
+                            <td><strong>$1,308.00</strong></td>
+                            <td><span class="badge-paid">Paid via ACH</span></td>
+                            <td><a href="#" class="action-link"><i data-lucide="file-text" style="width:14px;"></i> PDF</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong>#INV-2026-039</strong></td>
+                            <td>Sep 24 – Sep 30, 2026</td>
+                            <td>Weekly Corporate Facility Maintenance + Fogging Addon</td>
+                            <td><strong>$1,428.00</strong></td>
+                            <td><span class="badge-paid">Paid via ACH</span></td>
+                            <td><a href="#" class="action-link"><i data-lucide="file-text" style="width:14px;"></i> PDF</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

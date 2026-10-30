@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRIS Quality Solution LLC | Master Brand & UX Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --navy-core: #0e2b4c;
+            --navy-dark: #0a2540;
+            --green-clean: #009e49;
+            --cyan-tech: #0080a8;
+            --slate-900: #0e2b4c;
+            --slate-800: #122844;
+            --slate-50: #f8fafc;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: #0b1528;
+            color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 102, 204, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(15, 169, 126, 0.15) 0%, transparent 40%);
+        }
+
+        header {
+            padding: 2.5rem 2rem 1.5rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(15, 169, 126, 0.2);
+            border: 1px solid rgba(15, 169, 126, 0.4);
+            color: #34d399;
+            padding: 0.35rem 0.85rem;
+            border-radius: 9999px;
+            font-size: 0.8125rem;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            font-size: 1.125rem;
+            color: #94a3b8;
+            line-height: 1.6;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto 4rem;
+            padding: 0 1.5rem;
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.75rem;
+        }
+
+        .section-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s ease;
+        }
+
+        .section-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-header h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: 0.9375rem;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .link-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.85rem 1.15rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #fff;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: #38bdf8;
+            color: #38bdf8;
+        }
+
+        .btn-primary-card {
+            background: linear-gradient(135deg, var(--ocean-blue) 0%, #004c99 100%);
+            border: none;
+        }
+
+        .btn-primary-card:hover {
+            background: linear-gradient(135deg, #1a7ae6 0%, #0059b3 100%);
+            color: #fff;
+        }
+
+        .btn-teal-card {
+            background: linear-gradient(135deg, var(--eco-teal) 0%, #0b7c5b 100%);
+            border: none;
+        }
+
+        .btn-teal-card:hover {
+            background: linear-gradient(135deg, #13c290 0%, #0d8f6a 100%);
+            color: #fff;
+        }
+
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8125rem;
+            color: #64748b;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="brand-badge">
+            <i data-lucide="shield-check" style="width:15px;"></i>
+            <span>ENTREGA OFICIAL PARA VALIDACIÓN DE GERENCIA</span>
+        </div>
+        <h1>CRIS Quality Solution LLC</h1>
+        <p class="subtitle">Manual de Marca Oficial, Sistema de Diseño, Arquitectura de Navegación y Prototipos Interactivos de Alta Fidelidad para Validación Ejecutiva.</p>
+    </header>
+
+    <div class="main-container">
+        <!-- Card 1: Brand Guidelines -->
+        <div class="section-card">
+            <div class="card-header">
+                <div class="icon-box" style="background: rgba(0, 102, 204, 0.2); color: #38bdf8;">
+                    <i data-lucide="presentation"></i>
+                </div>
+                <h2>Manual de Marca & Diapositivas</h2>
+            </div>
+            <p class="card-desc">
+                Presentación oficial 16:9 maquetada con la skill <strong>frontend-slides</strong>. Lista para proyectar, editar en vivo (tecla E) o exportar a PDF para impresión vectorial.
+            </p>
+            <div class="link-group">
+                <a href="docs/brand-guidelines.html" class="nav-btn btn-primary-card" target="_blank">
+                    <span>Abrir Diapositivas 16:9 / PDF</span>
+                    <i data-lucide="arrow-right" style="width:16px;"></i>
+                </a>
+                <a href="docs/brand-guidelines.md" class="nav-btn" target="_blank">
+                    <span>Manual en Markdown (.md)</span>
+                    <i data-lucide="file-text" style="width:16px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 2: Interactive Prototypes -->
+        <div class="section-card">
+            <div class="card-header">
+                <div class="icon-box" style="background: rgba(15, 169, 126, 0.2); color: #34d399;">
+                    <i data-lucide="layers"></i>
+                </div>
+                <h2>Prototipos UX Interactivos</h2>
+            </div>
+            <p class="card-desc">
+                Pantallas interactivas de alta fidelidad que implementan la identidad oficial de <strong>CRIS Quality Solutions</strong> para el mercado residencial y comercial de Miami.
+            </p>
+            <div class="link-group">
+                <a href="prototypes/landing.html" class="nav-btn btn-teal-card" target="_blank">
+                    <span>1. Landing Page Comercial & Residencial</span>
+                    <i data-lucide="external-link" style="width:16px;"></i>
+                </a>
+                <a href="prototypes/calculator.html" class="nav-btn" target="_blank">
+                    <span>2. Calculadora de Precios en Vivo</span>
+                    <i data-lucide="calculator" style="width:16px;"></i>
+                </a>
+                <a href="prototypes/checkout.html" class="nav-btn" target="_blank">
+                    <span>3. Proceso de Reserva & Checkout</span>
+                    <i data-lucide="calendar" style="width:16px;"></i>
+                </a>
+                <a href="prototypes/client-portal.html" class="nav-btn" target="_blank">
+                    <span>4. Portal de Clientes (Auditoría QA)</span>
+                    <i data-lucide="user-check" style="width:16px;"></i>
+                </a>
+                <a href="prototypes/crm-admin.html" class="nav-btn" target="_blank">
+                    <span>5. CRM Operativo & Despacho de Rutas</span>
+                    <i data-lucide="layout-dashboard" style="width:16px;"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Card 3: Design System & Vectors -->
+        <div class="section-card">
+            <div class="card-header">
+                <div class="icon-box" style="background: rgba(0, 180, 216, 0.2); color: #00e5ff;">
+                    <i data-lucide="palette"></i>
+                </div>
+                <h2>Activos de Marca & Tokens</h2>
+            </div>
+            <p class="card-desc">
+                Logotipos vectoriales originales (100% SVG puro sin clichés) y tokens de diseño en formato CSS variables y JSON DTCG para el frontend.
+            </p>
+            <div class="link-group">
+                <a href="docs/NAVIGATION_FLOW.md" class="nav-btn" target="_blank">
+                    <span>Diagramas Mermaid de Navegación</span>
+                    <i data-lucide="git-merge" style="width:16px;"></i>
+                </a>
+                <a href="design-system/tokens.css" class="nav-btn" target="_blank">
+                    <span>Variables CSS (tokens.css)</span>
+                    <i data-lucide="code" style="width:16px;"></i>
+                </a>
+                <a href="design-system/tokens.json" class="nav-btn" target="_blank">
+                    <span>Design Tokens (tokens.json)</span>
+                    <i data-lucide="braces" style="width:16px;"></i>
+                </a>
+                <a href="assets/logo/cris-logo-horizontal.svg" class="nav-btn" target="_blank">
+                    <span>Logo Horizontal SVG</span>
+                    <i data-lucide="image" style="width:16px;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 CRIS Quality Solution LLC (Chris Quality Service) • 801 Brickell Ave, Miami, FL 33131 • Direct: (305) 555-CRIS
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

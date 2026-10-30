@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="crisNavyCyanH" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0A2540" />
+      <stop offset="50%" stop-color="#0E2B4C" />
+      <stop offset="100%" stop-color="#0080A8" />
+    </linearGradient>
+
+    <linearGradient id="crisEcoGreenH" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0080A8" />
+      <stop offset="45%" stop-color="#009E49" />
+      <stop offset="100%" stop-color="#28A745" />
+    </linearGradient>
+  </defs>
+
+  <!-- ISOTIPO (Escalado e integrado a la izquierda) -->
+  <g transform="translate(15, 10) scale(0.7)">
+    <!-- Anillo 'C' -->
+    <path d="M 148 48 A 72 72 0 1 0 148 152" 
+          fill="none" 
+          stroke="url(#crisNavyCyanH)" 
+          stroke-width="18" 
+          stroke-linecap="round" />
+
+    <!-- Óvalo 'Q' -->
+    <circle cx="112" cy="100" r="44" 
+            fill="none" 
+            stroke="url(#crisEcoGreenH)" 
+            stroke-width="14" 
+            stroke-linecap="round" />
+
+    <!-- Trazo 'Q' -->
+    <path d="M 132 120 L 172 160" 
+          stroke="url(#crisEcoGreenH)" 
+          stroke-width="15" 
+          stroke-linecap="round" />
+
+    <!-- Destello Central -->
+    <path d="M 112 82 Q 112 100 130 100 Q 112 100 112 118 Q 112 100 94 100 Q 112 100 112 82 Z" 
+          fill="#0097B2" />
+    <circle cx="112" cy="100" r="3.5" fill="#FFFFFF" />
+  </g>
+
+  <!-- WORDMARK: TEXTO CORPORATIVO -->
+  <!-- "CRIS" Principal -->
+  <text x="175" y="82" 
+        font-family="'Montserrat', system-ui, sans-serif" 
+        font-size="64" 
+        font-weight="800" 
+        letter-spacing="-0.02em" 
+        fill="#0E2B4C">
+    CRIS<tspan fill="#0080A8">.</tspan>
+  </text>
+
+  <!-- "QUALITY SOLUTION LLC" -->
+  <text x="178" y="116" 
+        font-family="'Montserrat', system-ui, sans-serif" 
+        font-size="22" 
+        font-weight="700" 
+        letter-spacing="0.12em" 
+        fill="#009E49">
+    QUALITY SOLUTION LLC
+  </text>
+
+  <!-- Línea divisoria elegante -->
+  <line x1="178" y1="126" x2="630" y2="126" stroke="#E2E8F0" stroke-width="1.5" />
+
+  <!-- Descriptor de Categoría Comercial & Residencial Bilingüe -->
+  <text x="178" y="145" 
+        font-family="'Inter', system-ui, sans-serif" 
+        font-size="12.5" 
+        font-weight="600" 
+        letter-spacing="0.18em" 
+        fill="#475569">
+    FACILITY MANAGEMENT &amp; LUXURY CLEANING • MIAMI, FL
+  </text>
+</svg>

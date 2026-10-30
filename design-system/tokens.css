@@ -1,0 +1,88 @@
+/**
+ * CRIS Quality Solutions — Official Design Tokens CSS
+ * Identidad Oficial extraída del Flyer y Sistema de Marca
+ * Version: 2.2.0
+ */
+
+:root {
+  /* =========================================
+     1. PALETA CROMÁTICA OFICIAL (FLYER CRIS)
+     ========================================= */
+  
+  /* Azul Marino Medianoche (Primario Dominante B2B) */
+  --color-brand-navy: #0b2032;
+  --color-brand-navy-dark: #071624;
+  --color-brand-navy-light: #16344e;
+  --color-brand-navy-rgb: 11, 32, 50;
+
+  /* Verde Azulado / Sea Green (Isotipo, Botones de Oferta & Acentos) */
+  --color-brand-teal: #1e857b;
+  --color-brand-teal-bright: #249c90;
+  --color-brand-teal-dark: #156c63;
+  --color-brand-teal-surface: #e6f5f3;
+  --color-brand-teal-rgb: 30, 133, 123;
+
+  /* Rojo Coral / Carmesí de Urgencia (Promociones & Precio Exclusivo) */
+  --color-brand-coral: #c0392b;
+  --color-brand-coral-light: #e74c3c;
+  --color-brand-coral-surface: #fde8e8;
+
+  /* Gama de Neutros */
+  --color-white: #ffffff;
+  --color-bg-base: #f8fafc;
+  --color-bg-light: #f4f6f8;            /* Fondos alternados de sección */
+  --color-bg-surface: #ffffff;          /* Tarjetas y contenedor del logo */
+  --color-border-subtle: #e2e8f0;       /* Bordes de separación */
+  --color-border-muted: #cbd5e1;
+
+  /* Tipografía Accesible WCAG */
+  --color-text-headings: #0b2032;       /* Titulares en azul medianoche */
+  --color-text-dark: #1e293b;           /* Precios y párrafos principales */
+  --color-text-secondary: #475569;      /* Subtítulos y descripciones */
+  --color-text-muted: #64748b;
+  --color-text-inverse: #ffffff;
+
+  /* Estados Funcionales */
+  --color-success: #1e857b;
+  --color-warning: #d97706;
+  --color-error: #c0392b;
+  --color-info: #1e857b;
+
+  /* =========================================
+     2. TIPOGRAFÍA
+     ========================================= */
+  --font-display: 'Montserrat', 'Barlow Condensed', system-ui, -apple-system, sans-serif;
+  --font-body: 'Inter', 'Roboto', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+  --weight-black: 900;
+
+  /* =========================================
+     3. BORDES Y SOMBRAS SUAVES
+     ========================================= */
+  --radius-subtle: 6px;
+  --radius-card: 8px;
+  --radius-badge: 12px;
+  --radius-full: 9999px;
+
+  --shadow-soft: 0 2px 8px -1px rgba(11, 32, 50, 0.06);
+  --shadow-card: 0 4px 14px -2px rgba(11, 32, 50, 0.08);
+  --shadow-elevated: 0 12px 28px -4px rgba(11, 32, 50, 0.14);
+  --shadow-teal: 0 4px 16px rgba(30, 133, 123, 0.32);
+}
+
+/* Modo oscuro opcional */
+[data-theme="dark"] {
+  --color-bg-base: #071624;
+  --color-bg-light: #0b2032;
+  --color-bg-surface: #0f273d;
+  --color-border-subtle: rgba(255, 255, 255, 0.1);
+  --color-text-headings: #ffffff;
+  --color-text-dark: #f1f5f9;
+  --color-text-secondary: #94a3b8;
+  --color-text-muted: #64748b;
+}

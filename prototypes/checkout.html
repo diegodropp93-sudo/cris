@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking & Checkout | CRIS Quality Solution LLC</title>
+    
+    <!-- Fonts & Tokens: Montserrat & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../design-system/tokens.css">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --font-display: 'Montserrat', system-ui, -apple-system, sans-serif;
+            --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --navy-core: #0e2b4c;
+            --green-clean: #009e49;
+            --cyan-tech: #0080a8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: #f8fafc;
+            color: var(--color-text-primary);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .top-nav {
+            background: #ffffff;
+            border-bottom: 1px solid var(--color-border-subtle);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .nav-brand h2 {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+        }
+
+        .checkout-container {
+            max-width: 1100px;
+            margin: 2.5rem auto 4rem;
+            padding: 0 1.5rem;
+            display: grid;
+            grid-template-columns: 1.45fr 1fr;
+            gap: 2.5rem;
+            align-items: start;
+        }
+
+        /* Step Progress Header */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 14px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e2e8f0;
+            z-index: 1;
+        }
+
+        .progress-step {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            background: #f8fafc;
+            padding: 0 0.5rem;
+        }
+
+        .step-circle {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #cbd5e1;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .progress-step.active .step-circle {
+            background: var(--color-brand-blue);
+        }
+
+        .progress-step.completed .step-circle {
+            background: var(--color-brand-teal);
+        }
+
+        .step-text {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-slate-600);
+            display: block;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            padding: 2.25rem;
+            border: 1px solid var(--color-border-subtle);
+            box-shadow: var(--shadow-md);
+        }
+
+        .section-heading {
+            font-family: var(--font-display);
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .field-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .field-group {
+            margin-bottom: 1rem;
+        }
+
+        .field-label {
+            display: block;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--color-slate-700);
+            margin-bottom: 0.35rem;
+        }
+
+        .input-control, .select-control {
+            width: 100%;
+            padding: 0.75rem 0.85rem;
+            border: 1px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
+            font-size: 0.875rem;
+            background: #fff;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        .input-control:focus, .select-control:focus {
+            border-color: var(--color-brand-blue);
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.12);
+        }
+
+        /* Shift Selector */
+        .shifts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .shift-option {
+            border: 2px solid var(--color-border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .shift-option:hover {
+            border-color: var(--color-brand-blue);
+        }
+
+        .shift-option.active {
+            border-color: var(--color-brand-blue);
+            background: #eff6ff;
+        }
+
+        .shift-name {
+            font-size: 0.8125rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            display: block;
+        }
+
+        .shift-time {
+            font-size: 0.6875rem;
+            color: var(--color-text-secondary);
+            margin-top: 0.2rem;
+            display: block;
+        }
+
+        /* Payment Selector */
+        .payment-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .payment-tab {
+            border: 2px solid var(--color-border-subtle);
+            border-radius: var(--radius-lg);
+            padding: 1rem;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .payment-tab.active {
+            border-color: var(--color-brand-teal);
+            background: #ecfdf5;
+        }
+
+        .payment-tab-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            display: block;
+        }
+
+        .payment-tab-sub {
+            font-size: 0.75rem;
+            color: var(--color-text-secondary);
+            margin-top: 0.25rem;
+            display: block;
+        }
+
+        /* Right Summary Sidebar */
+        .order-sidebar {
+            background: #ffffff;
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            border: 1px solid var(--color-border-subtle);
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 2rem;
+        }
+
+        .order-title {
+            font-family: var(--font-display);
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-brand-navy);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--color-border-subtle);
+        }
+
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
+            color: var(--color-slate-600);
+        }
+
+        .order-row strong {
+            color: var(--color-slate-900);
+        }
+
+        .order-total-box {
+            background: #f1f5f9;
+            border-radius: var(--radius-lg);
+            padding: 1.25rem;
+            margin: 1.25rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-number {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--color-brand-navy) 0%, var(--color-brand-blue) 100%);
+            color: #fff;
+            padding: 1rem;
+            border-radius: var(--radius-lg);
+            font-family: var(--font-display);
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(0, 102, 204, 0.3);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 102, 204, 0.45);
+        }
+
+        /* Modal Simulation */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 37, 69, 0.75);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #fff;
+            border-radius: var(--radius-2xl);
+            max-width: 520px;
+            width: 90%;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: var(--shadow-2xl);
+            transform: translateY(20px);
+            transition: transform 0.25s;
+        }
+
+        .modal-overlay.open .modal-card {
+            transform: translateY(0);
+        }
+
+        .success-icon {
+            width: 72px;
+            height: 72px;
+            background: #ecfdf5;
+            color: var(--color-brand-teal);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--color-brand-navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .wo-badge {
+            font-family: var(--font-mono);
+            background: #e0f2fe;
+            color: var(--color-brand-blue);
+            padding: 0.35rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            display: inline-block;
+            margin: 0.75rem 0 1.25rem;
+        }
+
+        @media (max-width: 800px) {
+            .checkout-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="top-nav">
+        <a href="landing.html" class="nav-brand">
+            <img src="../assets/logo/cris-logo-badge.svg" alt="CRIS Quality Solutions" style="height:46px;">
+        </a>
+
+        <div style="display:flex; gap:1rem; align-items:center;">
+            <span style="font-size:0.875rem; color:#64748b;"><i data-lucide="lock" style="width:13px; vertical-align:middle;"></i> 256-Bit SSL Encrypted Checkout</span>
+            <a href="calculator.html" style="font-size:0.875rem; color:var(--color-brand-blue); text-decoration:none; font-weight:600;">← Edit Specs</a>
+        </div>
+    </header>
+
+    <div class="checkout-container">
+        <!-- Main Form -->
+        <div>
+            <!-- Progress Tracker -->
+            <div class="progress-bar">
+                <div class="progress-step completed">
+                    <span class="step-circle"><i data-lucide="check" style="width:14px;"></i></span>
+                    <span class="step-text">1. Estimate</span>
+                </div>
+                <div class="progress-step active">
+                    <span class="step-circle">2</span>
+                    <span class="step-text">2. Schedule</span>
+                </div>
+                <div class="progress-step">
+                    <span class="step-circle">3</span>
+                    <span class="step-text">3. Verify</span>
+                </div>
+            </div>
+
+            <form class="form-card" onsubmit="handleCheckoutSubmit(event)">
+                <!-- Section 1: Location -->
+                <div class="section-heading">
+                    <i data-lucide="map-pin" style="color:var(--color-brand-blue); width:20px;"></i>
+                    <span>Service Location in South Florida</span>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label class="field-label">Primary Service Zone</label>
+                        <select class="select-control" id="zoneSelect">
+                            <option value="Brickell">Brickell / Downtown Miami</option>
+                            <option value="Coral Gables">Coral Gables / Coconut Grove</option>
+                            <option value="Miami Beach">Miami Beach / South Beach</option>
+                            <option value="Doral">Doral / Airport West</option>
+                            <option value="Sunny Isles">Aventura & Sunny Isles</option>
+                            <option value="Fort Lauderdale">Fort Lauderdale (Broward)</option>
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">ZIP Code</label>
+                        <input type="text" class="input-control" value="33131" required>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label class="field-label">Facility Street Address / Suite / Unit</label>
+                    <input type="text" class="input-control" placeholder="e.g. 1100 Brickell Bay Dr, Suite 1400" value="801 Brickell Ave, Floor 9" required>
+                </div>
+
+                <!-- Section 2: Date & Shift -->
+                <div class="section-heading" style="margin-top:2rem;">
+                    <i data-lucide="calendar" style="color:var(--color-brand-blue); width:20px;"></i>
+                    <span>Date & Preferred Shift</span>
+                </div>
+
+                <div class="field-row">
+                    <div class="field-group">
+                        <label class="field-label">First Service Date</label>
+                        <input type="date" class="input-control" id="serviceDate" required>
+                    </div>
+                    <div class="field-group">
+                        <label class="field-label">Facility Contact Person</label>
+                        <input type="text" class="input-control" placeholder="Full Name" value="Carlos Rodriguez" required>
+                    </div>
+                </div>
+
+                <label class="field-label">Select Crew Shift</label>
+                <div class="shifts-grid">
+                    <div class="shift-option active" onclick="selectShift('Night Shift', this)">
+                        <span class="shift-name">Night Shift</span>
+                        <span class="shift-time">6:00 PM – 2:00 AM</span>
+                    </div>
+                    <div class="shift-option" onclick="selectShift('Early Morning', this)">
+                        <span class="shift-name">Early Morning</span>
+                        <span class="shift-time">5:00 AM – 9:00 AM</span>
+                    </div>
+                    <div class="shift-option" onclick="selectShift('Daytime', this)">
+                        <span class="shift-name">Daytime</span>
+                        <span class="shift-time">9:00 AM – 5:00 PM</span>
+                    </div>
+                </div>
+
+                <!-- Section 3: Access & Security Protocol -->
+                <div class="section-heading" style="margin-top:2rem;">
+                    <i data-lucide="key" style="color:var(--color-brand-blue); width:20px;"></i>
+                    <span>Access Instructions & Security Codes</span>
+                </div>
+                <div class="field-group">
+                    <label class="field-label">Security Desk / Gate Code / Lockbox Instructions</label>
+                    <textarea class="input-control" rows="2" placeholder="e.g., Check in with 24/7 lobby concierge under 'CRIS Quality Crew'. Freight elevator key is at front desk.">Lobby concierge has company credentials on file. Freight elevator authorized after 6:00 PM.</textarea>
+                </div>
+
+                <!-- Section 4: Billing Selection -->
+                <div class="section-heading" style="margin-top:2rem;">
+                    <i data-lucide="credit-card" style="color:var(--color-brand-blue); width:20px;"></i>
+                    <span>Payment & Invoicing Method</span>
+                </div>
+
+                <div class="payment-tabs">
+                    <div class="payment-tab active" onclick="selectPayment('net30', this)">
+                        <span class="payment-tab-title">Corporate NET-30 (ACH)</span>
+                        <span class="payment-tab-sub">For commercial facilities & property managers</span>
+                    </div>
+                    <div class="payment-tab" onclick="selectPayment('card', this)">
+                        <span class="payment-tab-title">Credit Card Hold</span>
+                        <span class="payment-tab-sub">Billed only after digital inspection sign-off</span>
+                    </div>
+                </div>
+
+                <div id="achInfo">
+                    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:var(--radius-md); padding:1rem; font-size:0.8125rem; color:#475569; display:flex; gap:0.6rem; align-items:center;">
+                        <i data-lucide="building" style="color:#0066cc;"></i>
+                        <span>Invoices sent digitally via Plaid / Quickbooks with ACH auto-pay options. Zero advance deposit required for verified businesses.</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" style="margin-top:2rem;">
+                    <i data-lucide="shield-check" style="width:18px;"></i>
+                    <span>Confirm Booking & Generate Work Order</span>
+                </button>
+            </form>
+        </div>
+
+        <!-- Sidebar Summary -->
+        <aside class="order-sidebar">
+            <h3 class="order-title">Booking Summary</h3>
+
+            <div class="order-row">
+                <span>Facility Type:</span>
+                <strong id="sideType">Commercial Office</strong>
+            </div>
+
+            <div class="order-row">
+                <span>Total Surface:</span>
+                <strong id="sideSqft">3,500 sq ft</strong>
+            </div>
+
+            <div class="order-row">
+                <span>Frequency:</span>
+                <strong id="sideFreq">Weekly (-15% discount)</strong>
+            </div>
+
+            <div class="order-row">
+                <span>EPA Sanitization:</span>
+                <strong style="color:var(--color-brand-teal);">Included (Hospital-Grade)</strong>
+            </div>
+
+            <div class="order-row">
+                <span>Assigned Hub:</span>
+                <strong>Brickell Dispatch Center</strong>
+            </div>
+
+            <div class="order-total-box">
+                <div>
+                    <span style="font-size:0.75rem; color:#64748b; font-weight:700; text-transform:uppercase;">Estimated Per Service</span>
+                    <div class="total-number" id="sideTotal">$327</div>
+                </div>
+                <div style="text-align:right;">
+                    <span style="font-size:0.75rem; color:#047857; font-weight:700; background:#ecfdf5; padding:0.2rem 0.5rem; border-radius:4px;">100% Guaranteed</span>
+                </div>
+            </div>
+
+            <div style="font-size:0.75rem; color:#94a3b8; line-height:1.5;">
+                • All crews bonded & covered under $2,000,000 policy.<br>
+                • Real-time photo audit available upon job completion.<br>
+                • Reschedule without penalty up to 24h prior.
+            </div>
+        </aside>
+    </div>
+
+    <!-- Booking Confirmation Modal -->
+    <div class="modal-overlay" id="confirmModal">
+        <div class="modal-card">
+            <div class="success-icon">
+                <i data-lucide="check" style="width:36px; height:36px;"></i>
+            </div>
+            <h3 class="modal-title">Booking Confirmed!</h3>
+            <p style="color:#64748b; font-size:0.9375rem;">Your service request has been registered in the CRIS dispatch engine.</p>
+            
+            <div class="wo-badge">WORK ORDER #WO-2026-8942</div>
+
+            <div style="text-align:left; background:#f8fafc; border-radius:var(--radius-md); padding:1rem; margin-bottom:1.5rem; font-size:0.8125rem; color:#334155;">
+                <div><strong>Assigned Crew:</strong> Miami Transit Crew #102 (Supervisor: Mateo V.)</div>
+                <div><strong>Next Visit:</strong> Scheduled for chosen date at 6:00 PM</div>
+                <div><strong>Live Tracking:</strong> Accessible via Client Portal</div>
+            </div>
+
+            <div style="display:flex; gap:0.75rem;">
+                <a href="client-portal.html" class="submit-btn" style="background:var(--color-brand-teal); flex:1; text-decoration:none;">
+                    <i data-lucide="external-link" style="width:16px;"></i>
+                    <span>Go to Client Portal</span>
+                </a>
+                <a href="crm-admin.html" class="submit-btn" style="background:var(--color-brand-navy); flex:1; text-decoration:none;">
+                    <i data-lucide="layout-dashboard" style="width:16px;"></i>
+                    <span>View in CRM Admin</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Populate tomorrow's date by default
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        document.getElementById('serviceDate').value = tomorrow.toISOString().split('T')[0];
+
+        // Parse query params
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('price')) {
+            document.getElementById('sideTotal').textContent = `$${parseInt(params.get('price')).toLocaleString()}`;
+        }
+        if (params.get('sqft')) {
+            document.getElementById('sideSqft').textContent = `${parseInt(params.get('sqft')).toLocaleString()} sq ft`;
+        }
+        if (params.get('type')) {
+            document.getElementById('sideType').textContent = params.get('type').charAt(0).toUpperCase() + params.get('type').slice(1);
+        }
+        if (params.get('freq')) {
+            document.getElementById('sideFreq').textContent = params.get('freq').toUpperCase();
+        }
+
+        function selectShift(name, el) {
+            document.querySelectorAll('.shift-option').forEach(s => s.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function selectPayment(type, el) {
+            document.querySelectorAll('.payment-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            document.getElementById('confirmModal').classList.add('open');
+        }
+    </script>
+</body>
+</html>
